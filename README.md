@@ -106,7 +106,7 @@ absent : aucun affichage, aucun crash (warning console).
 
 ## Fonctionnalités
 
-- **8 univers jouables** (moteur pédagogique commun, 2 choix par manche) :
+- **8 univers jouables** (moteur pédagogique commun, 2 ou 3 choix par manche) :
   1. **Les Pirates** — coffre au trésor
   2. **Les Dragons** — dragon qui vole vers l'Alpha
   3. **Jurassic Basile** — œuf qui éclôt et bébé dinosaure
@@ -115,6 +115,17 @@ absent : aucun affichage, aucun crash (warning console).
   6. **Bricolo Basile** — construction progressive (robot/fusée/château)
   7. **Mission Sauvetage** — véhicule de secours et pont
   8. **Super Basile** — super-héros qui soulève un rocher
+- **Difficulté adaptative** : deux choix par défaut, passage à trois choix
+  lorsque trois Alphas sont réellement connus (réussites autonomes, jamais
+  après une réponse aidée), retour à deux après des difficultés répétées.
+  Réglage « Toujours 2 / Adaptatif / Toujours 3 » dans l'espace Parent.
+- **Boss du prénom — « Le Mystère du prénom BASILE »** : un dragon original a
+  mélangé les six Alphas de BASILE. Étape A : retrouver chaque Alpha et allumer
+  sa pierre magique. Étape B : reconstituer B-A-S-I-L-E (tap tactile, jamais de
+  clavier) avec trois niveaux d'aide (débutant / intermédiaire / avancé).
+  Étape C : château qui s'ouvre, dragon qui s'envole, confettis et médaille
+  enregistrée dans `localStorage`. Rejouable à volonté, avec vérification réelle
+  de l'image de Madame i (aucune substitution).
 - Phase de **découverte des Alphas** progressive (2 au départ, jusqu'aux 6 de BASILE).
 - Sauvegarde locale (`localStorage`) : statistiques + collections isolées
   (`alphas-de-basile/creatures|builds|explored`, additives et non destructives).

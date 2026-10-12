@@ -111,4 +111,16 @@ generate alpha-madame-i    "Madame i."
 generate alpha-limace      "La limace."
 generate alpha-madame-e    "Madame e."
 
+# Boss du prénom
+generate boss-intro        "Oh non ! Le dragon a mélangé les Alphas de ton prénom. Aide Basile à retrouver B A S I L E !"
+generate boss-pierre       "Une pierre magique s'allume !"
+generate boss-lettre-b     "Trouve le B. C'est la botte."
+generate boss-lettre-a     "Trouve le A. C'est monsieur a."
+generate boss-lettre-s     "Trouve le S. C'est le serpent."
+generate boss-lettre-i     "Trouve le I. C'est madame i."
+generate boss-lettre-l     "Trouve le L. C'est la limace."
+generate boss-lettre-e     "Trouve le E. C'est madame e."
+generate boss-indice       "Indice : regarde bien la forme de la lettre."
+generate boss-victoire     "Bravo Basile ! Tu as retrouvé ton prénom !"
+
 echo "Terminé : $(ls -1 "$OUT"/*.wav 2>/dev/null | wc -l | tr -d ' ') fichiers WAV."

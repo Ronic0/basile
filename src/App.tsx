@@ -2,16 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 import { HomeScreen } from "./components/HomeScreen";
 import { UniverseScreen } from "./components/UniverseScreen";
 import { DiscoveryScreen } from "./components/DiscoveryScreen";
-import { GameScreen } from "./components/GameScreen";
+import { GameScreen, type SessionResult } from "./components/GameScreen";
 import { RewardScreen } from "./components/RewardScreen";
 import { ParentScreen } from "./components/ParentScreen";
+import { BossScreen } from "./components/BossScreen";
 import { ALPHAS } from "./data/alphas";
 import { getUniverse, type UniverseId } from "./data/universes";
 import { playVoice, primeAudio } from "./lib/audio";
-import { loadStats, resetStats, saveStats, type Stats } from "./lib/storage";
+import {
+  loadStats,
+  resetStats,
+  saveStats,
+  type AideBoss,
+  type DifficulteMode,
+  type Stats,
+} from "./lib/storage";
 import { markExplored } from "./lib/collection";
 
-type Screen = "home" | "discovery" | "universes" | "game" | "reward" | "parent";
+type Screen = "home" | "discovery" | "universes" | "game" | "reward" | "parent" | "boss";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -58,15 +66,22 @@ export default function App() {
   }, []);
 
   const finishSession = useCallback(
-    (result: { bonnes: number; erreurs: number }) => {
-      setLastResult(result);
+    (result: SessionResult) => {
+      setLastResult({ bonnes: result.bonnes, erreurs: result.erreurs });
       setStats((prev) => {
+        const maitrise = { ...prev.maitrise };
+        for (const [id, value] of Object.entries(result.maitrise)) {
+          maitrise[id] = Math.max(maitrise[id] ?? 0, value);
+        }
         const next: Stats = {
+          ...prev,
           parties: prev.parties + 1,
           bonnes: prev.bonnes + result.bonnes,
           erreurs: prev.erreurs + result.erreurs,
+          bonnesSansAide: prev.bonnesSansAide + result.sansAide,
+          bonnesAvecAide: prev.bonnesAvecAide + result.avecAide,
+          maitrise,
           dernierUnivers: universeId,
-          decouverte: prev.decouverte,
         };
         saveStats(next);
         return next;
@@ -76,10 +91,38 @@ export default function App() {
     [universeId],
   );
 
+  const updateStats = useCallback((patch: Partial<Stats>) => {
+    setStats((prev) => {
+      const next = { ...prev, ...patch };
+      saveStats(next);
+      return next;
+    });
+  }, []);
+
+  const setDifficulte = useCallback(
+    (difficulte: DifficulteMode) => updateStats({ difficulte }),
+    [updateStats],
+  );
+
+  const setAideBoss = useCallback(
+    (aideBoss: AideBoss) => updateStats({ aideBoss }),
+    [updateStats],
+  );
+
   const handleReset = useCallback(() => {
     resetStats();
     setStats(loadStats());
   }, []);
+
+  const bossReady = stats.decouverte >= ALPHAS.length;
+
+  const openBoss = useCallback(() => {
+    if (stats.decouverte < ALPHAS.length) {
+      setScreen("discovery");
+      return;
+    }
+    setScreen("boss");
+  }, [stats.decouverte]);
 
   return (
     <div className="app">
@@ -96,12 +139,20 @@ export default function App() {
       )}
 
       {screen === "universes" && (
-        <UniverseScreen onSelect={selectUniverse} onBack={() => setScreen("home")} />
+        <UniverseScreen
+          onSelect={selectUniverse}
+          onSelectBoss={openBoss}
+          bossReady={bossReady}
+          onBack={() => setScreen("home")}
+        />
       )}
 
       {screen === "game" && (
         <GameScreen
           universe={universe}
+          discovered={ALPHAS.slice(0, stats.decouverte)}
+          difficulte={stats.difficulte}
+          maitrise={stats.maitrise}
           onExit={() => setScreen("universes")}
           onFinish={finishSession}
         />
@@ -120,8 +171,18 @@ export default function App() {
       {screen === "parent" && (
         <ParentScreen
           stats={stats}
+          onSetDifficulte={setDifficulte}
+          onSetAideBoss={setAideBoss}
           onReset={handleReset}
           onBack={() => setScreen("home")}
+        />
+      )}
+
+      {screen === "boss" && (
+        <BossScreen
+          alphas={ALPHAS}
+          aideBoss={stats.aideBoss}
+          onExit={() => setScreen("universes")}
         />
       )}
     </div>

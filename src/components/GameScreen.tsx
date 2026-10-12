@@ -3,18 +3,38 @@ import type { Alpha } from "../data/alphas";
 import type { Universe } from "../data/universes";
 import { playSfx, playVoice } from "../lib/audio";
 import { createRound, SESSION_ROUNDS, type Round } from "../lib/game";
+import { choixMax, choixSuivant, type EtatProgression } from "../lib/difficulty";
+import type { DifficulteMode } from "../lib/storage";
 import type { Phase } from "./boards/types";
 import { UNIVERSE_VIEWS } from "./universes/registry";
 import { BasileMascot } from "./BasileMascot";
 
-interface Props {
-  universe: Universe;
-  onExit: () => void;
-  onFinish: (result: { bonnes: number; erreurs: number }) => void;
+export interface SessionResult {
+  bonnes: number;
+  erreurs: number;
+  sansAide: number;
+  avecAide: number;
+  maitrise: Record<string, number>;
 }
 
-export function GameScreen({ universe, onExit, onFinish }: Props) {
-  const [round, setRound] = useState<Round>(() => createRound());
+interface Props {
+  universe: Universe;
+  discovered: Alpha[];
+  difficulte: DifficulteMode;
+  maitrise: Record<string, number>;
+  onExit: () => void;
+  onFinish: (result: SessionResult) => void;
+}
+
+export function GameScreen({ universe, discovered, difficulte, maitrise, onExit, onFinish }: Props) {
+  const [optionCount, setOptionCount] = useState(() => choixMax(difficulte, discovered.length));
+  const [progress, setProgress] = useState<EtatProgression>({
+    serieAutonome: 0,
+    serieDifficulte: 0,
+  });
+  const [round, setRound] = useState<Round>(() =>
+    createRound(discovered, undefined, choixMax(difficulte, discovered.length)),
+  );
   const [roundIndex, setRoundIndex] = useState(0);
   const [bonnes, setBonnes] = useState(0);
   const [erreurs, setErreurs] = useState(0);
@@ -22,6 +42,9 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
   const [pickedId, setPickedId] = useState<string | null>(null);
   const timer = useRef<number | null>(null);
   const sfxTimer = useRef<number | null>(null);
+  const roundHadError = useRef(false);
+  const session = useRef({ sansAide: 0, avecAide: 0, maitrise: { ...maitrise } });
+  const finished = useRef(false);
 
   useEffect(() => {
     playVoice(round.target.audioName);
@@ -35,8 +58,15 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
   }, []);
 
   useEffect(() => {
-    if (roundIndex >= SESSION_ROUNDS) {
-      onFinish({ bonnes, erreurs });
+    if (roundIndex >= SESSION_ROUNDS && !finished.current) {
+      finished.current = true;
+      onFinish({
+        bonnes,
+        erreurs,
+        sansAide: session.current.sansAide,
+        avecAide: session.current.avecAide,
+        maitrise: session.current.maitrise,
+      });
     }
   }, [roundIndex, bonnes, erreurs, onFinish]);
 
@@ -46,8 +76,19 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
       setPickedId(alpha.id);
 
       if (alpha.id === round.target.id) {
+        const autonome = !roundHadError.current;
         setPhase("correct");
         setBonnes((b) => b + 1);
+        if (autonome) {
+          session.current.sansAide += 1;
+          session.current.maitrise[alpha.id] = (session.current.maitrise[alpha.id] ?? 0) + 1;
+        } else {
+          session.current.avecAide += 1;
+        }
+        setProgress((p) => ({
+          serieAutonome: autonome ? p.serieAutonome + 1 : 0,
+          serieDifficulte: 0,
+        }));
         playVoice("bravo");
         playSfx(universe.correctSfx);
         if (sfxTimer.current) window.clearTimeout(sfxTimer.current);
@@ -57,15 +98,32 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
         timer.current = window.setTimeout(() => {
           const next = roundIndex + 1;
           if (next < SESSION_ROUNDS) {
-            setRound(createRound(round.target.id));
+            const etat: EtatProgression = {
+              serieAutonome: autonome ? progress.serieAutonome + 1 : 0,
+              serieDifficulte: 0,
+            };
+            const choix = choixSuivant(
+              difficulte,
+              discovered.length,
+              session.current.maitrise,
+              etat,
+            );
+            setOptionCount(choix);
+            setRound(createRound(discovered, round.target.id, choix));
             setPhase("asking");
             setPickedId(null);
+            roundHadError.current = false;
           }
           setRoundIndex(next);
         }, 1600);
       } else {
+        roundHadError.current = true;
         setPhase("wrong");
         setErreurs((e) => e + 1);
+        setProgress((p) => ({
+          serieAutonome: 0,
+          serieDifficulte: p.serieDifficulte + 1,
+        }));
         playVoice("reessaie");
         timer.current = window.setTimeout(() => {
           setPhase("asking");
@@ -73,10 +131,10 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
         }, 1100);
       }
     },
-    [phase, round.target.id, roundIndex, universe],
+    [phase, round.target.id, roundIndex, universe, difficulte, discovered, progress],
   );
 
-  const progress = Math.round((roundIndex / SESSION_ROUNDS) * 100);
+  const progressPct = Math.round((roundIndex / SESSION_ROUNDS) * 100);
   const { Scene, Board } = UNIVERSE_VIEWS[universe.id];
 
   return (
@@ -106,19 +164,24 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
 
       <main className="game-main">
         <Scene>
-          <Board
-            options={round.options}
-            targetId={round.target.id}
-            phase={phase}
-            pickedId={pickedId}
-            bonnes={bonnes}
-            onPick={handlePick}
-          />
+          <div
+            className={`board-host board-host--${optionCount}`}
+            data-options={optionCount}
+          >
+            <Board
+              options={round.options}
+              targetId={round.target.id}
+              phase={phase}
+              pickedId={pickedId}
+              bonnes={bonnes}
+              onPick={handlePick}
+            />
+          </div>
         </Scene>
       </main>
 
       <footer className="progress">
-        <div className="progress__bar" style={{ width: `${progress}%` }} />
+        <div className="progress__bar" style={{ width: `${progressPct}%` }} />
       </footer>
 
       <BasileMascot

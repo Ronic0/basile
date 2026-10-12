@@ -3,10 +3,12 @@ import { BasileMascot } from "./BasileMascot";
 
 interface Props {
   onSelect: (id: UniverseId) => void;
+  onSelectBoss: () => void;
+  bossReady: boolean;
   onBack: () => void;
 }
 
-export function UniverseScreen({ onSelect, onBack }: Props) {
+export function UniverseScreen({ onSelect, onSelectBoss, bossReady, onBack }: Props) {
   return (
     <div className="screen screen--universes">
       <BasileMascot
@@ -41,6 +43,30 @@ export function UniverseScreen({ onSelect, onBack }: Props) {
           </button>
         ))}
       </div>
+
+      <button
+        type="button"
+        className="boss-card"
+        onClick={onSelectBoss}
+        aria-label="Boss du prénom"
+      >
+        <span className="boss-card__glow" aria-hidden="true" />
+        <span className="boss-card__dragon" aria-hidden="true">
+          🐉
+        </span>
+        <span className="boss-card__text">
+          <span className="boss-card__tag">Boss final</span>
+          <span className="boss-card__title">Le Mystère du prénom BASILE</span>
+          <span className="boss-card__subtitle">
+            {bossReady
+              ? "Affronte le Dragon des prénoms mélangés"
+              : "Termine la découverte des 6 Alphas pour l'affronter"}
+          </span>
+        </span>
+        <span className="boss-card__crown" aria-hidden="true">
+          {bossReady ? "🏆" : "🔒"}
+        </span>
+      </button>
 
       {SOON_UNIVERSES.length > 0 && (
         <div className="universe-soon">

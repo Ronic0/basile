@@ -1,4 +1,4 @@
-import { ALPHAS, type Alpha } from "../data/alphas";
+import type { Alpha } from "../data/alphas";
 
 export const SESSION_ROUNDS = 6;
 
@@ -16,11 +16,22 @@ export interface Round {
   options: Alpha[];
 }
 
-/** Crée une manche avec 2 propositions (à terme paramétrable). */
-export function createRound(previousTargetId?: string): Round {
-  const pool = ALPHAS.filter((a) => a.id !== previousTargetId);
-  const target = shuffle(pool)[0] ?? ALPHAS[0];
-  const distractors = shuffle(ALPHAS.filter((a) => a.id !== target.id));
-  const options = shuffle([target, distractors[0]]);
-  return { target, options };
+/**
+ * Crée une manche avec un nombre de propositions paramétrable.
+ * Seuls les Alphas déjà découverts sont utilisés, sans doublon.
+ */
+export function createRound(
+  discovered: Alpha[],
+  previousTargetId: string | undefined,
+  optionCount: number,
+): Round {
+  const pool = discovered.length > 0 ? discovered : [];
+  const sansPrecedent = pool.filter((a) => a.id !== previousTargetId);
+  const targetPool = sansPrecedent.length > 0 ? sansPrecedent : pool;
+  const target = shuffle(targetPool)[0];
+
+  const count = Math.max(2, Math.min(optionCount, pool.length));
+  const distractors = shuffle(pool.filter((a) => a.id !== target.id)).slice(0, count - 1);
+
+  return { target, options: shuffle([target, ...distractors]) };
 }

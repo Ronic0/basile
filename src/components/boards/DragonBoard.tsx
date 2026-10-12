@@ -4,7 +4,14 @@ import type { BoardProps } from "./types";
 export function DragonBoard({ options, targetId, phase, pickedId, onPick }: BoardProps) {
   const targetIndex = options.findIndex((a) => a.id === targetId);
   const flying = phase === "correct";
-  const offset = options.length > 1 ? (targetIndex === 0 ? "-1" : "1") : "0";
+  const offset =
+    options.length <= 1
+      ? "0"
+      : options.length === 2
+        ? targetIndex === 0
+          ? "-1"
+          : "1"
+        : String(targetIndex - 1);
 
   return (
     <div className="board board--dragons">

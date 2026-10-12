@@ -3,7 +3,14 @@ import type { BoardProps } from "./types";
 
 export function RacingBoard({ options, targetId, phase, pickedId, onPick }: BoardProps) {
   const targetIndex = options.findIndex((a) => a.id === targetId);
-  const offset = options.length > 1 ? (targetIndex === 0 ? "-1" : "1") : "0";
+  const offset =
+    options.length <= 1
+      ? "0"
+      : options.length === 2
+        ? targetIndex === 0
+          ? "-1"
+          : "1"
+        : String(targetIndex - 1);
   const zooming = phase === "correct";
   const slowing = phase === "wrong";
 
