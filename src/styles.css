@@ -2703,25 +2703,63 @@ body {
   100% { transform: translate(0, 0) rotate(-3deg); }
 }
 
+/* --- Personnages (zones réservées, non interactives) --- */
+.boss-char {
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 0;
+}
+.boss-char--sm {
+  width: 15vmin;
+  flex: 0 0 auto;
+}
+.boss-char--md {
+  width: 23vmin;
+  flex: 0 0 auto;
+}
+.boss-char--lg {
+  width: 30vmin;
+  flex: 0 0 auto;
+}
+.boss-char .dragon-svg {
+  width: 100%;
+}
+.boss-char .dragon-svg.is-flying {
+  width: 100%;
+}
+
 /* --- Intro --- */
 .boss-intro {
   position: relative;
   flex: 1;
   min-height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3vmin;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "basile bubble dragon"
+    "actions actions actions";
+  align-items: end;
+  gap: 2vmin 4vmin;
   padding: 2vmin;
 }
+.boss-intro__basile {
+  grid-area: basile;
+  justify-self: center;
+}
 .boss-intro__dragon {
-  width: 42vmin;
-  max-width: 42%;
-  flex: 0 1 auto;
+  grid-area: dragon;
+  justify-self: center;
+  width: 34vmin;
+  max-width: 100%;
 }
 .boss-intro__bubble {
+  grid-area: bubble;
+  align-self: center;
   position: relative;
-  max-width: 46%;
+  max-width: 100%;
   background: rgba(255, 255, 255, 0.95);
   color: #2a1450;
   border-radius: 3vmin;
@@ -2729,15 +2767,23 @@ body {
   font-size: 3vmin;
   line-height: 1.5;
   font-weight: 600;
+  text-align: center;
   box-shadow: 0 1.4vmin 2.4vmin rgba(0, 0, 0, 0.35);
 }
-.boss-intro__bubble::before {
+.boss-intro__bubble::before,
+.boss-intro__bubble::after {
   content: "";
   position: absolute;
-  left: -2.4vmin;
-  top: 40%;
+  top: 42%;
   border: 1.4vmin solid transparent;
+}
+.boss-intro__bubble::before {
+  left: -2.6vmin;
   border-right-color: rgba(255, 255, 255, 0.95);
+}
+.boss-intro__bubble::after {
+  right: -2.6vmin;
+  border-left-color: rgba(255, 255, 255, 0.95);
 }
 .boss-intro__medal {
   margin-top: 1.6vmin;
@@ -2746,10 +2792,12 @@ body {
   font-size: 2.4vmin;
 }
 .boss-intro__actions {
+  grid-area: actions;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 2vmin;
+  justify-content: center;
+  gap: 3vmin;
 }
 
 /* --- Stages (A & B) --- */
@@ -2762,7 +2810,10 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2vmin;
-  padding-bottom: 3vmin;
+  padding: 1vmin 2vmin 3vmin;
+}
+.boss-stage--stones {
+  justify-content: space-between;
 }
 .boss-stage--build {
   justify-content: flex-start;
@@ -2770,18 +2821,28 @@ body {
   overflow: hidden;
   padding-top: 1vmin;
 }
-.boss-dragon-row {
+.boss-stage__head {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 3vmin;
+}
+.boss-stage__head--build {
+  align-items: center;
+  justify-items: center;
+}
+.boss-stage__prompt {
+  align-self: center;
   display: flex;
   align-items: center;
-  gap: 3vmin;
   justify-content: center;
-}
-.boss-stage__dragon {
-  width: 20vmin;
+  gap: 3vmin;
 }
 .boss-consigne {
   font-size: 3.4vmin;
   font-weight: 700;
+  text-align: center;
 }
 .boss-consigne strong {
   color: #ffd34d;
@@ -2968,21 +3029,17 @@ body {
 .boss-victory__scene {
   position: relative;
   width: 100%;
-  max-width: 52vmin;
+  max-width: 96vmin;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 2vmin;
+  padding: 0 1vmin;
 }
 .boss-victory__castle {
-  width: 34vmin;
-  max-width: 90%;
-}
-.boss-victory__dragon {
-  position: absolute;
-  top: 2%;
-  left: 8%;
-  width: 24vmin;
-  pointer-events: none;
+  width: 30vmin;
+  max-width: 42%;
+  flex: 0 1 auto;
 }
 .boss-victory__confetti {
   position: absolute;
@@ -3058,17 +3115,26 @@ body {
   border-radius: 1vmin;
 }
 
-/* Sur écran large/paysage, on garde tout lisible. */
+.boss-char .btn--sound:disabled,
+.btn--sound:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Sur écran plus étroit, on resserre sans chevauchement. */
 @media (max-width: 1100px) {
   .boss-intro {
-    flex-direction: column;
-  }
-  .boss-intro__dragon {
-    width: 30vmin;
-    max-width: 60%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr);
   }
   .boss-intro__bubble {
-    max-width: 90%;
+    font-size: 2.6vmin;
+    padding: 2.2vmin 2.6vmin;
+  }
+  .boss-char--md {
+    width: 18vmin;
+  }
+  .boss-char--sm {
+    width: 13vmin;
   }
   .boss-slot {
     width: 12vmin;

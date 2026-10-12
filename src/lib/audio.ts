@@ -168,13 +168,17 @@ export function playVoice(id: string): void {
   void startPlayback(el, src, () => token === voiceSeq);
 }
 
-/** Joue un bruitage. Plusieurs effets peuvent se superposer. */
-export function playSfx(id: string): void {
+/**
+ * Joue un bruitage. Plusieurs effets peuvent se superposer.
+ * `volume` optionnel (0..1) pour rendre un effet plus discret sans toucher
+ * au réglage global — utilisé par le boss pour ne pas couvrir les voix.
+ */
+export function playSfx(id: string, volume = sfxVolume): void {
   const src = pathFor("sfx", id);
   try {
     const el = new Audio(src);
     el.preload = "auto";
-    el.volume = sfxVolume;
+    el.volume = Math.max(0, Math.min(1, volume));
     el.addEventListener("error", () => {
       console.warn(
         "[audio] bruitage introuvable/illisible:",
@@ -187,6 +191,36 @@ export function playSfx(id: string): void {
   } catch (err) {
     console.warn("[audio] erreur bruitage:", src, describeError(err));
   }
+}
+
+/** Délai maximal d'attente d'une voix (si le fichier est bloqué/absent). */
+const VOICE_WAIT_TIMEOUT = 4500;
+
+/**
+ * Joue une consigne vocale et résout quand elle est terminée (ou en cas
+ * d'échec). Permet d'enchaîner les dialogues sans jamais couper une phrase.
+ */
+export function playVoiceAwait(id: string): Promise<void> {
+  return new Promise((resolve) => {
+    playVoice(id);
+    const el = currentVoice;
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      el?.removeEventListener("ended", finish);
+      el?.removeEventListener("error", finish);
+      resolve();
+    };
+    if (!el || el.ended) {
+      // Voix trop courte ou déjà terminée : on laisse un court temps de pose.
+      window.setTimeout(finish, 600);
+      return;
+    }
+    el.addEventListener("ended", finish, { once: true });
+    el.addEventListener("error", finish, { once: true });
+    window.setTimeout(finish, VOICE_WAIT_TIMEOUT);
+  });
 }
 
 const SILENT_WAV =

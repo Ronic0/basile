@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Alpha } from "../data/alphas";
-import { playSfx, playVoice } from "../lib/audio";
+import { playSfx, playVoice, playVoiceAwait } from "../lib/audio";
 import type { AideBoss } from "../lib/storage";
 import {
   loadBossReward,
@@ -98,7 +98,7 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
     alphas.length ? optionsFor(alphas[0], alphas, 2) : [],
   );
   const [pickedStoneId, setPickedStoneId] = useState<string | null>(null);
-  const stoneTimer = useRef<number | null>(null);
+  const alive = useRef(true);
 
   // --- Étape B : reconstituer BASILE ---
   const [placed, setPlaced] = useState<(string | null)[]>(() => Array(6).fill(null));
@@ -129,8 +129,9 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
   const stoneCount = aideBoss === "debutant" ? 2 : 3;
 
   useEffect(() => {
+    alive.current = true;
     return () => {
-      if (stoneTimer.current) window.clearTimeout(stoneTimer.current);
+      alive.current = false;
       if (wrongTimer.current) window.clearTimeout(wrongTimer.current);
       if (modelTimer.current) window.clearTimeout(modelTimer.current);
     };
@@ -143,6 +144,16 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
     }
   }, [phase, availability.checking]);
 
+  /** Annonce la consigne d'une pierre après un court temps de pose. */
+  const announceStone = useCallback(
+    (index: number, delay = 350) => {
+      window.setTimeout(() => {
+        if (alive.current) playVoice(alphas[index].audioName);
+      }, delay);
+    },
+    [alphas],
+  );
+
   const start = useCallback(() => {
     recordBossAttempt();
     setPhase("stones");
@@ -150,39 +161,42 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
     setStoneMini("asking");
     setPickedStoneId(null);
     setStoneOptions(optionsFor(alphas[0], alphas, stoneCount));
-  }, [alphas, stoneCount]);
+    announceStone(0, 450);
+  }, [alphas, stoneCount, announceStone]);
 
   // --- Interactions étape A ---
   const handleStonePick = useCallback(
-    (alpha: Alpha) => {
+    async (alpha: Alpha) => {
       if (stoneMini !== "asking") return;
       setPickedStoneId(alpha.id);
 
       if (alpha.id === alphas[stoneIndex].id) {
         setStoneMini("correct");
-        playSfx("etoile");
-        playVoice("boss-pierre");
-        stoneTimer.current = window.setTimeout(() => {
-          if (stoneIndex + 1 < alphas.length) {
-            const next = stoneIndex + 1;
-            setStoneIndex(next);
-            setStoneOptions(optionsFor(alphas[next], alphas, stoneCount));
-            setStoneMini("asking");
-            setPickedStoneId(null);
-          } else {
-            setPhase("build");
-          }
-        }, 1500);
-      } else {
-        setStoneMini("wrong");
-        playVoice("reessaie");
-        stoneTimer.current = window.setTimeout(() => {
+        playSfx("etoile", 0.3);
+        // On attend la fin de la phrase de réussite avant toute autre voix.
+        await playVoiceAwait("boss-pierre");
+        if (!alive.current) return;
+
+        if (stoneIndex + 1 < alphas.length) {
+          const next = stoneIndex + 1;
+          setStoneIndex(next);
+          setStoneOptions(optionsFor(alphas[next], alphas, stoneCount));
           setStoneMini("asking");
           setPickedStoneId(null);
-        }, 1000);
+          announceStone(next, 350);
+        } else {
+          setPhase("build");
+        }
+      } else {
+        setStoneMini("wrong");
+        await playVoiceAwait("reessaie");
+        if (!alive.current) return;
+        setStoneMini("asking");
+        setPickedStoneId(null);
+        announceStone(stoneIndex, 250);
       }
     },
-    [stoneMini, stoneIndex, alphas, stoneCount],
+    [stoneMini, stoneIndex, alphas, stoneCount, announceStone],
   );
 
   // --- Étape B : présentation du modèle (avancé) ---
@@ -217,7 +231,7 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
       setSelectedId(null);
       setWrongSlot(null);
       setHintActive(false);
-      playSfx("etoile");
+      playSfx("etoile", 0.3);
     },
     [selectedId],
   );
@@ -237,7 +251,7 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
           });
           setWrongSlot(null);
           setHintActive(false);
-          playSfx("etoile");
+          playSfx("etoile", 0.3);
         } else {
           setWrongSlot(nextEmpty);
           setSelectedId(null);
@@ -283,7 +297,8 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
     if (phase === "build" && allPlaced) {
       setPhase("victory");
       setReward(recordBossVictory());
-      playSfx("reussite");
+      playSfx("reussite", 0.4);
+      // Phrase finale complète, jamais coupée : aucune voix ne la suit.
       playVoice("boss-victoire");
     }
   }, [phase, allPlaced]);
@@ -300,7 +315,8 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
     setModelVisible(true);
     recordBossAttempt();
     setPhase("stones");
-  }, [alphas, stoneCount]);
+    announceStone(0, 450);
+  }, [alphas, stoneCount, announceStone]);
 
   const litStones = phase === "build" || phase === "victory" ? LETTERS.length : stoneIndex;
 
@@ -377,7 +393,16 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
 
       {phase === "intro" && (
         <main className="boss-intro">
-          <BossDragon mood="silly" className="boss-intro__dragon" />
+          <div className="boss-char boss-char--basile boss-intro__basile">
+            <BasileMascot
+              variant="guide"
+              mood="happy"
+              position="inline"
+              size="24vmin"
+              animated
+            />
+          </div>
+
           <div className="boss-intro__bubble">
             <p>
               Le Dragon des prénoms a mélangé les six Alphas de BASILE ! Aide Basile à les
@@ -387,6 +412,11 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
               <p className="boss-intro__medal">🏅 Médaille déjà gagnée — tu peux rejouer !</p>
             )}
           </div>
+
+          <div className="boss-char boss-char--dragon boss-intro__dragon">
+            <BossDragon mood="silly" />
+          </div>
+
           <div className="boss-intro__actions">
             <button type="button" className="btn btn--sound" onClick={() => playVoice("boss-intro")}>
               🔊
@@ -399,23 +429,36 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
       )}
 
       {phase === "stones" && (
-        <main className="boss-stage">
-          <div className="boss-dragon-row">
-            <BossDragon
-              mood={stoneMini === "correct" ? "happy" : "silly"}
-              className="boss-stage__dragon"
-            />
-            <p className="boss-consigne">
-              Trouve&nbsp;: <strong>{alphas[stoneIndex]?.name}</strong>
-            </p>
-            <button
-              type="button"
-              className="btn btn--sound"
-              onClick={() => playVoice(alphas[stoneIndex]?.audioName ?? "")}
-              aria-label="Rejouer la consigne"
-            >
-              🔊
-            </button>
+        <main className="boss-stage boss-stage--stones">
+          <div className="boss-stage__head">
+            <div className="boss-char boss-char--basile boss-char--md">
+              <BasileMascot
+                variant="sidekick"
+                mood={stoneMini === "correct" ? "celebrate" : "idle"}
+                position="inline"
+                size="16vmin"
+                animated
+              />
+            </div>
+
+            <div className="boss-stage__prompt">
+              <p className="boss-consigne">
+                Trouve&nbsp;: <strong>{alphas[stoneIndex]?.name}</strong>
+              </p>
+              <button
+                type="button"
+                className="btn btn--sound"
+                onClick={() => playVoice(alphas[stoneIndex]?.audioName ?? "")}
+                aria-label="Rejouer la consigne"
+                disabled={stoneMini !== "asking"}
+              >
+                🔊
+              </button>
+            </div>
+
+            <div className="boss-char boss-char--dragon boss-char--md">
+              <BossDragon mood={stoneMini === "correct" ? "happy" : "silly"} />
+            </div>
           </div>
 
           <div className="boss-choices">
@@ -439,7 +482,18 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
 
       {phase === "build" && (
         <main className="boss-stage boss-stage--build">
-          <div className="boss-slots" role="list" aria-label="Les lettres de BASILE">
+          <div className="boss-stage__head boss-stage__head--build">
+            <div className="boss-char boss-char--basile boss-char--sm">
+              <BasileMascot
+                variant="sidekick"
+                mood="happy"
+                position="inline"
+                size="14vmin"
+                animated
+              />
+            </div>
+
+            <div className="boss-slots" role="list" aria-label="Les lettres de BASILE">
             {LETTERS.map((letter, i) => {
               const filledId = placed[i];
               const filledAlpha = filledId ? alphas.find((a) => a.id === filledId) : null;
@@ -490,6 +544,11 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
                 </button>
               );
             })}
+            </div>
+
+            <div className="boss-char boss-char--dragon boss-char--sm">
+              <BossDragon mood="silly" />
+            </div>
           </div>
 
           <div className="boss-build-tools">
@@ -525,8 +584,22 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
       {phase === "victory" && (
         <main className="boss-victory">
           <div className="boss-victory__scene">
+            <div className="boss-char boss-char--basile boss-char--lg">
+              <BasileMascot
+                variant="reward"
+                mood="celebrate"
+                position="inline"
+                size="26vmin"
+                showEffects
+              />
+            </div>
+
             <BossCastle open className="boss-victory__castle" />
-            <BossDragon mood="happy" flying className="boss-victory__dragon" />
+
+            <div className="boss-char boss-char--dragon boss-char--lg">
+              <BossDragon mood="happy" flying />
+            </div>
+
             <div className="boss-victory__confetti" aria-hidden="true">
               {confetti.map((c) => (
                 <span
@@ -548,13 +621,6 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
           </div>
 
           <div className="boss-victory__banner">
-            <BasileMascot
-              variant="reward"
-              mood="celebrate"
-              position="inline"
-              size="22vmin"
-              showEffects
-            />
             <h2 className="boss-victory__title">Bravo Basile&nbsp;!</h2>
             <p className="boss-victory__subtitle">Tu as retrouvé ton prénom&nbsp;!</p>
             <p className="boss-victory__medal">🏅 Trésor enregistré&nbsp;: la médaille du prénom</p>
@@ -570,14 +636,6 @@ export function BossScreen({ alphas, aideBoss, onExit }: Props) {
         </main>
       )}
 
-      {(phase === "stones" || phase === "build") && (
-        <BasileMascot
-          variant="sidekick"
-          position="bottom-left"
-          mood={phase === "build" ? "happy" : "idle"}
-          animated
-        />
-      )}
     </div>
   );
 }

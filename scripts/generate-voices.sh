@@ -113,7 +113,7 @@ generate alpha-madame-e    "Madame e."
 
 # Boss du prénom
 generate boss-intro        "Oh non ! Le dragon a mélangé les Alphas de ton prénom. Aide Basile à retrouver B A S I L E !"
-generate boss-pierre       "Une pierre magique s'allume !"
+generate boss-pierre       "Bravo Basile ! Une pierre de plus !"
 generate boss-lettre-b     "Trouve le B. C'est la botte."
 generate boss-lettre-a     "Trouve le A. C'est monsieur a."
 generate boss-lettre-s     "Trouve le S. C'est le serpent."

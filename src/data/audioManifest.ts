@@ -41,7 +41,7 @@ export const VOICES: AudioDef[] = [
   { id: "bien-joue", kind: "voice", label: "Encouragement · Bien joué" },
   { id: "reessaie", kind: "voice", label: "Encouragement · Essaie encore" },
   { id: "boss-intro", kind: "voice", label: "Boss · Introduction du dragon" },
-  { id: "boss-pierre", kind: "voice", label: "Boss · Une pierre s'allume" },
+  { id: "boss-pierre", kind: "voice", label: "Boss · Bravo, une pierre de plus" },
   { id: "boss-lettre-b", kind: "voice", label: "Boss · Lettre B" },
   { id: "boss-lettre-a", kind: "voice", label: "Boss · Lettre A" },
   { id: "boss-lettre-s", kind: "voice", label: "Boss · Lettre S" },
