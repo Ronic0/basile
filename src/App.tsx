@@ -7,6 +7,7 @@ import { RewardScreen } from "./components/RewardScreen";
 import { ParentScreen } from "./components/ParentScreen";
 import { BossScreen } from "./components/BossScreen";
 import { NurserieScreen } from "./components/NurserieScreen";
+import { JardinMagiqueScreen } from "./components/JardinMagiqueScreen";
 import { AlbumScreen } from "./components/AlbumScreen";
 import { BASILE_ALPHAS, BASILE_ALPHA_IDS, type Alpha } from "./data/alphas";
 import type { ActivityId } from "./data/activities";
@@ -40,6 +41,7 @@ type Screen =
   | "parent"
   | "boss"
   | "nurserie"
+  | "jardin-magique"
   | "album";
 
 export default function App() {
@@ -90,6 +92,9 @@ export default function App() {
           break;
         case "nurserie":
           setScreen("nurserie");
+          break;
+        case "jardin-magique":
+          setScreen("jardin-magique");
           break;
         default:
           break;
@@ -271,6 +276,10 @@ export default function App() {
       )}
 
       {screen === "nurserie" && <NurserieScreen onExit={() => setScreen("home")} />}
+
+      {screen === "jardin-magique" && (
+        <JardinMagiqueScreen onExit={() => setScreen("home")} />
+      )}
     </div>
   );
 }

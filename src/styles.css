@@ -4490,6 +4490,483 @@ body {
   }
 }
 
+/* ---------- Jardin magique ---------- */
+.screen--jardin {
+  gap: 1vmin;
+  overflow: hidden;
+  background: linear-gradient(180deg, #7fc9f2 0%, #bde8ff 42%, #d9f2b0 62%, #9ed36a 100%);
+}
+.jardin__topbar {
+  gap: 2vmin;
+  flex: 0 0 auto;
+}
+.jardin__basket {
+  display: flex;
+  align-items: center;
+  gap: 0.8vmin;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  padding: 0.5vmin 2vmin;
+  flex: 0 0 auto;
+}
+.jardin__basket-icon {
+  width: 5vmin;
+  height: 5vmin;
+}
+.jardin__basket-count {
+  font-size: 2.8vmin;
+  font-weight: 800;
+  color: #4a2a00;
+}
+.jardin__stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 3vmin;
+  box-shadow: inset 0 0 6vmin rgba(0, 0, 0, 0.12);
+}
+.jardin__bubble {
+  position: absolute;
+  top: 2vmin;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  max-width: 72%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2a4d1f;
+  border-radius: 2.4vmin;
+  padding: 1.2vmin 3vmin;
+  font-size: 2.6vmin;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.25);
+  animation: pop 0.35s ease;
+}
+
+/* Décor */
+.garden-decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.garden-decor__sun {
+  position: absolute;
+  top: 3%;
+  right: 6%;
+  width: 11vmin;
+}
+.garden-decor__sun svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 2.6vmin rgba(255, 220, 120, 0.7));
+}
+.garden-decor__sun-rays {
+  transform-origin: 50px 50px;
+  animation: sun-spin 30s linear infinite;
+}
+.garden-decor__cloud {
+  position: absolute;
+  opacity: 0.92;
+}
+.garden-decor__cloud svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden-decor__cloud--1 {
+  top: 8%;
+  width: 18vmin;
+  animation: cloud-drift 55s linear infinite;
+}
+.garden-decor__cloud--2 {
+  top: 16%;
+  width: 13vmin;
+  animation: cloud-drift 72s linear infinite;
+  animation-delay: -30s;
+}
+.garden-decor__tree {
+  position: absolute;
+  bottom: 26%;
+  width: 16vmin;
+}
+.garden-decor__tree svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden-decor__tree--left {
+  left: 0.5%;
+}
+.garden-decor__tree--right {
+  right: 0.5%;
+  width: 18vmin;
+}
+.garden-decor__cabin {
+  position: absolute;
+  top: 16%;
+  right: 20%;
+  width: 15vmin;
+  opacity: 0.96;
+  filter: drop-shadow(0 0.6vmin 0.8vmin rgba(0, 0, 0, 0.18));
+}
+.garden-decor__cabin svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden-decor__ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 52%;
+  background: linear-gradient(180deg, #a5db74 0%, #7cc25a 52%, #5aa64a 100%);
+}
+.garden-decor__flowers {
+  position: absolute;
+  inset: 0;
+}
+.garden-decor__tuft {
+  position: absolute;
+  bottom: 46%;
+  width: 1.8vmin;
+  height: 1.8vmin;
+  border-radius: 50%;
+  background: #ffd34d;
+  box-shadow: 0 0 0 0.32vmin #fff6e0;
+  animation: flower-sway 4.6s ease-in-out infinite;
+}
+.garden-decor__tuft::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 0.5vmin;
+  height: 2.6vmin;
+  background: #3f8f38;
+  transform: translateX(-50%);
+}
+.garden-decor__tuft--1 { background: #ff8fb0; }
+.garden-decor__tuft--2 { background: #8ab6ff; }
+.garden-decor__tuft--3 { background: #ffd34d; }
+.garden-decor__tuft:nth-child(1) { left: 6%; bottom: 50%; }
+.garden-decor__tuft:nth-child(2) { left: 14%; }
+.garden-decor__tuft:nth-child(3) { left: 24%; bottom: 49%; }
+.garden-decor__tuft:nth-child(4) { left: 34%; }
+.garden-decor__tuft:nth-child(5) { left: 46%; bottom: 50%; }
+.garden-decor__tuft:nth-child(6) { left: 56%; }
+.garden-decor__tuft:nth-child(7) { left: 66%; bottom: 49%; }
+.garden-decor__tuft:nth-child(8) { left: 78%; }
+.garden-decor__tuft:nth-child(9) { left: 88%; bottom: 50%; }
+.garden-decor__tuft:nth-child(10) { left: 94%; }
+.garden-decor__butterfly {
+  position: absolute;
+  width: 7vmin;
+  animation: butterfly-flit 9s ease-in-out infinite;
+}
+.garden-decor__butterfly svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden-decor__butterfly--1 { top: 30%; left: 10%; }
+.garden-decor__butterfly--2 { top: 24%; right: 12%; animation-delay: -3s; }
+.garden-decor__butterfly-wings {
+  transform-origin: 30px 26px;
+  animation: wing-flap 0.5s ease-in-out infinite;
+}
+
+/* Plots */
+.jardin__plots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 3vmin;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2vmin;
+  padding: 0 3vmin;
+  align-items: end;
+  z-index: 3;
+}
+.jardin__plot {
+  position: relative;
+  height: 44vmin;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  border-radius: 3vmin;
+  touch-action: manipulation;
+  transition: transform 0.1s ease;
+}
+.jardin__plot:active {
+  transform: scale(0.98);
+}
+.jardin__soil {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 28vmin;
+  pointer-events: none;
+}
+.jardin__soil svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.jardin__plant-slot {
+  position: absolute;
+  left: 50%;
+  bottom: 7vmin;
+  transform: translateX(-50%);
+  width: 20vmin;
+  height: 34vmin;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+.garden-plant {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: plant-appear 0.45s ease both;
+}
+.garden-plant--tournesol.garden-plant--stage-3 {
+  transform-origin: 50% 100%;
+  animation: plant-appear 0.45s ease both, sun-turn 7s ease-in-out 0.6s infinite;
+}
+.jardin__ready {
+  position: absolute;
+  top: 1vmin;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3vmin;
+  height: 3vmin;
+  border-radius: 50%;
+  background: #fff3b0;
+  box-shadow: 0 0 3vmin #ffd34d;
+  animation: slot-pulse 1.2s ease-in-out infinite;
+  pointer-events: none;
+}
+.jardin__plot.is-mature .garden-plant {
+  filter: drop-shadow(0 0 1.6vmin #ffe08a);
+  animation: plant-glow 1.6s ease-in-out infinite;
+}
+
+/* Fx */
+.jardin__fx {
+  position: absolute;
+  bottom: 8vmin;
+  z-index: 6;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+.jardin__fx-can {
+  display: block;
+  width: 9vmin;
+  animation: can-pour 0.85s ease both;
+}
+.jardin__fx-can svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.jardin__fx-drop {
+  position: absolute;
+  left: -1vmin;
+  top: 1vmin;
+  width: 0.9vmin;
+  height: 1.6vmin;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: #8ad0ff;
+  animation: drop-fall 0.7s ease-in infinite;
+}
+.jardin__fx-drop--2 { left: 1.6vmin; animation-delay: 0.15s; }
+.jardin__fx-drop--3 { left: -3.4vmin; animation-delay: 0.3s; }
+.jardin__fx-seed {
+  display: block;
+  width: 2.2vmin;
+  height: 1.8vmin;
+  border-radius: 50%;
+  background: #7a4a20;
+  animation: seed-drop 0.72s ease-in both;
+}
+.jardin__fx-harvest {
+  display: block;
+  width: 9vmin;
+  height: 9vmin;
+  animation: harvest-fly 0.95s ease-in both;
+}
+.jardin__fx-star {
+  position: absolute;
+  left: 2vmin;
+  top: -2vmin;
+  font-size: 4.4vmin;
+  animation: pop-star 0.95s ease-in both;
+}
+.jardin__sparkle {
+  position: absolute;
+  bottom: 30vmin;
+  z-index: 6;
+  font-size: 5vmin;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: sparkle-pop 0.9s ease both;
+}
+.jardin__rest-butterfly {
+  position: absolute;
+  bottom: 33vmin;
+  z-index: 6;
+  font-size: 4.6vmin;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: butterfly-rest 4.2s ease both;
+}
+.jardin__ladybug {
+  position: absolute;
+  bottom: 9vmin;
+  left: -6vmin;
+  z-index: 6;
+  font-size: 4.4vmin;
+  pointer-events: none;
+  animation: ladybug-walk 6.5s linear both;
+}
+.screen--jardin .jardin__basile {
+  position: absolute;
+  top: 0.5vmin;
+  left: 1.5vmin;
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes plant-appear {
+  from { transform: translateY(1.2vmin) scale(0.9); opacity: 0.5; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes plant-glow {
+  0%, 100% { filter: drop-shadow(0 0 1.2vmin #ffe08a); }
+  50% { filter: drop-shadow(0 0 2.4vmin #ffd34d); }
+}
+@keyframes sun-turn {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+@keyframes can-pour {
+  0% { transform: translate(6vmin, -14vmin) rotate(-14deg); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(0, -8vmin) rotate(-34deg); opacity: 0.9; }
+}
+@keyframes drop-fall {
+  0% { transform: translateY(-2vmin); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(6vmin); opacity: 0; }
+}
+@keyframes seed-drop {
+  0% { transform: translateY(-12vmin) rotate(0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(0) rotate(90deg); opacity: 1; }
+}
+@keyframes harvest-fly {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translate(16vmin, -30vmin) scale(0.6); opacity: 0; }
+}
+@keyframes pop-star {
+  0% { transform: scale(0.4); opacity: 0; }
+  40% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.8) translateY(-3vmin); opacity: 0; }
+}
+@keyframes sparkle-pop {
+  0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: translateX(-50%) scale(1.3) translateY(-3vmin); opacity: 0; }
+}
+@keyframes butterfly-rest {
+  0% { transform: translate(-40%, -20%) scale(0.6); opacity: 0; }
+  15% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  80% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+  100% { transform: translate(-60%, -30%) scale(0.8); opacity: 0; }
+}
+@keyframes ladybug-walk {
+  0% { transform: translateX(0) rotate(0); }
+  50% { transform: translateX(70vw) rotate(6deg); }
+  100% { transform: translateX(140vw) rotate(0); }
+}
+
+/* Plante SVG */
+.garden-plant__stem { fill: none; stroke: #3f8f38; stroke-width: 5; stroke-linecap: round; }
+.garden-plant__leaf { fill: #5aa64a; }
+.garden-plant--tournesol .garden-plant__leaf { fill: #4fa863; }
+.garden-plant__bud { fill: #5aa64a; }
+.garden-plant__petal { fill: #ffd34d; }
+.garden-plant__core { fill: #8a5a2b; }
+.garden-plant__core-dot { fill: #5e3c1a; }
+.garden-plant__petal-white { fill: #ffffff; }
+.garden-plant__carrot { fill: #f0913a; }
+
+/* Barre d'outils */
+.jardin__toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 2vmin;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6vmin 0 calc(var(--safe) + 0.6vmin);
+}
+.jardin__tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3vmin;
+  width: 17vmin;
+  padding: 1vmin 0.6vmin;
+  border: none;
+  border-radius: 2.6vmin;
+  background: rgba(255, 255, 255, 0.9);
+  color: #23331d;
+  font-family: var(--font);
+  cursor: pointer;
+  box-shadow: 0 1vmin 0 rgba(0, 0, 0, 0.12), 0 1.4vmin 2vmin rgba(0, 0, 0, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.jardin__tool:active {
+  transform: translateY(0.5vmin) scale(0.97);
+}
+.jardin__tool.is-active {
+  background: #fff3c4;
+  box-shadow: 0 0 0 0.7vmin #ffd34d, 0 0 3vmin #ffd34d, 0 1vmin 0 rgba(0, 0, 0, 0.12);
+}
+.jardin__tool-icon {
+  width: 7.5vmin;
+  height: 7.5vmin;
+}
+.jardin__tool-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.jardin__tool-label {
+  font-size: 2vmin;
+  font-weight: 800;
+}
+
+@media (max-width: 1100px) {
+  .jardin__plot { height: 38vmin; }
+  .jardin__soil { width: 27vmin; }
+  .jardin__plant-slot { width: 17vmin; height: 30vmin; }
+  .jardin__tool { width: 15vmin; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

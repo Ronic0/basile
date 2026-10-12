@@ -110,9 +110,22 @@ L'écran d'accueil est un portail illustré (jardin, soleil, nuages, cabane,
 chemin, fleurs, papillons, petit dragon endormi) vers **six grandes activités**.
 « Le Jardin des Alphas » ouvre l'intégralité du jeu pédagogique déjà existant
 (8 univers + boss + découverte progressive) ; les autres activités sont des
-espaces libres. « La Nurserie des dragons » est jouable (voir ci-dessous).
-« Le Jardin magique » arrive à l'étape suivante ; « Atelier », « Port des
-pirates » et « Ma cabane » sont affichées comme extensions futures (désactivées).
+espaces libres. « La Nurserie des dragons » et « Le Jardin magique » sont jouables (voir
+ci-dessous) ; « Atelier », « Port des pirates » et « Ma cabane » sont affichées
+comme extensions futures (désactivées).
+
+### Le Jardin magique (V1)
+
+Activité de jardinage libre (aucun questionnaire, aucune pénalité) : trois
+graines (tournesol, fraisier, carotte) à planter dans **quatre parcelles**,
+arrosoir pour faire grandir (chaque arrosage = une étape, jusqu'à maturité),
+puis récolte (fleur / fraise / carotte) qui remplit le panier et libère la
+parcelle. Scène SVG/CSS (`src/components/jardin/`) : ciel, soleil, nuages,
+arbres, cabanon, fleurs, papillons. Réactions surprises : papillon qui se pose,
+coccinelle qui traverse, tournesol qui tourne vers le soleil. Bruitages et
+voix locales (`public/audio/sfx/plantation|eau|croissance|recolte|papillon.wav`,
+`public/audio/fr/jardin-*.wav`). Sauvegarde dédiée
+`alphas-de-basile/jardin/v1` (`src/lib/garden.ts`), additive et non destructive.
 
 ### La Nurserie des dragons (V1)
 

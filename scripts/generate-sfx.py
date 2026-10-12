@@ -310,6 +310,48 @@ def build_balle() -> list[float]:
     )
 
 
+def build_plantation() -> list[float]:
+    thud = tone(150, 0.2, amp=0.42, decay=0.12)
+    rustle = lowpass(noise(0.28, 0.3, decay=0.16), 0.2)
+    return mix(at(thud, 0.0), at(rustle, 0.05))
+
+
+def build_eau() -> list[float]:
+    pour = lowpass(noise(0.75, 0.34, decay=0.6), 0.28)
+    drops = concat(
+        tone(940, 0.06, amp=0.2, decay=0.04),
+        silence(0.08),
+        tone(1120, 0.05, amp=0.18, decay=0.03),
+        silence(0.1),
+        tone(820, 0.05, amp=0.16, decay=0.03),
+    )
+    return mix(pour, at(drops, 0.12))
+
+
+def build_croissance() -> list[float]:
+    notes = [659.25, 783.99, 987.77, 1318.5]
+    return concat(*[tone(freq, 0.12, amp=0.34, decay=0.09) for freq in notes])
+
+
+def build_recolte() -> list[float]:
+    pluck = glide(540, 260, 0.16, amp=0.4, decay=0.12)
+    sparkle = concat(
+        tone(1568.0, 0.07, amp=0.28, decay=0.04),
+        tone(2093.0, 0.10, amp=0.24, decay=0.06),
+    )
+    return concat(pluck, sparkle)
+
+
+def build_papillon() -> list[float]:
+    return concat(
+        tone(1760.0, 0.06, amp=0.22, decay=0.04),
+        silence(0.05),
+        tone(2093.0, 0.06, amp=0.2, decay=0.04),
+        silence(0.06),
+        tone(1760.0, 0.08, amp=0.18, decay=0.05),
+    )
+
+
 SOUNDS = {
     "coffre": build_coffre,
     "dragon-content": build_dragon_content,
@@ -329,6 +371,11 @@ SOUNDS = {
     "construction": build_construction,
     "sirene": build_sirene,
     "pouvoir": build_pouvoir,
+    "plantation": build_plantation,
+    "eau": build_eau,
+    "croissance": build_croissance,
+    "recolte": build_recolte,
+    "papillon": build_papillon,
 }
 
 

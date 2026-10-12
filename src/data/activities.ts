@@ -53,7 +53,7 @@ export const ACTIVITIES: Activity[] = [
     id: "jardin-magique",
     title: "Le Jardin magique",
     tagline: "Plante, arrose, récolte",
-    status: "soon",
+    status: "ready",
     voice: "activite-jardin-magique",
     accent: "#f0b429",
     background: "linear-gradient(160deg, #d9f0b0 0%, #9ad06a 55%, #5aa64a 100%)",

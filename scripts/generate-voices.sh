@@ -150,6 +150,10 @@ generate trouve-madame-e-aigu         "Trouve madame é."
 generate trouve-madame-e-grave        "Trouve madame è."
 generate trouve-madame-e-circonflexe  "Trouve madame ê."
 
+# Jardin magique
+generate jardin-bienvenue "Bienvenue dans ton jardin, Basile ! Plante une graine !"
+generate jardin-bravo     "Bravo, belle récolte !"
+
 # Nurserie des dragons
 generate nurserie-nourrir  "Nourris ton dragon !"
 generate nurserie-boire    "Donne-lui à boire !"
