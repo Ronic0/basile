@@ -4,6 +4,7 @@ export type DragonState =
   | "eating"
   | "drinking"
   | "sleeping"
+  | "waking"
   | "playing"
   | "beingPetted";
 

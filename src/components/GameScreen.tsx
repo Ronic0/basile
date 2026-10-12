@@ -15,6 +15,8 @@ export interface SessionResult {
   sansAide: number;
   avecAide: number;
   maitrise: Record<string, number>;
+  /** Confusions "choisi->cible" rencontrées pendant la session. */
+  confusions: Record<string, number>;
 }
 
 interface Props {
@@ -33,7 +35,7 @@ export function GameScreen({ universe, discovered, difficulte, maitrise, onExit,
     serieDifficulte: 0,
   });
   const [round, setRound] = useState<Round>(() =>
-    createRound(discovered, undefined, choixMax(difficulte, discovered.length)),
+    createRound(discovered, undefined, choixMax(difficulte, discovered.length), maitrise),
   );
   const [roundIndex, setRoundIndex] = useState(0);
   const [bonnes, setBonnes] = useState(0);
@@ -43,7 +45,12 @@ export function GameScreen({ universe, discovered, difficulte, maitrise, onExit,
   const timer = useRef<number | null>(null);
   const sfxTimer = useRef<number | null>(null);
   const roundHadError = useRef(false);
-  const session = useRef({ sansAide: 0, avecAide: 0, maitrise: { ...maitrise } });
+  const session = useRef({
+    sansAide: 0,
+    avecAide: 0,
+    maitrise: { ...maitrise },
+    confusions: {} as Record<string, number>,
+  });
   const finished = useRef(false);
 
   useEffect(() => {
@@ -66,6 +73,7 @@ export function GameScreen({ universe, discovered, difficulte, maitrise, onExit,
         sansAide: session.current.sansAide,
         avecAide: session.current.avecAide,
         maitrise: session.current.maitrise,
+        confusions: session.current.confusions,
       });
     }
   }, [roundIndex, bonnes, erreurs, onFinish]);
@@ -109,7 +117,7 @@ export function GameScreen({ universe, discovered, difficulte, maitrise, onExit,
               etat,
             );
             setOptionCount(choix);
-            setRound(createRound(discovered, round.target.id, choix));
+            setRound(createRound(discovered, round.target.id, choix, session.current.maitrise));
             setPhase("asking");
             setPickedId(null);
             roundHadError.current = false;
@@ -118,6 +126,9 @@ export function GameScreen({ universe, discovered, difficulte, maitrise, onExit,
         }, 1600);
       } else {
         roundHadError.current = true;
+        const confusionKey = `${alpha.id}->${round.target.id}`;
+        session.current.confusions[confusionKey] =
+          (session.current.confusions[confusionKey] ?? 0) + 1;
         setPhase("wrong");
         setErreurs((e) => e + 1);
         setProgress((p) => ({

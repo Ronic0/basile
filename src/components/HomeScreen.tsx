@@ -189,7 +189,7 @@ export function HomeScreen({ onSelectActivity, onParent, stats }: Props) {
             key={activity.id}
             activity={activity}
             selected={selectedId === activity.id}
-            progress={activity.id === "jardin-alphas" ? stats.decouverte : undefined}
+            progress={activity.id === "jardin-alphas" ? stats.decouverts.length : undefined}
             onSpeak={() => speak(activity.voice)}
             onEnter={(e) => handlePointerEnter(activity, e)}
             onLeave={handlePointerLeave}

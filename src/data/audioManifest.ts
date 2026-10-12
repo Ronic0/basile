@@ -11,6 +11,8 @@
  *   bruitages -> public/audio/sfx/<id>.wav
  */
 
+import { ALPHAS } from "./alphas";
+
 export type AudioKind = "voice" | "sfx";
 
 export interface AudioDef {
@@ -24,7 +26,7 @@ export const VOICE_EXT = "wav";
 export const SFX_DIR = "audio/sfx";
 export const SFX_EXT = "wav";
 
-export const VOICES: AudioDef[] = [
+const CORE_VOICES: AudioDef[] = [
   { id: "trouve-la-botte", kind: "voice", label: "Consigne · La botte" },
   { id: "trouve-monsieur-a", kind: "voice", label: "Consigne · Monsieur a" },
   { id: "trouve-le-serpent", kind: "voice", label: "Consigne · Le serpent" },
@@ -62,6 +64,16 @@ export const VOICES: AudioDef[] = [
   { id: "boss-indice", kind: "voice", label: "Boss · Indice" },
   { id: "boss-victoire", kind: "voice", label: "Boss · Victoire" },
 ];
+
+/** Voix du catalogue étendu, dérivées de `alphas.ts` (hors six BASILE déjà listés). */
+const CHARACTER_VOICES: AudioDef[] = ALPHAS.filter((a) => a.group !== "basile").flatMap(
+  (a) => [
+    { id: a.discoveryAudio, kind: "voice" as const, label: `Album · ${a.name}` },
+    { id: a.audioName, kind: "voice" as const, label: `Consigne · ${a.name}` },
+  ],
+);
+
+export const VOICES: AudioDef[] = [...CORE_VOICES, ...CHARACTER_VOICES];
 
 export const SFX: AudioDef[] = [
   { id: "coffre", kind: "sfx", label: "Coffre qui s'ouvre" },

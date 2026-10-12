@@ -7,7 +7,8 @@ import { RewardScreen } from "./components/RewardScreen";
 import { ParentScreen } from "./components/ParentScreen";
 import { BossScreen } from "./components/BossScreen";
 import { NurserieScreen } from "./components/NurserieScreen";
-import { ALPHAS } from "./data/alphas";
+import { AlbumScreen } from "./components/AlbumScreen";
+import { BASILE_ALPHAS, BASILE_ALPHA_IDS, type Alpha } from "./data/alphas";
 import type { ActivityId } from "./data/activities";
 import { getUniverse, type UniverseId } from "./data/universes";
 import { playVoice, primeAudio } from "./lib/audio";
@@ -19,6 +20,15 @@ import {
   type DifficulteMode,
   type Stats,
 } from "./lib/storage";
+import {
+  markDiscovered,
+  moveInOrder,
+  nextToDiscover,
+  playableAlphas,
+  resetPedagogy,
+  setActive,
+  unlockAlpha,
+} from "./lib/catalogue";
 import { markExplored, saveLastActivity } from "./lib/collection";
 
 type Screen =
@@ -29,16 +39,21 @@ type Screen =
   | "reward"
   | "parent"
   | "boss"
-  | "nurserie";
+  | "nurserie"
+  | "album";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
   const [universeId, setUniverseId] = useState<UniverseId>("pirates");
   const [stats, setStats] = useState<Stats>(() => loadStats());
   const [lastResult, setLastResult] = useState({ bonnes: 0, erreurs: 0 });
+  const [discoveryTarget, setDiscoveryTarget] = useState<Alpha | null>(null);
 
   const universe = getUniverse(universeId);
-  const discoveryAlphas = ALPHAS.slice(0, stats.decouverte);
+
+  const playable = playableAlphas(stats);
+  // Toujours au moins deux propositions pour pouvoir jouer.
+  const gamePool = playable.length >= 2 ? playable : BASILE_ALPHAS;
 
   useEffect(() => {
     const unlock = () => primeAudio();
@@ -51,13 +66,15 @@ export default function App() {
   }, []);
 
   const goPlay = useCallback(() => {
-    if (stats.decouverte < ALPHAS.length) {
+    const target = nextToDiscover(stats);
+    if (target) {
+      setDiscoveryTarget(target);
       setScreen("discovery");
     } else {
       playVoice("bien-joue");
       setScreen("universes");
     }
-  }, [stats.decouverte]);
+  }, [stats]);
 
   /**
    * Portail « Le Monde de Basile ».
@@ -82,14 +99,16 @@ export default function App() {
   );
 
   const finishDiscovery = useCallback(() => {
-    setStats((prev) => {
-      if (prev.decouverte >= ALPHAS.length) return prev;
-      const next: Stats = { ...prev, decouverte: prev.decouverte + 1 };
-      saveStats(next);
-      return next;
-    });
+    if (discoveryTarget) {
+      setStats((prev) => {
+        const next = markDiscovered(prev, discoveryTarget.id);
+        saveStats(next);
+        return next;
+      });
+    }
+    setDiscoveryTarget(null);
     setScreen("universes");
-  }, []);
+  }, [discoveryTarget]);
 
   const selectUniverse = useCallback((id: UniverseId) => {
     setUniverseId(id);
@@ -105,6 +124,10 @@ export default function App() {
         for (const [id, value] of Object.entries(result.maitrise)) {
           maitrise[id] = Math.max(maitrise[id] ?? 0, value);
         }
+        const confusions = { ...prev.confusions };
+        for (const [key, value] of Object.entries(result.confusions)) {
+          confusions[key] = (confusions[key] ?? 0) + value;
+        }
         const next: Stats = {
           ...prev,
           parties: prev.parties + 1,
@@ -113,6 +136,7 @@ export default function App() {
           bonnesSansAide: prev.bonnesSansAide + result.sansAide,
           bonnesAvecAide: prev.bonnesAvecAide + result.avecAide,
           maitrise,
+          confusions,
           dernierUnivers: universeId,
         };
         saveStats(next);
@@ -126,6 +150,15 @@ export default function App() {
   const updateStats = useCallback((patch: Partial<Stats>) => {
     setStats((prev) => {
       const next = { ...prev, ...patch };
+      saveStats(next);
+      return next;
+    });
+  }, []);
+
+  /** Applique une transformation pure du catalogue puis sauvegarde. */
+  const applyCatalogue = useCallback((transform: (s: Stats) => Stats) => {
+    setStats((prev) => {
+      const next = transform(prev);
       saveStats(next);
       return next;
     });
@@ -146,15 +179,21 @@ export default function App() {
     setStats(loadStats());
   }, []);
 
-  const bossReady = stats.decouverte >= ALPHAS.length;
+  const bossReady = BASILE_ALPHA_IDS.every((id) => stats.decouverts.includes(id));
 
   const openBoss = useCallback(() => {
-    if (stats.decouverte < ALPHAS.length) {
-      setScreen("discovery");
+    if (bossReady) {
+      setScreen("boss");
       return;
     }
-    setScreen("boss");
-  }, [stats.decouverte]);
+    const missing = BASILE_ALPHAS.find((a) => !stats.decouverts.includes(a.id));
+    if (missing) {
+      setDiscoveryTarget(missing);
+      setScreen("discovery");
+    } else {
+      setScreen("universes");
+    }
+  }, [bossReady, stats]);
 
   return (
     <div className="app">
@@ -168,7 +207,7 @@ export default function App() {
 
       {screen === "discovery" && (
         <DiscoveryScreen
-          alphas={discoveryAlphas}
+          alphas={discoveryTarget ? [discoveryTarget] : []}
           onDone={finishDiscovery}
           onBack={() => setScreen("home")}
         />
@@ -178,15 +217,20 @@ export default function App() {
         <UniverseScreen
           onSelect={selectUniverse}
           onSelectBoss={openBoss}
+          onSelectAlbum={() => setScreen("album")}
           bossReady={bossReady}
           onBack={() => setScreen("home")}
         />
       )}
 
+      {screen === "album" && (
+        <AlbumScreen stats={stats} onBack={() => setScreen("universes")} />
+      )}
+
       {screen === "game" && (
         <GameScreen
           universe={universe}
-          discovered={ALPHAS.slice(0, stats.decouverte)}
+          discovered={gamePool}
           difficulte={stats.difficulte}
           maitrise={stats.maitrise}
           onExit={() => setScreen("universes")}
@@ -209,6 +253,10 @@ export default function App() {
           stats={stats}
           onSetDifficulte={setDifficulte}
           onSetAideBoss={setAideBoss}
+          onToggleActive={(id, active) => applyCatalogue((s) => setActive(s, id, active))}
+          onUnlock={(id) => applyCatalogue((s) => unlockAlpha(s, id))}
+          onMove={(id, delta) => applyCatalogue((s) => moveInOrder(s, id, delta))}
+          onResetPedagogy={() => applyCatalogue(resetPedagogy)}
           onReset={handleReset}
           onBack={() => setScreen("home")}
         />
@@ -216,15 +264,13 @@ export default function App() {
 
       {screen === "boss" && (
         <BossScreen
-          alphas={ALPHAS}
+          alphas={BASILE_ALPHAS}
           aideBoss={stats.aideBoss}
           onExit={() => setScreen("universes")}
         />
       )}
 
-      {screen === "nurserie" && (
-        <NurserieScreen onExit={() => setScreen("home")} />
-      )}
+      {screen === "nurserie" && <NurserieScreen onExit={() => setScreen("home")} />}
     </div>
   );
 }

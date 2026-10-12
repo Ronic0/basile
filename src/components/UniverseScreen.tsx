@@ -4,11 +4,18 @@ import { BasileMascot } from "./BasileMascot";
 interface Props {
   onSelect: (id: UniverseId) => void;
   onSelectBoss: () => void;
+  onSelectAlbum: () => void;
   bossReady: boolean;
   onBack: () => void;
 }
 
-export function UniverseScreen({ onSelect, onSelectBoss, bossReady, onBack }: Props) {
+export function UniverseScreen({
+  onSelect,
+  onSelectBoss,
+  onSelectAlbum,
+  bossReady,
+  onBack,
+}: Props) {
   return (
     <div className="screen screen--universes">
       <BasileMascot
@@ -23,7 +30,14 @@ export function UniverseScreen({ onSelect, onSelectBoss, bossReady, onBack }: Pr
           ⬅️
         </button>
         <h2 className="topbar__title">Choisis ton univers</h2>
-        <span className="topbar__spacer" />
+        <button
+          type="button"
+          className="btn btn--album"
+          onClick={onSelectAlbum}
+          aria-label="Ouvrir mon album des Alphas"
+        >
+          📖 <span className="btn--album__text">Album</span>
+        </button>
       </header>
 
       <div className="universe-grid">

@@ -211,14 +211,15 @@ export function NurserieScreen({ onExit }: Props) {
   const wake = useCallback(() => {
     stopSleepInterval();
     beginAction();
-    setDragonState("happy");
+    // Il bâille et s'étire au réveil.
+    setDragonState("waking");
     setHint(null);
     playSfx("dragon-content", 0.5);
     updateGauges({ bonheur: 5 }, "reveiller");
     later(() => {
       endAction();
       setDragonState("idle");
-    }, 1200);
+    }, 1700);
   }, [stopSleepInterval, beginAction, endAction, updateGauges, later]);
 
   // --- Caresser (toucher / glissement) ---

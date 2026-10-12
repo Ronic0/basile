@@ -139,6 +139,33 @@ annonce au focus clavier avec ouverture directe par Entrée/Espace. Les
 activités « bientôt » sont annonçables mais jamais ouvrables. Audio via
 `playVoice`/`stopVoice` (+ `isVoicePlaying` pour éviter les relances inutiles).
 
+## Catalogue des Alphas (extensible)
+
+Le catalogue vit dans `src/data/alphas.ts` (30 personnages présents sur le
+disque, correspondance nom ↔ graphème issue de `public/assets/alphas/alphas.json`).
+Les six personnages de BASILE gardent leurs identifiants historiques ; le boss
+BASILE reste figé sur ces six personnages, indépendamment du reste.
+
+- **Groupes** (`ALPHA_GROUPS`) : BASILE, O·M·R·U, F·V·N·T, P·C·D·J, G·H·K·Q,
+  W·X·Y·Z, et un groupe « spécial » (digramme `ch` et variantes `é/è/ê`, jamais
+  proposés par défaut).
+- **Par défaut** : seuls les six BASILE sont activés ; aucune nouveauté n'est
+  débloquée automatiquement.
+- **Espace Parent** : activer/désactiver un personnage, le débloquer, choisir
+  l'ordre de découverte, consulter les confusions fréquentes, réinitialiser les
+  progrès pédagogiques (avec confirmation). Les réglages de difficulté existants
+  sont conservés.
+- **Album des Alphas** : accessible depuis « Choisis ton univers » (bouton
+  Album). Personnages découverts interactifs (nom prononcé + animation),
+  personnages à venir en silhouette.
+- **Moteur commun** : les huit univers puisent dans les personnages
+  découverts ∩ activés (mêmes règles : 2 choix par défaut, passage adaptatif à 3,
+  sans doublon, révision des personnages difficiles). Le boss BASILE est
+  inchangé.
+- **Sauvegarde** : `decouverts`, `actifs`, `ordre`, `confusions` ajoutés à
+  `alphas-de-basile/stats/v1` avec migration rétro-compatible (ancien champ
+  numérique `decouverte` → liste d'ids). Aucune donnée existante n'est écrasée.
+
 ## Fonctionnalités
 
 - **8 univers jouables** (moteur pédagogique commun, 2 ou 3 choix par manche) :
