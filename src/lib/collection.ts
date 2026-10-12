@@ -8,6 +8,7 @@ const CREATURES_KEY = "alphas-de-basile/creatures/v1";
 const BUILDS_KEY = "alphas-de-basile/builds/v1";
 const EXPLORED_KEY = "alphas-de-basile/explored/v1";
 const BOSS_KEY = "alphas-de-basile/boss/v1";
+const ACTIVITY_KEY = "alphas-de-basile/derniere-activite/v1";
 
 function loadList(key: string): string[] {
   try {
@@ -52,6 +53,24 @@ export function loadExplored(): UniverseId[] {
 }
 export function markExplored(id: UniverseId): void {
   addToList(EXPLORED_KEY, id);
+}
+
+/** Dernière grande activité visitée (portail « Le Monde de Basile »). */
+export function loadLastActivity(): string | null {
+  try {
+    return localStorage.getItem(ACTIVITY_KEY);
+  } catch (err) {
+    console.debug("[collection] lecture activité impossible:", err);
+    return null;
+  }
+}
+
+export function saveLastActivity(id: string): void {
+  try {
+    localStorage.setItem(ACTIVITY_KEY, id);
+  } catch (err) {
+    console.debug("[collection] écriture activité impossible:", err);
+  }
 }
 
 /** Récompense persistante du boss du prénom. */

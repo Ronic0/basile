@@ -178,6 +178,385 @@ body {
   opacity: 0.7;
 }
 
+/* ---------- Le Monde de Basile (portail) ---------- */
+.screen--world {
+  gap: 1vmin;
+  align-items: stretch;
+  background: linear-gradient(180deg, #7fc9f2 0%, #bfe6f7 46%, #e9f8de 68%, #cdeba0 100%);
+  padding: calc(env(safe-area-inset-top, 0px) + 1vmin) 2vmin calc(var(--safe) + 15vmin);
+}
+
+/* --- Décor de jardin (purement décoratif) --- */
+.garden {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.garden__sun {
+  position: absolute;
+  top: 3%;
+  left: 4%;
+  width: 13vmin;
+}
+.garden__sun svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 3vmin rgba(255, 220, 120, 0.75));
+}
+.garden__sun-rays {
+  transform-origin: 60px 60px;
+  animation: sun-spin 26s linear infinite;
+}
+.garden__cloud {
+  position: absolute;
+  opacity: 0.92;
+}
+.garden__cloud svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden__cloud--1 {
+  top: 7%;
+  width: 20vmin;
+  animation: cloud-drift 46s linear infinite;
+}
+.garden__cloud--2 {
+  top: 15%;
+  width: 15vmin;
+  animation: cloud-drift 62s linear infinite;
+  animation-delay: -18s;
+}
+.garden__cloud--3 {
+  top: 3%;
+  width: 12vmin;
+  animation: cloud-drift 78s linear infinite;
+  animation-delay: -40s;
+}
+.garden__cabin {
+  position: absolute;
+  left: 1.5vmin;
+  bottom: calc(var(--safe) + 0.5vmin);
+  width: 17vmin;
+  filter: drop-shadow(0 0.6vmin 0.8vmin rgba(0, 0, 0, 0.18));
+}
+.garden__cabin svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden__path {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 30vmin;
+  height: 42vmin;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #f3e0b6 0%, #e0c186 100%);
+  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  opacity: 0.85;
+}
+.garden__flowers {
+  position: absolute;
+  inset: 0;
+}
+.garden__flower {
+  position: absolute;
+  bottom: calc(var(--safe) + 0.5vmin);
+  width: 8vmin;
+  transform-origin: bottom center;
+  animation: flower-sway 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 0.4vmin 0.5vmin rgba(0, 0, 0, 0.15));
+}
+.garden__flower svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden__flower--1 { left: 20%; animation-delay: 0s; }
+.garden__flower--2 { left: 33%; animation-delay: 0.6s; width: 6.4vmin; }
+.garden__flower--3 { left: 46%; animation-delay: 1.2s; }
+.garden__flower--4 { left: 60%; animation-delay: 0.3s; width: 6.6vmin; }
+.garden__flower--5 { left: 72%; animation-delay: 0.9s; }
+.garden__butterfly {
+  position: absolute;
+  width: 7vmin;
+  animation: butterfly-flit 9s ease-in-out infinite;
+}
+.garden__butterfly svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.garden__butterfly--1 {
+  top: 30%;
+  left: 8%;
+  animation-delay: 0s;
+}
+.garden__butterfly--2 {
+  top: 22%;
+  right: 10%;
+  animation-delay: -3s;
+}
+.garden__butterfly-wings {
+  transform-origin: 30px 26px;
+  animation: wing-flap 0.5s ease-in-out infinite;
+}
+
+@keyframes sun-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes cloud-drift {
+  from { transform: translateX(-28vmin); }
+  to { transform: translateX(135vw); }
+}
+@keyframes flower-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes butterfly-flit {
+  0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+  25% { transform: translate(4vmin, -3vmin) rotate(6deg); }
+  50% { transform: translate(1vmin, -6vmin) rotate(-4deg); }
+  75% { transform: translate(-3vmin, -2vmin) rotate(5deg); }
+}
+@keyframes wing-flap {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.35); }
+}
+
+/* --- En-tête --- */
+.world__header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5vmin;
+  flex: 0 0 auto;
+}
+.world__basile {
+  --basile-size: 20vmin;
+}
+.world__titles {
+  text-align: left;
+}
+.world__title {
+  font-size: 4.6vmin;
+  line-height: 1.08;
+  color: #2a4d1f;
+  text-shadow: 0 0.5vmin 0 rgba(255, 255, 255, 0.7);
+}
+.world__subtitle {
+  font-size: 2.4vmin;
+  color: #3f6b2f;
+  opacity: 0.9;
+}
+
+/* --- Grille d'activités --- */
+.world__activities {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 122vmin;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2vmin;
+}
+
+.activity-card {
+  position: relative;
+  font-family: var(--font);
+  border: 0.5vmin solid rgba(255, 255, 255, 0.65);
+  border-radius: 4vmin;
+  color: #23331d;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6vmin;
+  padding: 1.6vmin;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 6vmin rgba(255, 255, 255, 0.35),
+    0 1.4vmin 2vmin rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.activity-card:not(:disabled):active {
+  transform: scale(0.96);
+}
+.activity-card__icon {
+  width: min(58%, 17vmin);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0.6vmin 0.7vmin rgba(0, 0, 0, 0.18));
+}
+.activity-card__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.activity-card__title {
+  font-size: 2.7vmin;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
+  text-shadow: 0 0.3vmin 0 rgba(255, 255, 255, 0.6);
+}
+.activity-card__tagline {
+  font-size: 1.9vmin;
+  opacity: 0.82;
+  text-align: center;
+}
+.activity-card__ribbon {
+  position: absolute;
+  top: 1.4vmin;
+  right: -0.4vmin;
+  background: #5a3a86;
+  color: #fff;
+  font-size: 1.9vmin;
+  font-weight: 800;
+  padding: 0.5vmin 2.4vmin;
+  border-radius: 999px 0 0 999px;
+  letter-spacing: 0.05vmin;
+  box-shadow: 0 0.4vmin 0.8vmin rgba(0, 0, 0, 0.25);
+}
+.activity-card.is-soon {
+  filter: saturate(0.55) brightness(0.97);
+}
+.activity-card.is-soon .activity-card__icon {
+  opacity: 0.75;
+}
+.activity-card__progress {
+  display: flex;
+  gap: 0.7vmin;
+  margin-top: 0.4vmin;
+}
+.activity-card__progress span {
+  width: 1.5vmin;
+  height: 1.5vmin;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 0 0 0.25vmin rgba(0, 0, 0, 0.08);
+}
+.activity-card__progress span.is-on {
+  background: var(--accent, #3aa34a);
+  box-shadow: 0 0 1vmin var(--accent, #3aa34a);
+}
+
+/* --- Dragon endormi & bouton Parent --- */
+.world__dragon {
+  position: absolute;
+  right: 2vmin;
+  bottom: calc(var(--safe) + 0.5vmin);
+  width: 20vmin;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0.8vmin 1vmin rgba(0, 0, 0, 0.2));
+}
+.world__dragon .sleepy-dragon__body {
+  transform-origin: 50% 90%;
+  animation: dragon-breathe 3.6s ease-in-out infinite;
+}
+.world__dragon .sleepy-dragon__shadow {
+  fill: rgba(0, 0, 0, 0.16);
+}
+.world__dragon .sleepy-dragon__torso,
+.world__dragon .sleepy-dragon__tail {
+  fill: #6cc05a;
+}
+.world__dragon .sleepy-dragon__belly {
+  fill: #f6d08a;
+}
+.world__dragon .sleepy-dragon__wing {
+  fill: #8fd98a;
+  stroke: #3f8f38;
+  stroke-width: 2;
+}
+.world__dragon .sleepy-dragon__head {
+  fill: #7fd39a;
+}
+.world__dragon .sleepy-dragon__snout {
+  fill: #9fe0b0;
+}
+.world__dragon .sleepy-dragon__nostril {
+  fill: #2f6b41;
+}
+.world__dragon .sleepy-dragon__cheek {
+  fill: #ff9d8a;
+  opacity: 0.7;
+}
+.world__dragon .sleepy-dragon__eye {
+  fill: none;
+  stroke: #2f6b41;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.world__dragon .sleepy-dragon__horn {
+  fill: #f5a623;
+}
+.world__dragon .sleepy-dragon__spike {
+  fill: #f5a623;
+}
+.world__dragon .sleepy-dragon__foot {
+  fill: #4fa863;
+}
+.world__dragon .sleepy-dragon__z {
+  font-family: var(--font);
+  font-weight: 800;
+  fill: #5a3a86;
+  opacity: 0;
+  animation: z-float 3.6s ease-in-out infinite;
+}
+.world__dragon .sleepy-dragon__z--1 { font-size: 15px; animation-delay: 0s; }
+.world__dragon .sleepy-dragon__z--2 { font-size: 19px; animation-delay: 0.8s; }
+.world__dragon .sleepy-dragon__z--3 { font-size: 23px; animation-delay: 1.6s; }
+
+@keyframes dragon-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+}
+@keyframes z-float {
+  0% { opacity: 0; transform: translateY(6px); }
+  30% { opacity: 0.9; }
+  100% { opacity: 0; transform: translateY(-16px); }
+}
+
+.world__parent {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 2vmin);
+  right: 2vmin;
+  z-index: 3;
+  font-size: 2.2vmin;
+  padding: 1.2vmin 3vmin;
+}
+
+/* --- Écrans plus petits : on resserre la grille --- */
+@media (max-width: 1100px) {
+  .world__activities {
+    max-width: 100%;
+    gap: 1.4vmin;
+  }
+  .activity-card__title {
+    font-size: 2.3vmin;
+  }
+  .world__title {
+    font-size: 4vmin;
+  }
+}
+
 /* ---------- Topbar ---------- */
 .topbar {
   display: flex;

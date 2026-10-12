@@ -7,6 +7,7 @@ import { RewardScreen } from "./components/RewardScreen";
 import { ParentScreen } from "./components/ParentScreen";
 import { BossScreen } from "./components/BossScreen";
 import { ALPHAS } from "./data/alphas";
+import type { ActivityId } from "./data/activities";
 import { getUniverse, type UniverseId } from "./data/universes";
 import { playVoice, primeAudio } from "./lib/audio";
 import {
@@ -17,7 +18,7 @@ import {
   type DifficulteMode,
   type Stats,
 } from "./lib/storage";
-import { markExplored } from "./lib/collection";
+import { markExplored, saveLastActivity } from "./lib/collection";
 
 type Screen = "home" | "discovery" | "universes" | "game" | "reward" | "parent" | "boss";
 
@@ -48,6 +49,25 @@ export default function App() {
       setScreen("universes");
     }
   }, [stats.decouverte]);
+
+  /**
+   * Portail « Le Monde de Basile ».
+   * Le Jardin des Alphas ouvre le moteur pédagogique existant ; les autres
+   * activités seront branchées ici au fil des étapes.
+   */
+  const selectActivity = useCallback(
+    (id: ActivityId) => {
+      saveLastActivity(id);
+      switch (id) {
+        case "jardin-alphas":
+          goPlay();
+          break;
+        default:
+          break;
+      }
+    },
+    [goPlay],
+  );
 
   const finishDiscovery = useCallback(() => {
     setStats((prev) => {
@@ -127,7 +147,11 @@ export default function App() {
   return (
     <div className="app">
       {screen === "home" && (
-        <HomeScreen onPlay={goPlay} onParent={() => setScreen("parent")} stats={stats} />
+        <HomeScreen
+          onSelectActivity={selectActivity}
+          onParent={() => setScreen("parent")}
+          stats={stats}
+        />
       )}
 
       {screen === "discovery" && (

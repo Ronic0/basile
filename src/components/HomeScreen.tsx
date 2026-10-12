@@ -1,47 +1,101 @@
 import type { Stats } from "../lib/storage";
+import { ACTIVITIES, type Activity, type ActivityId } from "../data/activities";
 import { BasileMascot } from "./BasileMascot";
+import { GardenDecor } from "./home/GardenDecor";
+import { ActivityIcon } from "./home/ActivityIcon";
+import { SleepyDragon } from "./home/SleepyDragon";
 
 interface Props {
-  onPlay: () => void;
+  onSelectActivity: (id: ActivityId) => void;
   onParent: () => void;
   stats: Stats;
 }
 
-export function HomeScreen({ onPlay, onParent, stats }: Props) {
+export function HomeScreen({ onSelectActivity, onParent, stats }: Props) {
   return (
-    <div className="screen screen--home">
-      <div className="home__stars" aria-hidden="true">
-        <span>⭐</span>
-        <span>🐍</span>
-        <span>🥾</span>
-        <span>✨</span>
-        <span>🐌</span>
-      </div>
+    <div className="screen screen--world">
+      <GardenDecor />
 
-      <BasileMascot variant="hero" mood="happy" position="inline" />
+      <header className="world__header">
+        <BasileMascot
+          variant="hero"
+          mood="happy"
+          position="inline"
+          size="24vmin"
+          className="world__basile"
+        />
+        <div className="world__titles">
+          <h1 className="world__title">
+            Bienvenue dans le
+            <br />
+            monde de Basile&nbsp;!
+          </h1>
+          <p className="world__subtitle">Choisis une activité</p>
+        </div>
+      </header>
 
-      <h1 className="home__title">
-        Les aventures des
-        <br />
-        <span>Alphas de Basile</span>
-      </h1>
+      <main className="world__activities">
+        {ACTIVITIES.map((activity) => (
+          <ActivityCard
+            key={activity.id}
+            activity={activity}
+            progress={activity.id === "jardin-alphas" ? stats.decouverte : undefined}
+            onSelect={onSelectActivity}
+          />
+        ))}
+      </main>
 
-      <p className="home__subtitle">Trouve le bon Alpha&nbsp;!</p>
+      <SleepyDragon className="world__dragon" />
 
-      <button type="button" className="btn btn--huge btn--play" onClick={onPlay}>
-        <span aria-hidden="true">▶</span> Jouer
-      </button>
-
-      <button type="button" className="btn btn--ghost home__parent" onClick={onParent}>
+      <button type="button" className="btn btn--ghost world__parent" onClick={onParent}>
         Parent
       </button>
-
-      {stats.parties > 0 && (
-        <p className="home__stats">
-          {stats.parties} partie{stats.parties > 1 ? "s" : ""} • {stats.bonnes} réussie
-          {stats.bonnes > 1 ? "s" : ""}
-        </p>
-      )}
     </div>
+  );
+}
+
+interface CardProps {
+  activity: Activity;
+  progress?: number;
+  onSelect: (id: ActivityId) => void;
+}
+
+function ActivityCard({ activity, progress, onSelect }: CardProps) {
+  const soon = activity.status === "soon";
+  return (
+    <button
+      type="button"
+      className={`activity-card ${soon ? "is-soon" : ""}`}
+      style={
+        {
+          background: activity.background,
+          "--accent": activity.accent,
+        } as React.CSSProperties
+      }
+      onClick={() => !soon && onSelect(activity.id)}
+      disabled={soon}
+      aria-label={`${activity.title}${soon ? " (bientôt disponible)" : ""}`}
+    >
+      {soon && (
+        <span className="activity-card__ribbon" aria-hidden="true">
+          bientôt
+        </span>
+      )}
+
+      <span className="activity-card__icon" aria-hidden="true">
+        <ActivityIcon id={activity.id} />
+      </span>
+
+      <span className="activity-card__title">{activity.title}</span>
+      <span className="activity-card__tagline">{activity.tagline}</span>
+
+      {!soon && progress !== undefined && (
+        <span className="activity-card__progress" aria-hidden="true">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={i} className={i < progress ? "is-on" : ""} />
+          ))}
+        </span>
+      )}
+    </button>
   );
 }

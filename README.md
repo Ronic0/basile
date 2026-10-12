@@ -104,6 +104,19 @@ Props : `variant`, `mood` (`idle` / `happy` / `celebrate`), `animated`, `size`,
 zones tactiles) et respect de `prefers-reduced-motion`. Si `basile.png` est
 absent : aucun affichage, aucun crash (warning console).
 
+## Le Monde de Basile (portail d'accueil)
+
+L'écran d'accueil est un portail illustré (jardin, soleil, nuages, cabane,
+chemin, fleurs, papillons, petit dragon endormi) vers **six grandes activités**.
+« Le Jardin des Alphas » ouvre l'intégralité du jeu pédagogique déjà existant
+(8 univers + boss + découverte progressive) ; les autres activités sont des
+espaces libres. Les trois activités « Atelier », « Port des pirates » et
+« Ma cabane » sont affichées comme extensions futures (désactivées).
+
+Données : `src/data/activities.ts`. Les illustrations du portail sont des SVG
+originaux dans `src/components/home/`. Navigation par état dans `App.tsx`
+(`selectActivity`), sans dépendance ajoutée.
+
 ## Fonctionnalités
 
 - **8 univers jouables** (moteur pédagogique commun, 2 ou 3 choix par manche) :
