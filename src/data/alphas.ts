@@ -6,10 +6,15 @@ export interface Alpha {
   color: string;
   colorDark: string;
   emoji: string;
+  /** Image optimisée (marges recadrées) générée par scripts/prepare-alphas.py. */
   image: string;
+  /** Image originale, utilisée si l'optimisée est absente. */
+  imageFallback: string;
 }
 
 const base = import.meta.env.BASE_URL;
+const optimized = (file: string) => `${base}assets/alphas/optimized/${file}`;
+const original = (file: string) => `${base}assets/alphas/${file}`;
 
 export const ALPHAS: Alpha[] = [
   {
@@ -20,7 +25,8 @@ export const ALPHAS: Alpha[] = [
     color: "#8a5a2b",
     colorDark: "#5e3c1a",
     emoji: "🥾",
-    image: `${base}assets/alphas/botte.png`,
+    image: optimized("botte.png"),
+    imageFallback: original("botte.png"),
   },
   {
     id: "monsieur-a",
@@ -30,7 +36,8 @@ export const ALPHAS: Alpha[] = [
     color: "#e8543f",
     colorDark: "#b5321f",
     emoji: "🅰️",
-    image: `${base}assets/alphas/monsieur-a.png`,
+    image: optimized("monsieur-a.png"),
+    imageFallback: original("monsieur-a.png"),
   },
   {
     id: "serpent",
@@ -40,7 +47,8 @@ export const ALPHAS: Alpha[] = [
     color: "#3aa34a",
     colorDark: "#246e30",
     emoji: "🐍",
-    image: `${base}assets/alphas/serpent.png`,
+    image: optimized("serpent.png"),
+    imageFallback: original("serpent.png"),
   },
   {
     id: "madame-i",
@@ -50,7 +58,8 @@ export const ALPHAS: Alpha[] = [
     color: "#7d4bd1",
     colorDark: "#542e93",
     emoji: "ℹ️",
-    image: `${base}assets/alphas/madame-i.png`,
+    image: optimized("madame-i.png"),
+    imageFallback: original("madame-i.png"),
   },
   {
     id: "limace",
@@ -60,7 +69,8 @@ export const ALPHAS: Alpha[] = [
     color: "#2f9bd6",
     colorDark: "#1c6a95",
     emoji: "🐌",
-    image: `${base}assets/alphas/limace.png`,
+    image: optimized("limace.png"),
+    imageFallback: original("limace.png"),
   },
   {
     id: "madame-e",
@@ -70,7 +80,8 @@ export const ALPHAS: Alpha[] = [
     color: "#f0b429",
     colorDark: "#b98612",
     emoji: "✨",
-    image: `${base}assets/alphas/madame-e.png`,
+    image: optimized("madame-e.png"),
+    imageFallback: original("madame-e.png"),
   },
 ];
 

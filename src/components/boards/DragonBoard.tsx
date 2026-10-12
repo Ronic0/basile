@@ -1,16 +1,7 @@
 import { AlphaCard } from "../AlphaCard";
-import type { Alpha } from "../../data/alphas";
-import type { Phase } from "./PirateBoard";
+import type { BoardProps } from "./types";
 
-interface Props {
-  options: Alpha[];
-  targetId: string;
-  phase: Phase;
-  pickedId: string | null;
-  onPick: (alpha: Alpha) => void;
-}
-
-export function DragonBoard({ options, targetId, phase, pickedId, onPick }: Props) {
+export function DragonBoard({ options, targetId, phase, pickedId, onPick }: BoardProps) {
   const targetIndex = options.findIndex((a) => a.id === targetId);
   const flying = phase === "correct";
   const offset = options.length > 1 ? (targetIndex === 0 ? "-1" : "1") : "0";

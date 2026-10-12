@@ -16,6 +16,12 @@ Fichiers générés :
 - `etoile.wav` — étoile magique (arpège aigu)
 - `dragon.wav` — battement d'ailes + grondement
 - `reussite.wav` — fanfare de fin de session
+- `eclosion.wav` — éclosion d'œuf (Jurassic Basile)
+- `moteur.wav` — moteur de course (Turbo Basile)
+- `capture.wav` — capture de créature (Les Créatures)
+- `construction.wav` — construction (Bricolo Basile)
+- `sirene.wav` — sirène douce (Mission Sauvetage)
+- `pouvoir.wav` — super-pouvoir (Super Basile)
 
 Pour vos propres sons : remplacez le `.wav` (même nom). Pour changer
 d'extension, modifiez `SFX_EXT` dans `src/data/audioManifest.ts`.

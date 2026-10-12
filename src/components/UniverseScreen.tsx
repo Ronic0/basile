@@ -42,15 +42,17 @@ export function UniverseScreen({ onSelect, onBack }: Props) {
         ))}
       </div>
 
-      <div className="universe-soon">
-        {SOON_UNIVERSES.map((u) => (
-          <div key={u.title} className="universe-soon__card">
-            <span aria-hidden="true">{u.emoji}</span>
-            <span className="universe-soon__title">{u.title}</span>
-            <span className="universe-soon__tag">bientôt</span>
-          </div>
-        ))}
-      </div>
+      {SOON_UNIVERSES.length > 0 && (
+        <div className="universe-soon">
+          {SOON_UNIVERSES.map((u) => (
+            <div key={u.title} className="universe-soon__card">
+              <span aria-hidden="true">{u.emoji}</span>
+              <span className="universe-soon__title">{u.title}</span>
+              <span className="universe-soon__tag">bientôt</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -18,7 +18,9 @@ export function AlphaCard({
   disabled = false,
   showName = false,
 }: Props) {
-  const [imageFailed, setImageFailed] = useState(false);
+  const sources = [alpha.image, alpha.imageFallback];
+  const [srcIndex, setSrcIndex] = useState(0);
+  const failed = srcIndex >= sources.length;
 
   const classes = ["alpha-card", `is-${state}`];
   if (disabled) classes.push("is-disabled");
@@ -38,13 +40,13 @@ export function AlphaCard({
       aria-label={alpha.name}
     >
       <div className="alpha-card__frame">
-        {!imageFailed ? (
+        {!failed ? (
           <img
             className="alpha-card__img"
-            src={alpha.image}
+            src={sources[srcIndex]}
             alt={alpha.name}
             draggable={false}
-            onError={() => setImageFailed(true)}
+            onError={() => setSrcIndex((i) => i + 1)}
           />
         ) : (
           <div className="alpha-card__placeholder">

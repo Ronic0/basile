@@ -3,10 +3,8 @@ import type { Alpha } from "../data/alphas";
 import type { Universe } from "../data/universes";
 import { playSfx, playVoice } from "../lib/audio";
 import { createRound, SESSION_ROUNDS, type Round } from "../lib/game";
-import { DragonBoard } from "./boards/DragonBoard";
-import { PirateBoard, type Phase } from "./boards/PirateBoard";
-import { DragonScene } from "./scenes/DragonScene";
-import { PirateScene } from "./scenes/PirateScene";
+import type { Phase } from "./boards/types";
+import { UNIVERSE_VIEWS } from "./universes/registry";
 import { BasileMascot } from "./BasileMascot";
 
 interface Props {
@@ -51,10 +49,10 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
         setPhase("correct");
         setBonnes((b) => b + 1);
         playVoice("bravo");
-        playSfx(universe.id === "pirates" ? "coffre" : "dragon");
+        playSfx(universe.correctSfx);
         if (sfxTimer.current) window.clearTimeout(sfxTimer.current);
         sfxTimer.current = window.setTimeout(() => {
-          playSfx(universe.id === "pirates" ? "piece" : "etoile");
+          playSfx(universe.accentSfx);
         }, 350);
         timer.current = window.setTimeout(() => {
           const next = roundIndex + 1;
@@ -75,10 +73,11 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
         }, 1100);
       }
     },
-    [phase, round.target.id, roundIndex, universe.id],
+    [phase, round.target.id, roundIndex, universe],
   );
 
   const progress = Math.round((roundIndex / SESSION_ROUNDS) * 100);
+  const { Scene, Board } = UNIVERSE_VIEWS[universe.id];
 
   return (
     <div className="screen screen--game" style={{ background: universe.background }}>
@@ -106,27 +105,16 @@ export function GameScreen({ universe, onExit, onFinish }: Props) {
       </header>
 
       <main className="game-main">
-        {universe.id === "pirates" ? (
-          <PirateScene>
-            <PirateBoard
-              options={round.options}
-              targetId={round.target.id}
-              phase={phase}
-              pickedId={pickedId}
-              onPick={handlePick}
-            />
-          </PirateScene>
-        ) : (
-          <DragonScene>
-            <DragonBoard
-              options={round.options}
-              targetId={round.target.id}
-              phase={phase}
-              pickedId={pickedId}
-              onPick={handlePick}
-            />
-          </DragonScene>
-        )}
+        <Scene>
+          <Board
+            options={round.options}
+            targetId={round.target.id}
+            phase={phase}
+            pickedId={pickedId}
+            bonnes={bonnes}
+            onPick={handlePick}
+          />
+        </Scene>
       </main>
 
       <footer className="progress">

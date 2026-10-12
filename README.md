@@ -38,6 +38,19 @@ npm run preview
 
 Le jeu démarre même si ces fichiers sont absents.
 
+### Lisibilité des images
+
+Les PNG sources ont de grandes marges transparentes. On génère des versions
+recadrées (sans déformer ni retoucher les couleurs) :
+
+```bash
+npm run alphas   # python3 scripts/prepare-alphas.py (requiert Pillow)
+```
+
+Sortie dans `public/assets/alphas/optimized/`. Le composant `AlphaCard` utilise
+`object-fit: contain`, un fond clair neutre, un cadre à la couleur de l'Alpha et
+de petites animations (flottement, apparition, saut à la réussite).
+
 ## Audio (voix + bruitages)
 
 Tout l'audio est **local et généré automatiquement** (aucune API, aucun service
@@ -93,9 +106,26 @@ absent : aucun affichage, aucun crash (warning console).
 
 ## Fonctionnalités
 
+- **8 univers jouables** (moteur pédagogique commun, 2 choix par manche) :
+  1. **Les Pirates** — coffre au trésor
+  2. **Les Dragons** — dragon qui vole vers l'Alpha
+  3. **Jurassic Basile** — œuf qui éclôt et bébé dinosaure
+  4. **Turbo Basile** — course de voiture
+  5. **Les Créatures** — capture et album de 5 créatures SVG
+  6. **Bricolo Basile** — construction progressive (robot/fusée/château)
+  7. **Mission Sauvetage** — véhicule de secours et pont
+  8. **Super Basile** — super-héros qui soulève un rocher
 - Phase de **découverte des Alphas** progressive (2 au départ, jusqu'aux 6 de BASILE).
-- Univers **Pirates** : bateau, île, coffres qui s'ouvrent, pièces et trésor.
-- Univers **Dragons** : ciel, nuages, montagnes et dragon animé qui vole vers le
-  bon Alpha.
-- Sauvegarde locale (`localStorage`) et espace parent.
+- Sauvegarde locale (`localStorage`) : statistiques + collections isolées
+  (`alphas-de-basile/creatures|builds|explored`, additives et non destructives).
+- Espace parent (stats + test audio) et mascotte **Basile** animée.
+
+## Ajouter un univers
+
+1. Créer un **décor** (`src/components/scenes/`) et un **plateau**
+   (`src/components/boards/`, props `BoardProps`).
+2. Déclarer le monde dans `src/data/universes.ts` (`UniverseId`, `UNIVERSES`,
+   `correctSfx`/`accentSfx`).
+3. Ajouter l'entrée dans `src/components/universes/registry.tsx`.
+Le moteur (manches, score, consignes, progression) est réutilisé automatiquement.
 

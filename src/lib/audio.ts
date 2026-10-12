@@ -86,11 +86,6 @@ function whenReady(el: HTMLAudioElement): Promise<void> {
     el.addEventListener("canplay", finish);
     el.addEventListener("error", finish);
     window.setTimeout(finish, 2500);
-    try {
-      el.load();
-    } catch {
-      finish();
-    }
   });
 }
 
@@ -112,6 +107,11 @@ async function startPlayback(
     await el.play();
     console.debug("[audio] lecture OK:", src);
   } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      // interruption volontaire (voix remplacée) : ce n'est pas une erreur
+      console.debug("[audio] lecture interrompue:", src);
+      return;
+    }
     console.warn(
       "[audio] échec lecture:",
       src,
@@ -226,11 +226,6 @@ export function probeAudio(def: AudioDef): Promise<boolean> {
     window.setTimeout(() => finish(false), 2500);
     el.preload = "auto";
     el.src = src;
-    try {
-      el.load();
-    } catch {
-      finish(false);
-    }
   });
 }
 
@@ -283,11 +278,6 @@ export async function diagnoseAudio(def: AudioDef): Promise<AudioDiagnostic> {
     el.addEventListener("loadedmetadata", () => finish(true), { once: true });
     el.addEventListener("error", () => finish(false), { once: true });
     window.setTimeout(() => finish(false), 3000);
-    try {
-      el.load();
-    } catch {
-      finish(false);
-    }
   });
 
   if (!diag.decodable) {

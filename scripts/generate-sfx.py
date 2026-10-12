@@ -183,12 +183,80 @@ def build_reussite() -> list[float]:
     return concat(arpeggio, chord)
 
 
+def build_eclosion() -> list[float]:
+    crack = concat(
+        tone(2400, 0.03, amp=0.3, decay=0.02),
+        silence(0.02),
+        tone(2800, 0.03, amp=0.25, decay=0.02),
+    )
+    pop = tone(680, 0.14, amp=0.5, decay=0.09)
+    cheep = concat(
+        tone(1450, 0.09, amp=0.32, decay=0.05),
+        tone(1850, 0.11, amp=0.28, decay=0.06),
+    )
+    return concat(crack, pop, cheep)
+
+
+def build_moteur() -> list[float]:
+    rev = glide(90, 240, 0.6, amp=0.42, decay=0.5)
+    rumble = lowpass(noise(0.6, 0.5, decay=0.5), 0.06)
+    return mix(rev, rumble, at(gain(rev, 0.3), 0.25))
+
+
+def build_capture() -> list[float]:
+    pwing = glide(320, 900, 0.22, amp=0.5, decay=0.16)
+    chimes = concat(
+        tone(1320, 0.08, amp=0.3, decay=0.05),
+        tone(1760, 0.12, amp=0.26, decay=0.07),
+    )
+    return concat(pwing, chimes)
+
+
+def _hammer_hit(freq: float) -> list[float]:
+    return mix(
+        tone(freq, 0.06, amp=0.5, decay=0.03),
+        lowpass(noise(0.06, 0.35, decay=0.03), 0.35),
+    )
+
+
+def build_construction() -> list[float]:
+    chime = concat(
+        tone(783.99, 0.12, amp=0.32, decay=0.09),
+        tone(1174.7, 0.16, amp=0.28, decay=0.11),
+    )
+    return concat(
+        _hammer_hit(320),
+        silence(0.09),
+        _hammer_hit(360),
+        silence(0.05),
+        chime,
+    )
+
+
+def build_sirene() -> list[float]:
+    up = glide(620, 900, 0.35, amp=0.32, decay=1.2)
+    down = glide(900, 620, 0.35, amp=0.32, decay=1.2)
+    return concat(up, down, up, down)
+
+
+def build_pouvoir() -> list[float]:
+    w = whoosh(0.45, amp=0.4, peak=0.16, spread=0.1)
+    power = glide(180, 1100, 0.7, amp=0.4, decay=0.55)
+    return mix(w, power)
+
+
 SOUNDS = {
     "coffre": build_coffre,
     "piece": build_piece,
     "etoile": build_etoile,
     "dragon": build_dragon,
     "reussite": build_reussite,
+    "eclosion": build_eclosion,
+    "moteur": build_moteur,
+    "capture": build_capture,
+    "construction": build_construction,
+    "sirene": build_sirene,
+    "pouvoir": build_pouvoir,
 }
 
 

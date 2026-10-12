@@ -9,6 +9,7 @@ import { ALPHAS } from "./data/alphas";
 import { getUniverse, type UniverseId } from "./data/universes";
 import { playVoice, primeAudio } from "./lib/audio";
 import { loadStats, resetStats, saveStats, type Stats } from "./lib/storage";
+import { markExplored } from "./lib/collection";
 
 type Screen = "home" | "discovery" | "universes" | "game" | "reward" | "parent";
 
@@ -52,6 +53,7 @@ export default function App() {
 
   const selectUniverse = useCallback((id: UniverseId) => {
     setUniverseId(id);
+    markExplored(id);
     setScreen("game");
   }, []);
 

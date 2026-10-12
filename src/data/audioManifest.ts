@@ -48,6 +48,12 @@ export const SFX: AudioDef[] = [
   { id: "etoile", kind: "sfx", label: "Étoile" },
   { id: "dragon", kind: "sfx", label: "Dragon" },
   { id: "reussite", kind: "sfx", label: "Réussite (fanfare)" },
+  { id: "eclosion", kind: "sfx", label: "Éclosion d'œuf" },
+  { id: "moteur", kind: "sfx", label: "Moteur de course" },
+  { id: "capture", kind: "sfx", label: "Capture de créature" },
+  { id: "construction", kind: "sfx", label: "Construction" },
+  { id: "sirene", kind: "sfx", label: "Sirène douce" },
+  { id: "pouvoir", kind: "sfx", label: "Super-pouvoir" },
 ];
 
 export const ALL_AUDIO: AudioDef[] = [...VOICES, ...SFX];

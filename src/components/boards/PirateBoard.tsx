@@ -1,17 +1,7 @@
 import { AlphaCard } from "../AlphaCard";
-import type { Alpha } from "../../data/alphas";
+import type { BoardProps } from "./types";
 
-export type Phase = "asking" | "correct" | "wrong";
-
-interface Props {
-  options: Alpha[];
-  targetId: string;
-  phase: Phase;
-  pickedId: string | null;
-  onPick: (alpha: Alpha) => void;
-}
-
-export function PirateBoard({ options, targetId, phase, pickedId, onPick }: Props) {
+export function PirateBoard({ options, targetId, phase, pickedId, onPick }: BoardProps) {
   return (
     <div className="board board--pirates">
       {options.map((alpha) => {
