@@ -797,16 +797,22 @@ body {
 /* ---------- Parent ---------- */
 .parent__content {
   flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 3vmin;
+  overflow-y: auto;
+  padding: 1vmin 2vmin calc(var(--safe) + 2vmin);
+}
+.parent__stats-col {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3vmin;
+  gap: 2.5vmin;
 }
 .parent__stats {
   list-style: none;
-  width: 60vmin;
-  max-width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5vmin;
@@ -834,6 +840,114 @@ body {
   border-radius: 1vmin;
 }
 
+/* ---------- Audio test (parent) ---------- */
+.audio-test {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2.4vmin;
+  padding: 2.2vmin;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6vmin;
+}
+.audio-test__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2vmin;
+}
+.audio-test__title {
+  font-size: 3vmin;
+}
+.audio-test__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9vmin;
+}
+.audio-test__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6vmin;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 1.6vmin;
+  padding: 1vmin 2vmin;
+  font-size: 2.4vmin;
+}
+.audio-test__row {
+  display: flex;
+  align-items: center;
+  gap: 1.6vmin;
+}
+.audio-test__item.is-playing {
+  background: rgba(255, 211, 77, 0.22);
+}
+.audio-test__item.is-missing .audio-test__status {
+  color: #ff8a73;
+}
+.audio-test__diag {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vmin;
+  padding-left: 8.1vmin;
+  font-size: 1.9vmin;
+}
+.audio-test__diag b {
+  color: #ffd34d;
+}
+.audio-test__diag-url {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 1.7vmin;
+  opacity: 0.6;
+  word-break: break-all;
+}
+.audio-test__diag-error {
+  color: #ff8a73;
+}
+.audio-test__actions {
+  display: flex;
+  gap: 1vmin;
+  align-items: center;
+}
+.audio-test__play {
+  border: none;
+  cursor: pointer;
+  background: #ffd34d;
+  color: #4a2a00;
+  width: 6.5vmin;
+  height: 6.5vmin;
+  border-radius: 50%;
+  font-size: 3vmin;
+  flex: 0 0 auto;
+}
+.audio-test__play:active {
+  transform: scale(0.92);
+}
+.audio-test__label {
+  flex: 1;
+}
+.audio-test__kind {
+  font-size: 1.9vmin;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.audio-test__status {
+  width: 3vmin;
+  text-align: center;
+  color: #8ef0a0;
+  font-weight: 800;
+}
+.audio-test__hint {
+  font-size: 2vmin;
+  opacity: 0.75;
+  line-height: 1.5;
+}
+.audio-test__hint code {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.2vmin 0.9vmin;
+  border-radius: 1vmin;
+}
+
 /* ---------- Discovery ---------- */
 .screen--discovery {
   align-items: center;
@@ -857,6 +971,16 @@ body {
   color: #ffd34d;
 }
 
+.discovery-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5vmin;
+}
+.basile--presenter {
+  transform-origin: bottom center;
+}
+
 .discovery-dots {
   display: flex;
   gap: 1.5vmin;
@@ -878,6 +1002,199 @@ body {
   display: flex;
   gap: 4vmin;
   align-items: center;
+}
+
+/* ---------- Basile mascot ---------- */
+.basile {
+  position: relative;
+  width: var(--basile-size, 18vmin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.basile--hero {
+  --basile-size: 32vmin;
+}
+.basile--guide {
+  --basile-size: 20vmin;
+}
+.basile--sidekick {
+  --basile-size: 15vmin;
+}
+.basile--reward {
+  --basile-size: 30vmin;
+}
+
+.basile--pos-inline,
+.basile--pos-center {
+  position: relative;
+}
+.basile--pos-bottom-left {
+  position: absolute;
+  left: max(3vmin, env(safe-area-inset-left, 0px));
+  bottom: calc(var(--safe) + 4vmin);
+  z-index: 6;
+}
+.basile--pos-bottom-right {
+  position: absolute;
+  right: max(3vmin, env(safe-area-inset-right, 0px));
+  bottom: calc(var(--safe) + 4vmin);
+  z-index: 6;
+}
+.basile--pos-top-right {
+  position: absolute;
+  right: max(3vmin, env(safe-area-inset-right, 0px));
+  top: calc(env(safe-area-inset-top, 0px) + 3vmin);
+  z-index: 6;
+}
+
+.basile__body {
+  position: relative;
+  width: 100%;
+  transform-origin: 50% 92%;
+  will-change: transform;
+}
+
+.basile__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 1vmin 1.6vmin rgba(0, 0, 0, 0.28));
+  will-change: transform;
+}
+
+.basile__halo {
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 226, 140, 0.55), transparent 68%);
+}
+
+.basile__shadow {
+  width: 58%;
+  height: 2.4vmin;
+  margin-top: -0.4vmin;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.35), transparent 70%);
+}
+
+.basile.is-animated {
+  animation: basile-appear 0.55s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+.basile.is-animated .basile__body {
+  animation: basile-float 4.5s ease-in-out infinite;
+}
+.basile--variant-sidekick.is-animated .basile__body {
+  animation-duration: 5.5s;
+}
+.basile--mood-celebrate.is-animated .basile__body,
+.basile--variant-reward.is-animated .basile__body {
+  animation: basile-bounce 1s ease-in-out infinite;
+}
+.basile.is-animated .basile__shadow {
+  animation: basile-shadow 4.5s ease-in-out infinite;
+}
+.basile--mood-celebrate.is-animated .basile__shadow,
+.basile--variant-reward.is-animated .basile__shadow {
+  animation-duration: 1s;
+}
+
+.basile__effects {
+  position: absolute;
+  inset: -15% -12%;
+  pointer-events: none;
+}
+.basile__effect {
+  position: absolute;
+  font-size: calc(var(--basile-size, 18vmin) * 0.22);
+  opacity: 0;
+  animation: basile-effect 1.8s ease-in-out infinite;
+}
+.basile__effect--1 {
+  top: 2%;
+  left: -4%;
+  animation-delay: 0s;
+}
+.basile__effect--2 {
+  top: -8%;
+  right: 0%;
+  animation-delay: 0.3s;
+}
+.basile__effect--3 {
+  top: 26%;
+  right: -10%;
+  animation-delay: 0.6s;
+}
+.basile__effect--4 {
+  top: 32%;
+  left: -12%;
+  animation-delay: 0.9s;
+}
+.basile__effect--5 {
+  bottom: 6%;
+  right: -6%;
+  animation-delay: 1.2s;
+}
+
+@keyframes basile-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(2vmin);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+@keyframes basile-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-2.4%) rotate(1.5deg);
+  }
+}
+@keyframes basile-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-6%) scale(1.05);
+  }
+  60% {
+    transform: translateY(0) scale(0.98);
+  }
+}
+@keyframes basile-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleX(0.8);
+    opacity: 0.55;
+  }
+}
+@keyframes basile-effect {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-1vmin);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-3vmin);
+  }
 }
 
 /* ---------- Animations ---------- */

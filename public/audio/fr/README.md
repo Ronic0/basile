@@ -1,38 +1,45 @@
-# Consignes audio (français)
+# Consignes de voix (français)
 
-Ces fichiers sont des **AIFF LPCM 16 bits** (format nativement supporté par
-Safari / iPadOS). Ils sont générés automatiquement avec la voix locale de
-macOS :
+Ces fichiers sont des **WAV PCM 16 bits mono 22050 Hz**, générés localement avec
+la voix de macOS (`say`) puis convertis avec `afconvert` :
 
 ```bash
 npm run voices
-# ou, en personnalisant :
+# personnalisation :
 ALPHAS_VOICE="Flo (Français (France))" ALPHAS_RATE=150 npm run voices
 ```
 
-Liste des fichiers (noms attendus par le jeu) :
+Format choisi pour être décodable **à la fois par Safari (macOS/iPadOS) et
+Chrome** (l'AIFF n'est pas supporté par Chrome).
 
-- `trouve-la-botte.aiff`
-- `trouve-monsieur-a.aiff`
-- `trouve-le-serpent.aiff`
-- `trouve-madame-i.aiff`
-- `trouve-la-limace.aiff`
-- `trouve-madame-e.aiff`
-- `bravo.aiff`
-- `bien-joue.aiff`
-- `reessaie.aiff`
-- `alpha-botte.aiff` (phase de découverte)
-- `alpha-monsieur-a.aiff`
-- `alpha-serpent.aiff`
-- `alpha-madame-i.aiff`
-- `alpha-limace.aiff`
-- `alpha-madame-e.aiff`
+Fichiers générés (`<id>.wav`) :
+
+- `trouve-la-botte.wav`
+- `trouve-monsieur-a.wav`
+- `trouve-le-serpent.wav`
+- `trouve-madame-i.wav`
+- `trouve-la-limace.wav`
+- `trouve-madame-e.wav`
+- `bravo.wav`
+- `bien-joue.wav`
+- `reessaie.wav`
+- `alpha-botte.wav` (découverte)
+- `alpha-monsieur-a.wav`
+- `alpha-serpent.wav`
+- `alpha-madame-i.wav`
+- `alpha-limace.wav`
+- `alpha-madame-e.wav`
 
 ## Remplacer par vos propres enregistrements
 
-Écrasez simplement le `.aiff` correspondant (même nom de fichier). Vous pouvez
-aussi utiliser un `.m4a`/`.mp3` : dans ce cas, modifiez l'extension dans
-`src/lib/audio.ts` (variable `EXT`). Aucun autre changement n'est nécessaire.
+Écrasez simplement le `.wav` correspondant (même nom). L'extension est définie
+par `VOICE_EXT` dans `src/data/audioManifest.ts`.
 
-Si un fichier est absent, le jeu continue sans planter (fallback silencieux,
-message discret dans la console du navigateur).
+## Anciens fichiers AIFF
+
+Les `.aiff` générés précédemment peuvent encore être présents : ils ne sont
+plus référencés par le jeu. Vous pouvez les supprimer en toute sécurité :
+
+```bash
+rm public/audio/fr/*.aiff
+```

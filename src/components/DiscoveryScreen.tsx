@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Alpha } from "../data/alphas";
-import { playAudio } from "../lib/audio";
+import { playVoice } from "../lib/audio";
 import { AlphaCard } from "./AlphaCard";
+import { BasileMascot } from "./BasileMascot";
 
 interface Props {
   alphas: Alpha[];
@@ -15,7 +16,7 @@ export function DiscoveryScreen({ alphas, onDone, onBack }: Props) {
   const isLast = index === alphas.length - 1;
 
   useEffect(() => {
-    if (alpha) playAudio(alpha.discoveryAudio);
+    if (alpha) playVoice(alpha.discoveryAudio);
   }, [alpha]);
 
   if (!alpha) {
@@ -30,7 +31,7 @@ export function DiscoveryScreen({ alphas, onDone, onBack }: Props) {
 
   const handleNext = () => {
     if (isLast) {
-      playAudio("bien-joue");
+      playVoice("bien-joue");
       onDone();
     } else {
       setIndex((i) => i + 1);
@@ -48,7 +49,17 @@ export function DiscoveryScreen({ alphas, onDone, onBack }: Props) {
       </header>
 
       <main className="discovery-main">
-        <AlphaCard alpha={alpha} showName />
+        <div className="discovery-stage">
+          <AlphaCard alpha={alpha} showName />
+          <BasileMascot
+            variant="guide"
+            mood="happy"
+            size="24vmin"
+            position="inline"
+            animated
+            className="basile--presenter"
+          />
+        </div>
       </main>
 
       <div className="discovery-dots" aria-hidden="true">
@@ -61,7 +72,7 @@ export function DiscoveryScreen({ alphas, onDone, onBack }: Props) {
         <button
           type="button"
           className="btn btn--huge btn--ghost"
-          onClick={() => playAudio(alpha.discoveryAudio)}
+          onClick={() => playVoice(alpha.discoveryAudio)}
         >
           🔊 Réécouter
         </button>

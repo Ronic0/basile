@@ -1,4 +1,5 @@
 import { SOON_UNIVERSES, UNIVERSES, type UniverseId } from "../data/universes";
+import { BasileMascot } from "./BasileMascot";
 
 interface Props {
   onSelect: (id: UniverseId) => void;
@@ -8,6 +9,13 @@ interface Props {
 export function UniverseScreen({ onSelect, onBack }: Props) {
   return (
     <div className="screen screen--universes">
+      <BasileMascot
+        variant="guide"
+        mood="happy"
+        size="14vmin"
+        position="bottom-left"
+      />
+
       <header className="topbar">
         <button type="button" className="btn btn--icon" onClick={onBack} aria-label="Retour">
           ⬅️

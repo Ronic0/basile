@@ -1,4 +1,6 @@
 import type { Stats } from "../lib/storage";
+import { AudioTestPanel } from "./AudioTestPanel";
+import { BasileMascot } from "./BasileMascot";
 
 interface Props {
   stats: Stats;
@@ -18,39 +20,44 @@ export function ParentScreen({ stats, onReset, onBack }: Props) {
       </header>
 
       <div className="parent__content">
-        <ul className="parent__stats">
-          <li>
-            <span>Parties jouées</span>
-            <strong>{stats.parties}</strong>
-          </li>
-          <li>
-            <span>Bonnes réponses</span>
-            <strong>{stats.bonnes}</strong>
-          </li>
-          <li>
-            <span>Erreurs</span>
-            <strong>{stats.erreurs}</strong>
-          </li>
-          <li>
-            <span>Dernier univers</span>
-            <strong>{stats.dernierUnivers ?? "—"}</strong>
-          </li>
-          <li>
-            <span>Alphas découverts</span>
-            <strong>{stats.decouverte} / 6</strong>
-          </li>
-        </ul>
+        <div className="parent__stats-col">
+          <ul className="parent__stats">
+            <li>
+              <span>Parties jouées</span>
+              <strong>{stats.parties}</strong>
+            </li>
+            <li>
+              <span>Bonnes réponses</span>
+              <strong>{stats.bonnes}</strong>
+            </li>
+            <li>
+              <span>Erreurs</span>
+              <strong>{stats.erreurs}</strong>
+            </li>
+            <li>
+              <span>Dernier univers</span>
+              <strong>{stats.dernierUnivers ?? "—"}</strong>
+            </li>
+            <li>
+              <span>Alphas découverts</span>
+              <strong>{stats.decouverte} / 6</strong>
+            </li>
+          </ul>
 
-        <p className="parent__hint">
-          Pour ajouter les images des Alphas&nbsp;: <code>public/assets/alphas/</code>
-          <br />
-          Pour les consignes audio&nbsp;: <code>public/audio/fr/</code>
-        </p>
+          <button type="button" className="btn btn--danger" onClick={onReset}>
+            Réinitialiser les progrès
+          </button>
+        </div>
 
-        <button type="button" className="btn btn--danger" onClick={onReset}>
-          Réinitialiser les progrès
-        </button>
+        <AudioTestPanel />
       </div>
+
+      <BasileMascot
+        variant="guide"
+        size="11vmin"
+        position="bottom-right"
+        mood="idle"
+      />
     </div>
   );
 }

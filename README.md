@@ -38,24 +38,58 @@ npm run preview
 
 Le jeu démarre même si ces fichiers sont absents.
 
-## Voix françaises (générées localement)
+## Audio (voix + bruitages)
 
-Les consignes audio sont générées avec la voix locale de macOS (commande `say`)
-au format **AIFF LPCM** (nativement supporté par Safari / iPadOS) :
-
-```bash
-npm run voices
-```
-
-Pour changer de voix ou de débit :
+Tout l'audio est **local et généré automatiquement** (aucune API, aucun service
+payant, aucune intervention manuelle) :
 
 ```bash
-ALPHAS_VOICE="Flo (Français (France))" ALPHAS_RATE=150 npm run voices
+npm run voices   # voix FR via macOS `say`           -> public/audio/fr/*.aiff
+npm run sfx      # bruitages via Python (stdlib)      -> public/audio/sfx/*.wav
+npm run audio    # les deux
 ```
 
-Pour remplacer un fichier par votre propre enregistrement, écrasez simplement
-le `.aiff` correspondant dans `public/audio/fr/`. L'architecture (`src/lib/audio.ts`)
-permet aussi de basculer toutes les extensions (ex. `m4a`) en une ligne.
+- La **voix française** est choisie automatiquement parmi celles présentes sur
+  votre Mac (préférence : Thomas, Amélie, Jacques, puis première `fr_FR`, puis
+  `fr_CA`). Forcez-en une avec `ALPHAS_VOICE="..." npm run voices`.
+- Les voix et les bruitages sont des **WAV PCM 16 bits mono** (voix via
+  `say` + `afconvert`), décodables **par Safari et Chrome** (l'AIFF, non
+  supporté par Chrome, a été abandonné).
+- **Anti-superposition** : une seule consigne vocale est jouée à la fois.
+- **Volumes distincts** voix / effets : `src/lib/audio.ts`.
+- **Autoplay iOS** : l'audio est déverrouillé au premier tap (`primeAudio`).
+- **Manifeste** : `src/data/audioManifest.ts` (un seul endroit pour tout
+  remplacer par vos propres enregistrements).
+- **Test audio** : dans l'écran **Parent** (bouton « Tout tester » + statut
+  présent/absent de chaque fichier).
+
+Dossiers exacts :
+
+- Voix : `public/audio/fr/` (voir le README du dossier)
+- Bruitages : `public/audio/sfx/` (voir le README du dossier)
+
+## Mascotte Basile
+
+Déposez le portrait détouré ici :
+
+```text
+public/assets/basile/basile.png   (PNG, fond transparent)
+```
+
+Le composant `src/components/BasileMascot.tsx` l'affiche de façon récurrente :
+
+| Variante   | Écran                         | Rendu                                   |
+| ---------- | ----------------------------- | --------------------------------------- |
+| `hero`     | Accueil                       | Grand, flottement doux + halo           |
+| `guide`    | Choix d'univers, Découverte, Parent | Petit / à côté de l'Alpha, flotte  |
+| `sidekick` | Mini-jeux                     | Compagnon discret, saute à la réussite  |
+| `reward`   | Récompense                    | Mis en avant, bounce + étoiles          |
+
+Props : `variant`, `mood` (`idle` / `happy` / `celebrate`), `animated`, `size`,
+`position`, `showEffects`, `className`. Animations CSS uniquement
+(`transform` / `opacity`), `pointer-events: none` (n'empiète jamais sur les
+zones tactiles) et respect de `prefers-reduced-motion`. Si `basile.png` est
+absent : aucun affichage, aucun crash (warning console).
 
 ## Fonctionnalités
 

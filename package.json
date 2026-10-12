@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host",
     "voices": "bash scripts/generate-voices.sh",
+    "sfx": "python3 scripts/generate-sfx.py",
+    "audio": "npm run voices && npm run sfx",
     "lint": "tsc -b --noEmit"
   },
   "dependencies": {

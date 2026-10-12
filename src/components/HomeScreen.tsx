@@ -1,4 +1,5 @@
 import type { Stats } from "../lib/storage";
+import { BasileMascot } from "./BasileMascot";
 
 interface Props {
   onPlay: () => void;
@@ -16,6 +17,8 @@ export function HomeScreen({ onPlay, onParent, stats }: Props) {
         <span>✨</span>
         <span>🐌</span>
       </div>
+
+      <BasileMascot variant="hero" mood="happy" position="inline" />
 
       <h1 className="home__title">
         Les aventures des

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HomeScreen } from "./components/HomeScreen";
 import { UniverseScreen } from "./components/UniverseScreen";
 import { DiscoveryScreen } from "./components/DiscoveryScreen";
@@ -7,7 +7,7 @@ import { RewardScreen } from "./components/RewardScreen";
 import { ParentScreen } from "./components/ParentScreen";
 import { ALPHAS } from "./data/alphas";
 import { getUniverse, type UniverseId } from "./data/universes";
-import { playAudio } from "./lib/audio";
+import { playVoice, primeAudio } from "./lib/audio";
 import { loadStats, resetStats, saveStats, type Stats } from "./lib/storage";
 
 type Screen = "home" | "discovery" | "universes" | "game" | "reward" | "parent";
@@ -21,11 +21,21 @@ export default function App() {
   const universe = getUniverse(universeId);
   const discoveryAlphas = ALPHAS.slice(0, stats.decouverte);
 
+  useEffect(() => {
+    const unlock = () => primeAudio();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
   const goPlay = useCallback(() => {
     if (stats.decouverte < ALPHAS.length) {
       setScreen("discovery");
     } else {
-      playAudio("bien-joue");
+      playVoice("bien-joue");
       setScreen("universes");
     }
   }, [stats.decouverte]);
