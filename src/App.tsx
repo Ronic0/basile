@@ -6,6 +6,7 @@ import { GameScreen, type SessionResult } from "./components/GameScreen";
 import { RewardScreen } from "./components/RewardScreen";
 import { ParentScreen } from "./components/ParentScreen";
 import { BossScreen } from "./components/BossScreen";
+import { NurserieScreen } from "./components/NurserieScreen";
 import { ALPHAS } from "./data/alphas";
 import type { ActivityId } from "./data/activities";
 import { getUniverse, type UniverseId } from "./data/universes";
@@ -20,7 +21,15 @@ import {
 } from "./lib/storage";
 import { markExplored, saveLastActivity } from "./lib/collection";
 
-type Screen = "home" | "discovery" | "universes" | "game" | "reward" | "parent" | "boss";
+type Screen =
+  | "home"
+  | "discovery"
+  | "universes"
+  | "game"
+  | "reward"
+  | "parent"
+  | "boss"
+  | "nurserie";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
@@ -61,6 +70,9 @@ export default function App() {
       switch (id) {
         case "jardin-alphas":
           goPlay();
+          break;
+        case "nurserie":
+          setScreen("nurserie");
           break;
         default:
           break;
@@ -208,6 +220,10 @@ export default function App() {
           aideBoss={stats.aideBoss}
           onExit={() => setScreen("universes")}
         />
+      )}
+
+      {screen === "nurserie" && (
+        <NurserieScreen onExit={() => setScreen("home")} />
       )}
     </div>
   );

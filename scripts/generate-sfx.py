@@ -245,8 +245,80 @@ def build_pouvoir() -> list[float]:
     return mix(w, power)
 
 
+def build_dragon_content() -> list[float]:
+    return concat(
+        tone(680, 0.10, amp=0.34, decay=0.06),
+        tone(900, 0.12, amp=0.32, decay=0.07),
+        tone(1180, 0.16, amp=0.28, decay=0.10),
+    )
+
+
+def build_ronflement() -> list[float]:
+    def puff() -> list[float]:
+        return mix(
+            tone(120, 0.35, amp=0.34, decay=0.28),
+            lowpass(noise(0.35, 0.24, decay=0.28), 0.08),
+        )
+
+    return concat(puff(), silence(0.26), puff(), silence(0.2), gain(puff(), 0.8))
+
+
+def build_mastication() -> list[float]:
+    def crunch(freq: float) -> list[float]:
+        return concat(
+            tone(freq, 0.05, amp=0.4, decay=0.03),
+            lowpass(noise(0.05, 0.3, decay=0.03), 0.4),
+        )
+
+    return concat(
+        crunch(300),
+        silence(0.10),
+        crunch(260),
+        silence(0.09),
+        crunch(330),
+        silence(0.10),
+        crunch(280),
+    )
+
+
+def build_gorgee() -> list[float]:
+    return concat(
+        glide(320, 180, 0.16, amp=0.34, decay=0.12),
+        silence(0.06),
+        glide(290, 160, 0.16, amp=0.3, decay=0.12),
+    )
+
+
+def build_ailes() -> list[float]:
+    return whoosh(0.4, amp=0.5, peak=0.14, spread=0.1)
+
+
+def build_flamme() -> list[float]:
+    return mix(
+        lowpass(noise(0.3, 0.5, decay=0.18), 0.15),
+        glide(520, 180, 0.3, amp=0.3, decay=0.2),
+    )
+
+
+def build_balle() -> list[float]:
+    return concat(
+        tone(520, 0.10, amp=0.4, decay=0.07),
+        silence(0.06),
+        tone(400, 0.12, amp=0.34, decay=0.09),
+        silence(0.07),
+        tone(300, 0.16, amp=0.28, decay=0.12),
+    )
+
+
 SOUNDS = {
     "coffre": build_coffre,
+    "dragon-content": build_dragon_content,
+    "ronflement": build_ronflement,
+    "mastication": build_mastication,
+    "gorgee": build_gorgee,
+    "ailes": build_ailes,
+    "flamme": build_flamme,
+    "balle": build_balle,
     "piece": build_piece,
     "etoile": build_etoile,
     "dragon": build_dragon,

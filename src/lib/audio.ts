@@ -29,6 +29,8 @@ export function getVolumes(): { voice: number; sfx: number } {
 
 const voiceCache = new Map<string, HTMLAudioElement>();
 let currentVoice: HTMLAudioElement | null = null;
+/** Identifiant de la voix actuellement chargée dans `currentVoice`. */
+let currentVoiceId: string | null = null;
 /** Jeton de séquence : invalide toute lecture de voix devenue obsolète. */
 let voiceSeq = 0;
 
@@ -123,6 +125,17 @@ async function startPlayback(
   }
 }
 
+/**
+ * Indique si une consigne est en train d'être lue.
+ * `id` optionnel : ne renvoie vrai que si c'est précisément cette consigne.
+ * Permet au portail d'éviter de relancer inutilement une voix déjà en cours.
+ */
+export function isVoicePlaying(id?: string): boolean {
+  if (!currentVoice) return false;
+  if (id && currentVoiceId !== id) return false;
+  return !currentVoice.paused && !currentVoice.ended;
+}
+
 /** Stoppe la consigne en cours (évite la superposition des voix). */
 export function stopVoice(): void {
   voiceSeq++;
@@ -157,6 +170,7 @@ export function playVoice(id: string): void {
     stopVoice();
   }
   currentVoice = el;
+  currentVoiceId = id;
   el.volume = voiceVolume;
 
   const token = ++voiceSeq;

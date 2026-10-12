@@ -98,6 +98,21 @@ generate trouve-madame-i    "Trouve madame i."
 generate trouve-la-limace   "Trouve la limace."
 generate trouve-madame-e    "Trouve madame e."
 
+# Nurserie des dragons
+generate nurserie-nourrir  "Nourris ton dragon !"
+generate nurserie-boire    "Donne-lui à boire !"
+generate nurserie-caresser "Caresse ton dragon !"
+generate nurserie-dormir   "Il a sommeil !"
+generate nurserie-content  "Bravo Basile, ton dragon est content !"
+
+# Portail du Monde de Basile (noms d'activités)
+generate activite-jardin-alphas  "Le Jardin des Alphas."
+generate activite-nurserie       "La Nurserie des Dragons."
+generate activite-jardin-magique "Le Jardin Magique."
+generate activite-atelier        "L'Atelier de Construction."
+generate activite-port-pirates   "Le Port des Pirates."
+generate activite-cabane         "Ma Cabane."
+
 # Feedback
 generate bravo      "Bravo !"
 generate bien-joue  "Bien joué !"

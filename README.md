@@ -110,12 +110,34 @@ L'écran d'accueil est un portail illustré (jardin, soleil, nuages, cabane,
 chemin, fleurs, papillons, petit dragon endormi) vers **six grandes activités**.
 « Le Jardin des Alphas » ouvre l'intégralité du jeu pédagogique déjà existant
 (8 univers + boss + découverte progressive) ; les autres activités sont des
-espaces libres. Les trois activités « Atelier », « Port des pirates » et
-« Ma cabane » sont affichées comme extensions futures (désactivées).
+espaces libres. « La Nurserie des dragons » est jouable (voir ci-dessous).
+« Le Jardin magique » arrive à l'étape suivante ; « Atelier », « Port des
+pirates » et « Ma cabane » sont affichées comme extensions futures (désactivées).
+
+### La Nurserie des dragons (V1)
+
+Petite expérience de jeu libre (aucune question sur les Alphas) : un bébé
+dragon original (`src/components/nurserie/BabyDragon.tsx`, SVG/CSS animés)
+que Basile peut **nourrir, faire boire, caresser** (toucher/glisser sur le
+dragon), **faire jouer, endormir et réveiller**. Trois jauges douces (Faim,
+Bonheur, Énergie) sans dégradation punitive ni horloge temps réel ; le dragon
+exprime une envie quand une jauge est basse. Réactions surprises aléatoires
+(éternuement avec flamme, pirouette, bâillement, tortillement). Bruitages et
+consignes locales (`public/audio/sfx/`, `public/audio/fr/nurserie-*.wav`),
+sauvegarde dédiée `alphas-de-basile/nurserie/v1` (`src/lib/nursery.ts`),
+additive et non destructive.
 
 Données : `src/data/activities.ts`. Les illustrations du portail sont des SVG
 originaux dans `src/components/home/`. Navigation par état dans `App.tsx`
 (`selectActivity`), sans dépendance ajoutée.
+
+Chaque activité est **annoncée oralement** (noms générés dans
+`public/audio/fr/activite-*.wav`) : survol de 350 ms à la souris (sans boucle,
+annulé si la souris repart), **deux touchers** sur iPad (le premier sélectionne
+et prononce, le second ouvre), bouton 🔊 sur la carte pour réécouter, et
+annonce au focus clavier avec ouverture directe par Entrée/Espace. Les
+activités « bientôt » sont annonçables mais jamais ouvrables. Audio via
+`playVoice`/`stopVoice` (+ `isVoicePlaying` pour éviter les relances inutiles).
 
 ## Fonctionnalités
 
