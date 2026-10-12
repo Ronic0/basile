@@ -150,6 +150,18 @@ generate trouve-madame-e-aigu         "Trouve madame é."
 generate trouve-madame-e-grave        "Trouve madame è."
 generate trouve-madame-e-circonflexe  "Trouve madame ê."
 
+# Port des pirates
+generate pirates-choisis   "Choisis une île, capitaine Basile !"
+generate pirates-abordage  "À l'abordage !"
+generate pirates-tresor    "Bravo, tu as trouvé un trésor !"
+generate pirates-tresors   "Regardons tes trésors !"
+generate tresor-piece      "Des pièces d'or."
+generate tresor-coquillage "Un coquillage."
+generate tresor-rubis      "Un rubis."
+generate tresor-emeraude   "Une émeraude."
+generate tresor-perle      "Une perle."
+generate tresor-carte      "Une carte ancienne."
+
 # Atelier de construction
 generate atelier-bienvenue "Bienvenue dans l'atelier de Basile ! Choisis un objet à construire."
 generate atelier-reussi    "Bravo ! Ta construction est terminée !"

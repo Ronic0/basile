@@ -5420,6 +5420,358 @@ body {
   .atelier-decor__shelf { width: 18vmin; }
 }
 
+/* ---------- Port des Pirates ---------- */
+.screen--pirates {
+  gap: 1vmin;
+  overflow: hidden;
+  background: linear-gradient(180deg, #6fb8e6 0%, #2f8fc6 100%);
+}
+.pirates__topbar {
+  gap: 2vmin;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 5;
+}
+.btn--gold {
+  background: linear-gradient(180deg, #ffd34d 0%, #e0a72a 100%);
+  color: #4a2a00;
+  font-size: 2.4vmin;
+  padding: 1.2vmin 3vmin;
+  gap: 1vmin;
+}
+.pirates__expeditions {
+  font-size: 2.6vmin;
+  font-weight: 800;
+  color: #ffe08a;
+  min-width: 10vmin;
+  text-align: right;
+}
+.pirates__bubble {
+  position: absolute;
+  top: 2vmin;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  max-width: 74%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #123c56;
+  border-radius: 2.4vmin;
+  padding: 1.2vmin 3vmin;
+  font-size: 2.6vmin;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.3);
+  animation: pop 0.35s ease;
+}
+
+/* Carte maritime */
+.sea {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 3vmin;
+  background: linear-gradient(180deg, #8fd4ff 0%, #6fb8e6 34%, #2f8fc6 100%);
+  box-shadow: inset 0 0 6vmin rgba(0, 0, 0, 0.2);
+}
+.sea__waves {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  height: 46%;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.18) 0 4vmin,
+    transparent 4vmin 8vmin
+  );
+  animation: sea-scroll 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes sea-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(8vmin); }
+}
+.sea__clouds,
+.sea__gulls,
+.sea__fish {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sea__cloud {
+  position: absolute;
+  width: 18vmin;
+  height: 6vmin;
+  background: #ffffff;
+  border-radius: 999px;
+  opacity: 0.9;
+  box-shadow: 3vmin -2vmin 0 -0.5vmin #fff, -3vmin -1.5vmin 0 -1vmin #fff;
+}
+.sea__cloud--1 { top: 8%; animation: cloud-drift 60s linear infinite; }
+.sea__cloud--2 { top: 20%; width: 13vmin; animation: cloud-drift 80s linear infinite; animation-delay: -30s; }
+.sea__gull {
+  position: absolute;
+  top: 14%;
+  left: 30%;
+  font-size: 4vmin;
+  animation: gull-fly 12s ease-in-out infinite;
+}
+.sea__gull--2 { top: 24%; left: 62%; animation-delay: -5s; }
+@keyframes gull-fly {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10vmin, -4vmin); }
+}
+.sea__fish {
+  width: 4vmin;
+  height: 2vmin;
+  background: #ff9d3a;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: absolute;
+  animation: fish-swim 14s linear infinite;
+}
+.sea__fish::after {
+  content: "";
+  position: absolute;
+  right: -1.4vmin;
+  top: 0;
+  border: 1vmin solid transparent;
+  border-left-color: #ff9d3a;
+}
+.sea__fish-1 { top: 60%; animation-delay: 0s; }
+.sea__fish-2 { top: 78%; background: #ffd34d; animation-delay: -7s; }
+.sea__fish-2::after { border-left-color: #ffd34d; }
+@keyframes fish-swim {
+  from { transform: translateX(-14vmin); }
+  to { transform: translateX(100vw); }
+}
+.sea__port {
+  position: absolute;
+  width: 11vmin;
+  transform: translate(-50%, -78%);
+  pointer-events: none;
+  z-index: 2;
+}
+.sea__port svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0.6vmin 0.8vmin rgba(0, 0, 0, 0.25));
+}
+
+.sea-island {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4vmin;
+  z-index: 3;
+  animation: island-bob 3s ease-in-out infinite;
+}
+.sea-island:nth-child(2) { animation-delay: 0.4s; }
+.sea-island:nth-child(3) { animation-delay: 0.8s; }
+.sea-island:active { transform: translate(-50%, -50%) scale(0.96); }
+.sea-island__silhouette {
+  width: 22vmin;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 1vmin 1.4vmin rgba(0, 0, 0, 0.3));
+}
+.sea-island__name {
+  font-size: 2.2vmin;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0.4vmin 0 rgba(0, 0, 0, 0.35);
+}
+@keyframes island-bob {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, calc(-50% - 1vmin)); }
+}
+
+.pirate-ship-wrap {
+  position: absolute;
+  width: 18vmin;
+  transform: translate(-50%, -70%);
+  transition-property: left, top;
+  transition-timing-function: cubic-bezier(0.4, 0.1, 0.2, 1);
+  z-index: 4;
+}
+.pirate-ship-wrap.is-arrived {
+  animation: ship-arrive 0.5s ease;
+}
+@keyframes ship-arrive {
+  0% { transform: translate(-50%, -70%) scale(1); }
+  50% { transform: translate(-50%, -78%) scale(1.12); }
+  100% { transform: translate(-50%, -70%) scale(1); }
+}
+.pirate-ship {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform-origin: 50% 88%;
+  animation: ship-rock 3.2s ease-in-out infinite;
+}
+@keyframes ship-rock {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-0.6vmin); }
+}
+.pirate-ship__shadow { fill: rgba(0, 0, 0, 0.18); }
+.pirate-ship__hull { fill: #8a5a2b; }
+.pirate-ship__deck { fill: #a06a34; }
+.pirate-ship__port { fill: #4a3a22; }
+.pirate-ship__mast { fill: #6b4410; }
+.pirate-ship__sail { fill: #fff6e0; }
+.pirate-ship__sail--front { fill: #f0e2c4; }
+.pirate-ship__flag { fill: #22303a; }
+.pirate-ship__flag-skull { fill: #fff; }
+.pirates__basile {
+  position: absolute;
+  left: 1.5vmin;
+  bottom: 1vmin;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Scène d'île */
+.island-scene {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 3vmin;
+  box-shadow: inset 0 0 6vmin rgba(0, 0, 0, 0.2);
+  background: linear-gradient(180deg, #8fd4ff 0%, #cdeeff 42%, #f3e0b6 100%);
+}
+.island-scene--volcan { background: linear-gradient(180deg, #f7c9a0 0%, #e8a06a 42%, #7d6a55 100%); }
+.island-scene--mysterieuse { background: linear-gradient(180deg, #b7c9d6 0%, #d7e0e6 40%, #7f8f68 100%); }
+.island-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.island-backdrop__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.island-spot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+  animation: spot-idle 2.6s ease-in-out infinite;
+}
+.island-spot:nth-child(odd) { animation-delay: 0.5s; }
+.island-spot:active { transform: translate(-50%, -50%) scale(0.94); }
+.island-spot.is-searched { animation: none; opacity: 0.75; }
+.spot-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 0.6vmin 0.8vmin rgba(0, 0, 0, 0.25));
+}
+.spot-art__gem { animation: sun-pulse 1.2s ease-in-out infinite; }
+@keyframes spot-idle {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, calc(-50% - 0.6vmin)); }
+}
+.island-pop {
+  position: absolute;
+  width: 12vmin;
+  height: 12vmin;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  pointer-events: none;
+  animation: treasure-pop 1.2s ease both;
+}
+.island-pop svg { width: 100%; height: 100%; display: block; }
+@keyframes treasure-pop {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  25% { transform: translate(-50%, -80%) scale(1.15); opacity: 1; }
+  70% { transform: translate(-50%, -90%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -130%) scale(0.8); opacity: 0; }
+}
+.island-scene__basile {
+  position: absolute;
+  left: 1.5vmin;
+  bottom: 1vmin;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Coffre personnel */
+.pirates__chest-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: linear-gradient(180deg, rgba(20, 40, 60, 0.94), rgba(10, 24, 40, 0.98));
+  display: flex;
+  flex-direction: column;
+  gap: 2vmin;
+  padding: 1.2vmin 2vmin calc(var(--safe) + 2vmin);
+}
+.pirates__chest-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2vmin;
+  align-content: start;
+}
+.chest-item {
+  border: none;
+  border-radius: 3vmin;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-family: var(--font);
+  padding: 1.6vmin;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6vmin;
+  border: 0.4vmin solid rgba(255, 255, 255, 0.12);
+  transition: transform 0.15s ease;
+}
+.chest-item.is-found { border-color: #ffd34d; background: rgba(255, 211, 77, 0.1); }
+.chest-item:disabled { opacity: 0.55; cursor: default; }
+.chest-item.is-popped { animation: pop 0.4s ease; }
+.chest-item__art {
+  width: 12vmin;
+  height: 12vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chest-item__art svg { width: 100%; height: 100%; display: block; }
+.chest-item__lock { font-size: 6vmin; font-weight: 800; opacity: 0.5; }
+.chest-item__name { font-size: 2.2vmin; font-weight: 700; text-align: center; }
+.chest-item__count { font-size: 2.4vmin; font-weight: 800; color: #ffe08a; }
+.chest-item__count.is-rare { color: #c084fc; }
+.pirates__chest-hint {
+  text-align: center;
+  font-size: 2.2vmin;
+  opacity: 0.8;
+}
+
+@media (max-width: 1100px) {
+  .sea-island__silhouette { width: 18vmin; }
+  .pirate-ship-wrap { width: 15vmin; }
+  .pirates__chest-label { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

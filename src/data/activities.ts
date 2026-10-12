@@ -71,7 +71,7 @@ export const ACTIVITIES: Activity[] = [
     id: "port-pirates",
     title: "Le Port des pirates",
     tagline: "Navigue vers les îles",
-    status: "soon",
+    status: "ready",
     voice: "activite-port-pirates",
     accent: "#2f9bd6",
     background: "linear-gradient(160deg, #bfe6ff 0%, #6fb8e6 55%, #2f9bd6 100%)",

@@ -110,9 +110,24 @@ L'écran d'accueil est un portail illustré (jardin, soleil, nuages, cabane,
 chemin, fleurs, papillons, petit dragon endormi) vers **six grandes activités**.
 « Le Jardin des Alphas » ouvre l'intégralité du jeu pédagogique déjà existant
 (8 univers + boss + découverte progressive) ; les autres activités sont des
-espaces libres. « La Nurserie des dragons », « Le Jardin magique » et « L'Atelier de Basile »
-sont jouables (voir ci-dessous) ; « Port des pirates » et « Ma cabane » sont
-affichées comme extensions futures (désactivées).
+espaces libres. « La Nurserie des dragons », « Le Jardin magique », « L'Atelier de Basile » et
+« Le Port des pirates » sont jouables (voir ci-dessous) ; « Ma cabane » est
+affichée comme extension future (désactivée).
+
+### Le Port des Pirates (V1)
+
+Petite aventure libre (aucun questionnaire sur les Alphas) : depuis la **carte
+maritime** (mer animée, poissons, mouettes, nuages, phare), le bateau pirate
+navigue vers l'une des **trois îles** (Palmiers, Volcan, Mystérieuse) avec
+trajectoire animée et tangage. Sur chaque île, **4 cachettes** à explorer
+donnent des trésors déterministes (pièces, coquillages, perle / rubis, émeraude,
+carte ancienne). Les trésors rejoignent **« Mes trésors »** (coffre personnel).
+Une nouvelle expédition rend les cachettes à nouveau explorables ; les trésors
+restent acquis. Scène SVG/CSS (`src/components/pirates/`). Bruitages et voix
+locaux (`public/audio/sfx/depart|vagues|mouette|tresor|coffre-ouvre|surprise.wav`,
+`public/audio/fr/pirates-*` et `tresor-*`). Sauvegarde dédiée
+`alphas-de-basile/pirates-port/v1` (`src/lib/pirates.ts`) : trésors, expéditions,
+dernière île, cachettes fouillées — structure réutilisable par « Ma Cabane ».
 
 ### L'Atelier de Basile (V1)
 

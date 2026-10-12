@@ -377,6 +377,52 @@ def build_fusee() -> list[float]:
     return mix(w, rumble, at(glide(120, 320, 0.9, amp=0.3, decay=0.8), 0.1))
 
 
+def build_depart() -> list[float]:
+    horn = mix(
+        tone(170, 0.6, amp=0.34, decay=0.5),
+        tone(255, 0.6, amp=0.22, decay=0.5),
+    )
+    w = whoosh(0.9, amp=0.4, peak=0.32, spread=0.22)
+    return mix(horn, at(w, 0.1))
+
+
+def build_vagues() -> list[float]:
+    swell = lowpass(noise(1.4, 0.34, decay=1.6), 0.05)
+    return mix(swell, at(gain(lowpass(noise(1.0, 0.28, decay=1.1), 0.04), 0.8), 0.3))
+
+
+def build_mouette() -> list[float]:
+    return concat(
+        glide(1250, 720, 0.18, amp=0.3, decay=0.16),
+        silence(0.05),
+        glide(1450, 820, 0.15, amp=0.26, decay=0.13),
+    )
+
+
+def build_tresor() -> list[float]:
+    notes = [659.25, 880.0, 1174.66, 1567.98]
+    return concat(*[tone(freq, 0.13, amp=0.36, decay=0.09) for freq in notes])
+
+
+def build_coffre_ouvre() -> list[float]:
+    creak = lowpass(glide(220, 380, 0.35, amp=0.3, decay=0.3), 0.2)
+    thunk = tone(140, 0.2, amp=0.4, decay=0.12)
+    sparkle = concat(
+        tone(1320, 0.08, amp=0.28, decay=0.05),
+        tone(1760, 0.1, amp=0.24, decay=0.06),
+        tone(2093, 0.12, amp=0.2, decay=0.07),
+    )
+    return concat(creak, thunk, silence(0.05), sparkle)
+
+
+def build_surprise() -> list[float]:
+    return concat(
+        tone(880, 0.06, amp=0.3, decay=0.04),
+        silence(0.04),
+        tone(1320, 0.1, amp=0.26, decay=0.07),
+    )
+
+
 SOUNDS = {
     "coffre": build_coffre,
     "dragon-content": build_dragon_content,
@@ -405,6 +451,12 @@ SOUNDS = {
     "construit": build_construit,
     "robot": build_robot,
     "fusee": build_fusee,
+    "depart": build_depart,
+    "vagues": build_vagues,
+    "mouette": build_mouette,
+    "tresor": build_tresor,
+    "coffre-ouvre": build_coffre_ouvre,
+    "surprise": build_surprise,
 }
 
 
