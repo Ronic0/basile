@@ -39,6 +39,9 @@ const CORE_VOICES: AudioDef[] = [
   { id: "alpha-madame-i", kind: "voice", label: "Découverte · Madame i" },
   { id: "alpha-limace", kind: "voice", label: "Découverte · La limace" },
   { id: "alpha-madame-e", kind: "voice", label: "Découverte · Madame e" },
+  { id: "cabane-bienvenue", kind: "voice", label: "Cabane · Bienvenue" },
+  { id: "cabane-dehors", kind: "voice", label: "Cabane · Regarde dehors" },
+  { id: "cabane-lumiere", kind: "voice", label: "Cabane · La lumière" },
   { id: "pirates-choisis", kind: "voice", label: "Pirates · Choisis une île" },
   { id: "pirates-abordage", kind: "voice", label: "Pirates · À l'abordage" },
   { id: "pirates-tresor", kind: "voice", label: "Pirates · Trésor trouvé" },
@@ -123,6 +126,8 @@ export const SFX: AudioDef[] = [
   { id: "tresor", kind: "sfx", label: "Découverte d'un trésor" },
   { id: "coffre-ouvre", kind: "sfx", label: "Ouverture de coffre" },
   { id: "surprise", kind: "sfx", label: "Petite surprise" },
+  { id: "lumiere", kind: "sfx", label: "Interrupteur (lumière)" },
+  { id: "rideau", kind: "sfx", label: "Rideau" },
 ];
 
 export const ALL_AUDIO: AudioDef[] = [...VOICES, ...SFX];

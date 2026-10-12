@@ -80,7 +80,7 @@ export const ACTIVITIES: Activity[] = [
     id: "cabane",
     title: "Ma cabane",
     tagline: "Décore ta maison",
-    status: "soon",
+    status: "ready",
     voice: "activite-cabane",
     accent: "#f5a623",
     background: "linear-gradient(160deg, #ffe6b0 0%, #f5c46a 55%, #e08f2a 100%)",

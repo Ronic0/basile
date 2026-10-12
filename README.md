@@ -110,9 +110,23 @@ L'écran d'accueil est un portail illustré (jardin, soleil, nuages, cabane,
 chemin, fleurs, papillons, petit dragon endormi) vers **six grandes activités**.
 « Le Jardin des Alphas » ouvre l'intégralité du jeu pédagogique déjà existant
 (8 univers + boss + découverte progressive) ; les autres activités sont des
-espaces libres. « La Nurserie des dragons », « Le Jardin magique », « L'Atelier de Basile » et
-« Le Port des pirates » sont jouables (voir ci-dessous) ; « Ma cabane » est
-affichée comme extension future (désactivée).
+espaces libres. Les **six** activités sont désormais jouables (voir ci-dessous).
+
+### Ma Cabane (V1)
+
+Une vraie pièce 2D interactive (aucun texte obligatoire) : mur, sol, fenêtre,
+rideaux, tapis, lampe suspendue, horloge, chat, coffre. Les **collections des
+autres activités sont lues en direct** (jamais dupliquées) : l'**étagère**
+affiche les voitures/robots/fusées réellement construits avec leur couleur
+(`workshop.ts`), le **coffre** montre les trésors réellement rapportés du Port
+des Pirates (`pirates.ts`), un **cadre** montre les Alphas découverts
+(`stats`), un autre le **dragon** de la Nurserie (`nursery.ts`), et un **vase**
+les plantes récoltées au Jardin magique (`garden.ts`). Interactions : lampe
+(allume/éteint), fenêtre (oiseau), coffre, chat, objets de l'étagère qui
+rejouent leur animation. **Personnalisation** : murs, tapis et rideaux (3 choix
+chacun). Sauvegarde **indépendante** `alphas-de-basile/cabane/v1`
+(`src/lib/cabane.ts`) — uniquement les décorations. Voix/bruitages locaux
+(`cabane-*`, `lumiere`, `rideau`).
 
 ### Le Port des Pirates (V1)
 

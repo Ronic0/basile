@@ -10,6 +10,7 @@ import { NurserieScreen } from "./components/NurserieScreen";
 import { JardinMagiqueScreen } from "./components/JardinMagiqueScreen";
 import { AtelierScreen } from "./components/AtelierScreen";
 import { PiratesScreen } from "./components/PiratesScreen";
+import { CabaneScreen } from "./components/CabaneScreen";
 import { AlbumScreen } from "./components/AlbumScreen";
 import { BASILE_ALPHAS, BASILE_ALPHA_IDS, type Alpha } from "./data/alphas";
 import type { ActivityId } from "./data/activities";
@@ -46,6 +47,7 @@ type Screen =
   | "jardin-magique"
   | "atelier"
   | "pirates"
+  | "cabane"
   | "album";
 
 export default function App() {
@@ -105,6 +107,9 @@ export default function App() {
           break;
         case "port-pirates":
           setScreen("pirates");
+          break;
+        case "cabane":
+          setScreen("cabane");
           break;
         default:
           break;
@@ -294,6 +299,8 @@ export default function App() {
       {screen === "atelier" && <AtelierScreen onExit={() => setScreen("home")} />}
 
       {screen === "pirates" && <PiratesScreen onExit={() => setScreen("home")} />}
+
+      {screen === "cabane" && <CabaneScreen onExit={() => setScreen("home")} />}
     </div>
   );
 }

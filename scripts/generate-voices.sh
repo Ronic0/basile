@@ -150,6 +150,11 @@ generate trouve-madame-e-aigu         "Trouve madame é."
 generate trouve-madame-e-grave        "Trouve madame è."
 generate trouve-madame-e-circonflexe  "Trouve madame ê."
 
+# Ma cabane
+generate cabane-bienvenue "Bienvenue dans ta cabane, Basile !"
+generate cabane-dehors    "Regarde dehors !"
+generate cabane-lumiere   "La lumière !"
+
 # Port des pirates
 generate pirates-choisis   "Choisis une île, capitaine Basile !"
 generate pirates-abordage  "À l'abordage !"

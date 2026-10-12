@@ -423,6 +423,18 @@ def build_surprise() -> list[float]:
     )
 
 
+def build_lumiere() -> list[float]:
+    return concat(
+        tone(300, 0.04, amp=0.35, decay=0.02),
+        silence(0.03),
+        tone(960, 0.06, amp=0.3, decay=0.04),
+    )
+
+
+def build_rideau() -> list[float]:
+    return whoosh(0.4, amp=0.34, peak=0.15, spread=0.12)
+
+
 SOUNDS = {
     "coffre": build_coffre,
     "dragon-content": build_dragon_content,
@@ -457,6 +469,8 @@ SOUNDS = {
     "tresor": build_tresor,
     "coffre-ouvre": build_coffre_ouvre,
     "surprise": build_surprise,
+    "lumiere": build_lumiere,
+    "rideau": build_rideau,
 }
 
 

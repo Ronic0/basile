@@ -5772,6 +5772,409 @@ body {
   .pirates__chest-label { display: none; }
 }
 
+/* ---------- Ma Cabane ---------- */
+.screen--cabane {
+  gap: 1vmin;
+  overflow: hidden;
+  background: linear-gradient(180deg, #6fb8e6 0%, #3f6f9a 100%);
+}
+.cabane__topbar {
+  gap: 2vmin;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 5;
+}
+.cabane__room {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 3vmin;
+  background: var(--wall, #f3e2c4);
+  box-shadow: inset 0 0 6vmin rgba(0, 0, 0, 0.16);
+}
+.cabane__room.is-lit::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 42% 26%, rgba(255, 240, 180, 0.28), transparent 42%);
+}
+.cabane__bubble {
+  position: absolute;
+  top: 2vmin;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+  max-width: 72%;
+  background: rgba(255, 255, 255, 0.96);
+  color: #4a3a22;
+  border-radius: 2.4vmin;
+  padding: 1.1vmin 3vmin;
+  font-size: 2.4vmin;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.28);
+  animation: pop 0.35s ease;
+}
+.cabane__wall {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 36%;
+  background:
+    repeating-linear-gradient(90deg, var(--wall) 0 8vmin, var(--wall-accent) 8vmin 8.4vmin);
+  border-bottom: 1vmin solid var(--wall-accent);
+}
+.cabane__floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 36%;
+  background: repeating-linear-gradient(180deg, #c98a4a 0 6vmin, #b5763c 6vmin 6.4vmin);
+  box-shadow: inset 0 1vmin 1.4vmin rgba(0, 0, 0, 0.18);
+}
+.cabane__window {
+  position: absolute;
+  left: 4%;
+  top: 10%;
+  width: 23%;
+  height: 66%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.cabane__window svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cabane__lamp {
+  position: absolute;
+  left: 35%;
+  top: -1vmin;
+  width: 9vmin;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transform-origin: top center;
+  animation: lamp-swing 5s ease-in-out infinite;
+  z-index: 3;
+}
+.cabane__lamp svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cabane__lamp.is-on .cabane__lamp-bulb {
+  fill: #fff3b0;
+  filter: drop-shadow(0 0 2.6vmin #ffe08a);
+}
+.cabane__lamp.is-off .cabane__lamp-bulb {
+  fill: #8a8578;
+}
+.cabane__shelf {
+  position: absolute;
+  right: 3%;
+  top: 13%;
+  width: 34%;
+  height: 50%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2vmin;
+  padding-bottom: 1.6vmin;
+  border-bottom: 1vmin solid #8a5a2b;
+  box-shadow: 0 1vmin 0 rgba(0, 0, 0, 0.12);
+}
+.cabane__shelf-item {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  width: 9vmin;
+  height: 9vmin;
+}
+.cabane__shelf-item .buildable-art {
+  width: 100%;
+  height: 100%;
+}
+.cabane__shelf-empty {
+  font-size: 6vmin;
+  font-weight: 800;
+  opacity: 0.35;
+}
+.cabane__frames {
+  position: absolute;
+  left: 31%;
+  top: 16%;
+  display: flex;
+  gap: 2.2vmin;
+}
+.cabane__frame {
+  width: 15vmin;
+  height: 16vmin;
+  background: #fff8ec;
+  border: 0.7vmin solid #8a5a2b;
+  border-radius: 1.6vmin;
+  box-shadow: 0 0.7vmin 1vmin rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0.6vmin;
+}
+.cabane__alphas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.2vmin;
+  width: 100%;
+  height: 100%;
+}
+.cabane__alphas img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.cabane__dragon {
+  width: 82%;
+  height: 72%;
+}
+.cabane__dragon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cabane__dragon-name {
+  font-size: 1.7vmin;
+  font-weight: 800;
+  color: #4a3a22;
+}
+.cabane__frame-empty {
+  font-size: 5vmin;
+}
+.cabane__clock {
+  position: absolute;
+  right: 5%;
+  top: 1%;
+  width: 8vmin;
+}
+.cabane__clock svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cabane__clock-hand {
+  transform-box: view-box;
+  transform-origin: 35px 35px;
+  animation: clock-spin 8s linear infinite;
+}
+.cabane__clock-hand--slow {
+  animation-duration: 48s;
+}
+@keyframes clock-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.cabane__rug {
+  position: absolute;
+  left: 44%;
+  bottom: 6%;
+  transform: translateX(-50%);
+  width: 58%;
+  height: 46%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, var(--rug) 0 58%, var(--rug-accent) 58% 66%, var(--rug) 66% 100%);
+  box-shadow: 0 0.6vmin 1vmin rgba(0, 0, 0, 0.15);
+}
+.cabane__chest {
+  position: absolute;
+  left: 68%;
+  bottom: 6%;
+  width: 15vmin;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+.cabane__chest svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cabane__chest-gem {
+  animation: sun-pulse 1.2s ease-in-out infinite;
+}
+.cabane__cat {
+  position: absolute;
+  left: 20%;
+  bottom: 6%;
+  width: 13vmin;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+.cabane__cat svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cabane__cat svg.is-happy {
+  animation: cat-hop 0.5s ease 2;
+}
+@keyframes cat-hop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-1.4vmin) scale(1.04); }
+}
+.cabane__vase {
+  position: absolute;
+  right: 5%;
+  bottom: 6%;
+  width: 11vmin;
+  height: 14vmin;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.4vmin;
+}
+.cabane__vase-plant {
+  width: 4vmin;
+  height: 12vmin;
+  display: block;
+}
+.cabane__vase-plant .garden-plant {
+  width: 100%;
+  height: 100%;
+}
+.cabane__vase-empty {
+  font-size: 6vmin;
+}
+.cabane__bird {
+  position: absolute;
+  top: 20%;
+  left: -8vmin;
+  width: 9vmin;
+  z-index: 6;
+  pointer-events: none;
+  animation: bird-fly 2.6s ease-in forwards;
+}
+.cabane__bird svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+@keyframes bird-fly {
+  from { transform: translateX(0) translateY(0); }
+  to { transform: translateX(140vw) translateY(-6vmin); }
+}
+.cabane__night {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(circle at 42% 26%, rgba(255, 240, 180, 0) 0 10%, rgba(10, 16, 40, 0.5) 55%, rgba(6, 10, 28, 0.68) 100%);
+}
+.cabane__room.is-dark .cabane__night {
+  opacity: 1;
+}
+.cabane__basile {
+  position: absolute;
+  left: 1.5vmin;
+  bottom: 1vmin;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Barre de décoration */
+.cabane__decor-bar {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 2vmin;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4vmin 0 calc(var(--safe) + 0.4vmin);
+}
+.cabane__decor-group {
+  display: flex;
+  align-items: center;
+  gap: 1.4vmin;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 2.4vmin;
+  padding: 1vmin 2vmin;
+  box-shadow: 0 1vmin 0 rgba(0, 0, 0, 0.12), 0 1.2vmin 1.8vmin rgba(0, 0, 0, 0.18);
+}
+.cabane__decor-title {
+  font-size: 2.2vmin;
+  font-weight: 800;
+  color: #4a3a22;
+}
+.cabane__swatches {
+  display: flex;
+  gap: 1vmin;
+}
+.cabane__swatch {
+  width: 6vmin;
+  height: 6vmin;
+  border-radius: 50%;
+  border: 0.5vmin solid rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  box-shadow: inset 0 -0.6vmin 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.cabane__swatch.is-active {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 0.6vmin #ffffff, 0 0 2.4vmin rgba(255, 255, 255, 0.9);
+}
+
+/* Coffre */
+.cabane__chest-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: linear-gradient(180deg, rgba(20, 40, 60, 0.94), rgba(10, 24, 40, 0.98));
+  display: flex;
+  flex-direction: column;
+  gap: 2vmin;
+  padding: 1.2vmin 2vmin calc(var(--safe) + 2vmin);
+}
+.cabane__expeditions {
+  font-size: 2.6vmin;
+  font-weight: 800;
+  color: #ffe08a;
+  min-width: 10vmin;
+  text-align: right;
+}
+.cabane__chest-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2vmin;
+  align-content: start;
+}
+.cabane__chest-hint {
+  text-align: center;
+  font-size: 2.2vmin;
+  opacity: 0.85;
+}
+
+@media (max-width: 1100px) {
+  .cabane__frame { width: 12vmin; height: 13vmin; }
+  .cabane__shelf-item { width: 7.5vmin; height: 7.5vmin; }
+  .cabane__chest-label { display: none; }
+  .cabane__swatch { width: 5vmin; height: 5vmin; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
