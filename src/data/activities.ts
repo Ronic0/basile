@@ -62,7 +62,7 @@ export const ACTIVITIES: Activity[] = [
     id: "atelier",
     title: "L'Atelier",
     tagline: "Construis des machines",
-    status: "soon",
+    status: "ready",
     voice: "activite-atelier",
     accent: "#7d4bd1",
     background: "linear-gradient(160deg, #d9c6f5 0%, #a97fe0 55%, #7d4bd1 100%)",

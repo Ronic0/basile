@@ -8,6 +8,7 @@ import { ParentScreen } from "./components/ParentScreen";
 import { BossScreen } from "./components/BossScreen";
 import { NurserieScreen } from "./components/NurserieScreen";
 import { JardinMagiqueScreen } from "./components/JardinMagiqueScreen";
+import { AtelierScreen } from "./components/AtelierScreen";
 import { AlbumScreen } from "./components/AlbumScreen";
 import { BASILE_ALPHAS, BASILE_ALPHA_IDS, type Alpha } from "./data/alphas";
 import type { ActivityId } from "./data/activities";
@@ -42,6 +43,7 @@ type Screen =
   | "boss"
   | "nurserie"
   | "jardin-magique"
+  | "atelier"
   | "album";
 
 export default function App() {
@@ -95,6 +97,9 @@ export default function App() {
           break;
         case "jardin-magique":
           setScreen("jardin-magique");
+          break;
+        case "atelier":
+          setScreen("atelier");
           break;
         default:
           break;
@@ -280,6 +285,8 @@ export default function App() {
       {screen === "jardin-magique" && (
         <JardinMagiqueScreen onExit={() => setScreen("home")} />
       )}
+
+      {screen === "atelier" && <AtelierScreen onExit={() => setScreen("home")} />}
     </div>
   );
 }

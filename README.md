@@ -110,9 +110,24 @@ L'écran d'accueil est un portail illustré (jardin, soleil, nuages, cabane,
 chemin, fleurs, papillons, petit dragon endormi) vers **six grandes activités**.
 « Le Jardin des Alphas » ouvre l'intégralité du jeu pédagogique déjà existant
 (8 univers + boss + découverte progressive) ; les autres activités sont des
-espaces libres. « La Nurserie des dragons » et « Le Jardin magique » sont jouables (voir
-ci-dessous) ; « Atelier », « Port des pirates » et « Ma cabane » sont affichées
-comme extensions futures (désactivées).
+espaces libres. « La Nurserie des dragons », « Le Jardin magique » et « L'Atelier de Basile »
+sont jouables (voir ci-dessous) ; « Port des pirates » et « Ma cabane » sont
+affichées comme extensions futures (désactivées).
+
+### L'Atelier de Basile (V1)
+
+Construction libre (aucune question sur les Alphas) : Basile choisit un objet
+(voiture, robot, fusée), fait **glisser chaque pièce** vers sa zone d'accrochage
+généreuse ou **touche la pièce puis l'emplacement**, la pièce s'emboîte
+(animation + bruitage) et l'objet prend forme. Une fois terminé, il **choisit
+parmi trois couleurs** (effet immédiat) et l'objet s'anime (voiture qui roule,
+robot qui danse, fusée qui décolle). Les objets terminés rejoignent une
+**étagère de collection** (tap pour revoir l'animation). Scène SVG/CSS
+(`src/components/atelier/`) : établi, étagères, outils, lampe, engrenages.
+Aucune pénalité en cas de mauvais emplacement. Bruitages et voix locales
+(`public/audio/sfx/emboite|construit|robot|fusee.wav`, `public/audio/fr/atelier-*`).
+Sauvegarde dédiée `alphas-de-basile/atelier/v1` (`src/lib/workshop.ts`) :
+objets construits + couleur + nombre de constructions.
 
 ### Le Jardin magique (V1)
 

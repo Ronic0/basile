@@ -150,6 +150,10 @@ generate trouve-madame-e-aigu         "Trouve madame é."
 generate trouve-madame-e-grave        "Trouve madame è."
 generate trouve-madame-e-circonflexe  "Trouve madame ê."
 
+# Atelier de construction
+generate atelier-bienvenue "Bienvenue dans l'atelier de Basile ! Choisis un objet à construire."
+generate atelier-reussi    "Bravo ! Ta construction est terminée !"
+
 # Jardin magique
 generate jardin-bienvenue "Bienvenue dans ton jardin, Basile ! Plante une graine !"
 generate jardin-bravo     "Bravo, belle récolte !"

@@ -39,6 +39,8 @@ const CORE_VOICES: AudioDef[] = [
   { id: "alpha-madame-i", kind: "voice", label: "Découverte · Madame i" },
   { id: "alpha-limace", kind: "voice", label: "Découverte · La limace" },
   { id: "alpha-madame-e", kind: "voice", label: "Découverte · Madame e" },
+  { id: "atelier-bienvenue", kind: "voice", label: "Atelier · Bienvenue" },
+  { id: "atelier-reussi", kind: "voice", label: "Atelier · Construction terminée" },
   { id: "jardin-bienvenue", kind: "voice", label: "Jardin · Bienvenue" },
   { id: "jardin-bravo", kind: "voice", label: "Jardin · Belle récolte" },
   { id: "nurserie-nourrir", kind: "voice", label: "Nurserie · Nourris ton dragon" },
@@ -101,6 +103,10 @@ export const SFX: AudioDef[] = [
   { id: "croissance", kind: "sfx", label: "Croissance magique" },
   { id: "recolte", kind: "sfx", label: "Récolte" },
   { id: "papillon", kind: "sfx", label: "Papillon" },
+  { id: "emboite", kind: "sfx", label: "Pièce emboîtée" },
+  { id: "construit", kind: "sfx", label: "Construction terminée" },
+  { id: "robot", kind: "sfx", label: "Robot" },
+  { id: "fusee", kind: "sfx", label: "Fusée" },
 ];
 
 export const ALL_AUDIO: AudioDef[] = [...VOICES, ...SFX];

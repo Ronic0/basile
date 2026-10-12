@@ -352,6 +352,31 @@ def build_papillon() -> list[float]:
     )
 
 
+def build_emboite() -> list[float]:
+    click = tone(640, 0.04, amp=0.4, decay=0.02)
+    snap = mix(
+        tone(240, 0.09, amp=0.4, decay=0.05),
+        lowpass(noise(0.07, 0.3, decay=0.04), 0.4),
+    )
+    return concat(click, snap)
+
+
+def build_construit() -> list[float]:
+    notes = [523.25, 659.25, 783.99, 1046.5]
+    return concat(*[tone(freq, 0.14, amp=0.4, decay=0.1) for freq in notes])
+
+
+def build_robot() -> list[float]:
+    seq = [440.0, 554.37, 659.25, 554.37, 440.0]
+    return concat(*[tone(freq, 0.09, amp=0.32, decay=0.05) for freq in seq])
+
+
+def build_fusee() -> list[float]:
+    w = whoosh(0.7, amp=0.5, peak=0.2, spread=0.18)
+    rumble = lowpass(noise(1.0, 0.4, decay=0.9), 0.05)
+    return mix(w, rumble, at(glide(120, 320, 0.9, amp=0.3, decay=0.8), 0.1))
+
+
 SOUNDS = {
     "coffre": build_coffre,
     "dragon-content": build_dragon_content,
@@ -376,6 +401,10 @@ SOUNDS = {
     "croissance": build_croissance,
     "recolte": build_recolte,
     "papillon": build_papillon,
+    "emboite": build_emboite,
+    "construit": build_construit,
+    "robot": build_robot,
+    "fusee": build_fusee,
 }
 
 
