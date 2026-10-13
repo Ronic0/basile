@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { playSfx, playVoice } from "../lib/audio";
 import {
   clampGauge,
@@ -7,6 +7,10 @@ import {
   type NurseryAction,
   type NurseryState,
 } from "../lib/nursery";
+import { pickAvailableLetter } from "../lib/letters";
+import { loadStats } from "../lib/storage";
+import type { LetterToy } from "../data/letters";
+import { InteractiveLetter } from "./InteractiveLetter";
 import { BabyDragon, type DragonState, type DragonSurprise } from "./nurserie/BabyDragon";
 import { NurseryBackdrop } from "./nurserie/NurseryBackdrop";
 import {
@@ -35,6 +39,12 @@ const SURPRISES: DragonSurprise[] = ["sneeze", "yawn", "spin", "wiggle"];
 
 export function NurserieScreen({ onExit }: Props) {
   const [nursery, setNursery] = useState<NurseryState>(() => loadNursery());
+  const [stats] = useState(() => loadStats());
+  const letterSeed = useRef(Math.floor(Math.random() * 26));
+  const toyLetter = useMemo<LetterToy | null>(
+    () => pickAvailableLetter(stats, letterSeed.current),
+    [stats],
+  );
   const [dragonState, setDragonState] = useState<DragonState>("idle");
   const [surprise, setSurprise] = useState<DragonSurprise>(null);
   const [food, setFood] = useState<FoodKind | null>(null);
@@ -56,6 +66,7 @@ export function NurserieScreen({ onExit }: Props) {
   const petCount = useRef(0);
   const heartId = useRef(0);
   const spoken = useRef<Set<string>>(new Set());
+  const letterReaction = useRef(0);
 
   const later = useCallback((fn: () => void, ms: number) => {
     const id = window.setTimeout(fn, ms);
@@ -294,6 +305,22 @@ export function NurserieScreen({ onExit }: Props) {
     }, 1200);
   }, [sleeping, wake, later, spawnHeart, updateGauges, speakOnce]);
 
+  /**
+   * Le dragon regarde / réagit quand Basile touche la lettre-jouet.
+   * Ne perturbe jamais une action en cours (repas, jeu, dodo…).
+   */
+  const reactToLetter = useCallback(() => {
+    playSfx("dragon-content", 0.3);
+    if (dragonState !== "idle" || running.current) return;
+    const token = ++letterReaction.current;
+    setDragonState("happy");
+    later(() => {
+      if (letterReaction.current === token && !petting.current && !running.current) {
+        setDragonState("idle");
+      }
+    }, 900);
+  }, [dragonState, later]);
+
   // --- Envie douce quand une jauge est basse ---
   useEffect(() => {
     if (dragonState !== "idle") return;
@@ -427,6 +454,18 @@ export function NurserieScreen({ onExit }: Props) {
             </span>
           ))}
         </div>
+
+        {toyLetter && (
+          <InteractiveLetter
+            key={toyLetter.char}
+            letter={toyLetter}
+            x={80}
+            y={46}
+            size="21vmin"
+            onInteract={reactToLetter}
+            className="nurserie__letter"
+          />
+        )}
 
         <BasileMascot
           variant="sidekick"

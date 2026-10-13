@@ -17,7 +17,7 @@
     "alphas": "python3 scripts/prepare-alphas.py",
     "audio": "npm run voices && npm run sfx",
     "lint": "tsc -b --noEmit",
-    "test": "node --test scripts/words.test.mjs"
+    "test": "node --test scripts/words.test.mjs scripts/letters.test.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

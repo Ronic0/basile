@@ -6302,6 +6302,85 @@ body {
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
+/* ---------- Lettres-jouets (InteractiveLetter) ---------- */
+.interactive-letter {
+  position: absolute;
+  width: var(--iletter-size, 22vmin);
+  height: var(--iletter-size, 22vmin);
+  z-index: 4;
+  transform: translate(-50%, -50%) translate(var(--dx, 0px), var(--dy, 0px));
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
+}
+.interactive-letter.is-returning {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.interactive-letter.is-dragging {
+  z-index: 12;
+  cursor: grabbing;
+}
+.interactive-letter:focus-visible {
+  outline: none;
+}
+.interactive-letter:focus-visible .interactive-letter__body {
+  box-shadow: 0 0 0 0.8vmin #ffd34d, 0 1.6vmin 0 rgba(0, 0, 0, 0.18);
+}
+.interactive-letter__body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 34%;
+  background: radial-gradient(circle at 34% 28%, #ffffff 0%, #f4f8ff 55%, #e3ecfb 100%);
+  box-shadow: 0 1.4vmin 0 rgba(0, 0, 0, 0.16), 0 2vmin 2.6vmin rgba(0, 0, 0, 0.22),
+    inset 0 -1vmin 0 rgba(0, 0, 0, 0.06);
+}
+.interactive-letter__body.is-idle {
+  animation: iletter-float 3.6s ease-in-out infinite;
+}
+.interactive-letter__body.is-react-jump { animation: iletter-jump 0.6s ease; }
+.interactive-letter__body.is-react-wobble { animation: iletter-wobble 0.6s ease; }
+.interactive-letter__body.is-react-spin { animation: iletter-spin 0.7s ease; }
+.interactive-letter__body.is-landing { animation: iletter-land 0.5s ease; }
+.interactive-letter__glyph {
+  font-weight: 900;
+  font-size: calc(var(--iletter-size, 22vmin) * 0.66);
+  line-height: 1;
+}
+
+@keyframes iletter-float {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-1.6vmin) rotate(1.5deg); }
+}
+@keyframes iletter-jump {
+  0% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-18%) scale(1.06, 0.96); }
+  55% { transform: translateY(-22%) scale(0.98, 1.05); }
+  75% { transform: translateY(0) scale(1.04, 0.96); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes iletter-wobble {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-6deg); }
+  40% { transform: rotate(6deg); }
+  60% { transform: rotate(-4deg); }
+  80% { transform: rotate(4deg); }
+}
+@keyframes iletter-spin {
+  0% { transform: rotate(0) scale(1); }
+  55% { transform: rotate(200deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes iletter-land {
+  0% { transform: translateY(-6%) scale(0.96, 1.06); }
+  55% { transform: translateY(0) scale(1.06, 0.94); }
+  100% { transform: translateY(0) scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

@@ -11,11 +11,14 @@ import {
   type GardenState,
   type PlantType,
 } from "../lib/garden";
-import { PLANT_WORDS, type WordId } from "../data/words";
+import { getWord, PLANT_WORDS, type WordId } from "../data/words";
+import { firstLetterToy } from "../lib/letters";
+import type { LetterToy } from "../data/letters";
 import { GardenBackdrop } from "./jardin/GardenBackdrop";
 import { Plant } from "./jardin/GardenPlants";
 import { BasketIcon, SeedPreview, WateringCanIcon } from "./jardin/GardenIcons";
 import { WordRevealCard } from "./WordRevealCard";
+import { InteractiveLetter } from "./InteractiveLetter";
 import { BasileMascot } from "./BasileMascot";
 
 interface Props {
@@ -37,11 +40,13 @@ export function JardinMagiqueScreen({ onExit }: Props) {
   const [ladybug, setLadybug] = useState(false);
   const [resting, setResting] = useState<number | null>(null);
   const [wordReveal, setWordReveal] = useState<WordId | null>(null);
+  const [gardenLetter, setGardenLetter] = useState<LetterToy | null>(null);
 
   const timers = useRef<number[]>([]);
   const fxId = useRef(0);
   const harvestCount = useRef(0);
   const hintedMature = useRef(false);
+  const letterToken = useRef(0);
 
   const later = useCallback((fn: () => void, ms: number) => {
     const id = window.setTimeout(fn, ms);
@@ -70,6 +75,19 @@ export function JardinMagiqueScreen({ onExit }: Props) {
   const showWord = useCallback(
     (id: WordId, delay: number) => {
       later(() => setWordReveal((cur) => cur ?? id), delay);
+    },
+    [later],
+  );
+
+  /**
+   * Fait apparaître la première lettre du mot récolté (lettre-jouet flottante).
+   * Une seule visible à la fois ; disparaît après un moment.
+   */
+  const showGardenLetter = useCallback(
+    (toy: LetterToy) => {
+      const token = ++letterToken.current;
+      setGardenLetter(toy);
+      later(() => setGardenLetter((cur) => (letterToken.current === token ? null : cur)), 18000);
     },
     [later],
   );
@@ -136,8 +154,12 @@ export function JardinMagiqueScreen({ onExit }: Props) {
       }
       // Une seule carte mot, après la récolte (et l'éventuel bravo).
       showWord(PLANT_WORDS[type], spokeBravo ? 2600 : 1000);
+
+      // Puis la première lettre du mot récolté (lettre-jouet à toucher).
+      const toy = firstLetterToy(getWord(PLANT_WORDS[type]).label);
+      if (toy) later(() => showGardenLetter(toy), spokeBravo ? 3200 : 1600);
     },
-    [garden.plots, runFx, later, showWord],
+    [garden.plots, runFx, later, showWord, showGardenLetter],
   );
 
   const tapPlot = useCallback(
@@ -319,6 +341,18 @@ export function JardinMagiqueScreen({ onExit }: Props) {
         )}
 
         {ladybug && <span className="jardin__ladybug" aria-hidden="true">🐞</span>}
+
+        {gardenLetter && (
+          <InteractiveLetter
+            key={gardenLetter.char}
+            letter={gardenLetter}
+            x={50}
+            y={22}
+            size="20vmin"
+            resetKey={letterToken.current}
+            className="jardin__letter"
+          />
+        )}
 
         <BasileMascot
           variant="sidekick"
