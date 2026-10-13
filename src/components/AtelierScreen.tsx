@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { playSfx, playVoice } from "../lib/audio";
 import { BUILDABLES, OBJECT_COLORS, getBuildable, type BuildableId } from "../data/buildables";
+import { BUILDABLE_WORDS, type WordId } from "../data/words";
 import { loadAtelier, saveAtelier, type AtelierState } from "../lib/workshop";
 import { BuildableArt, PartIcon } from "./atelier/BuildableArt";
 import { WorkshopBackdrop } from "./atelier/WorkshopBackdrop";
+import { WordRevealCard } from "./WordRevealCard";
 import { BasileMascot } from "./BasileMascot";
 
 interface Props {
@@ -28,6 +30,7 @@ export function AtelierScreen({ onExit }: Props) {
   const [drag, setDrag] = useState<DragState | null>(null);
   const [hint, setHint] = useState<string | null>(null);
   const [wrong, setWrong] = useState(false);
+  const [wordReveal, setWordReveal] = useState<WordId | null>(null);
 
   const timers = useRef<number[]>([]);
   const dragRef = useRef<DragState | null>(null);
@@ -48,6 +51,14 @@ export function AtelierScreen({ onExit }: Props) {
   useEffect(() => {
     return () => timers.current.forEach((id) => window.clearTimeout(id));
   }, []);
+
+  /** Affiche au plus une carte mot à la fois (la première gagne). */
+  const showWord = useCallback(
+    (id: WordId, delay: number) => {
+      later(() => setWordReveal((cur) => cur ?? id), delay);
+    },
+    [later],
+  );
 
   // Consigne d'accueil (une fois).
   useEffect(() => {
@@ -108,10 +119,12 @@ export function AtelierScreen({ onExit }: Props) {
             built: { ...prev.built, [current]: color },
             builds: prev.builds + 1,
           }));
+          // Une seule carte mot, après l'annonce de réussite.
+          showWord(BUILDABLE_WORDS[current], 2200);
         }, 350);
       }
     },
-    [current, placed, color, later],
+    [current, placed, color, later, showWord],
   );
 
   // --- Glisser-déposer (Pointer Events) ---
@@ -383,6 +396,10 @@ export function AtelierScreen({ onExit }: Props) {
         <div className="atelier__ghost" style={{ left: drag.x, top: drag.y }} aria-hidden="true">
           <PartIcon type={drag.type} partId={drag.partId} color={color} />
         </div>
+      )}
+
+      {wordReveal && (
+        <WordRevealCard word={wordReveal} onClose={() => setWordReveal(null)} />
       )}
     </div>
   );

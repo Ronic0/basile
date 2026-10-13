@@ -11,9 +11,11 @@ import {
   type TreasureId,
 } from "../data/pirates";
 import { loadPirates, savePirates, type PiratesState } from "../lib/pirates";
+import { TREASURE_WORDS, type WordId } from "../data/words";
 import { PirateShip } from "./pirates/PirateShip";
 import { IslandBackdrop, IslandSpotArt } from "./pirates/IslandScenes";
 import { TreasureIcon } from "./pirates/TreasureIcon";
+import { WordRevealCard } from "./WordRevealCard";
 import { BasileMascot } from "./BasileMascot";
 
 interface Props {
@@ -34,6 +36,7 @@ export function PiratesScreen({ onExit }: Props) {
   const [showChest, setShowChest] = useState(false);
   const [pop, setPop] = useState<{ token: number; treasure: TreasureId; x: number; y: number } | null>(null);
   const [hint, setHint] = useState<string | null>(null);
+  const [wordReveal, setWordReveal] = useState<WordId | null>(null);
 
   const timers = useRef<number[]>([]);
   const spoken = useRef<Set<string>>(new Set());
@@ -59,6 +62,14 @@ export function PiratesScreen({ onExit }: Props) {
     spoken.current.add(id);
     playVoice(id);
   }, []);
+
+  /** Affiche au plus une carte mot à la fois (la première gagne). */
+  const showWord = useCallback(
+    (id: WordId, delay: number) => {
+      later(() => setWordReveal((cur) => cur ?? id), delay);
+    },
+    [later],
+  );
 
   // Consigne d'accueil de la carte.
   useEffect(() => {
@@ -139,14 +150,18 @@ export function PiratesScreen({ onExit }: Props) {
       later(() => setPop((cur) => (cur && cur.token === token ? null : cur)), 1200);
 
       // Voix : seulement la première découverte de l'expédition.
-      if (treasureVoiceBudget.current === 0) {
+      const firstOfExpedition = treasureVoiceBudget.current === 0;
+      if (firstOfExpedition) {
         treasureVoiceBudget.current = 1;
         later(() => playVoice("pirates-tresor"), 300);
       } else {
         playSfx("surprise", 0.25);
       }
+
+      // Une seule carte par découverte, après l'annonce vocale éventuelle.
+      showWord(TREASURE_WORDS[spot.treasure], firstOfExpedition ? 2600 : 900);
     },
-    [pirates.searched, later],
+    [pirates.searched, later, showWord],
   );
 
   const openChest = useCallback(() => {
@@ -337,6 +352,10 @@ export function PiratesScreen({ onExit }: Props) {
             Ces trésors pourront décorer « Ma Cabane » plus tard 🏚️
           </p>
         </div>
+      )}
+
+      {wordReveal && (
+        <WordRevealCard word={wordReveal} onClose={() => setWordReveal(null)} />
       )}
     </div>
   );

@@ -2,3 +2,9 @@ node_modules
 dist
 .DS_Store
 *.local
+
+# Outils de génération vocale neuronale (Kokoro/MLX) — jamais embarqués
+scripts/.venv-kokoro/
+scripts/__pycache__/
+tmp/
+

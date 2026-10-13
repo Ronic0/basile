@@ -81,6 +81,24 @@ Dossiers exacts :
 - Voix : `public/audio/fr/` (voir le README du dossier)
 - Bruitages : `public/audio/sfx/` (voir le README du dossier)
 
+### Voix neuronales locales (optionnel, hors du jeu)
+
+Une synthèse neuronale **locale** (Kokoro-82M via MLX, Apple Silicon) peut
+remplacer `say` pour de meilleures voix FR. C'est un **outil de développement** :
+aucun modèle n'est embarqué, le jeu reste 100 % hors-ligne.
+
+```bash
+npm run voices:setup    # venv isolé scripts/.venv-kokoro (n'affecte pas le jeu)
+npm run voices:check    # cohérence manifeste <-> textes
+npm run voices:samples  # échantillons de comparaison -> tmp/voice-comparison/
+npm run voices:report   # prononciations à vérifier
+```
+
+Le générateur `scripts/voice-generator.py` lit le manifeste du jeu et
+`scripts/voice-lines.json` (texte + rôle par id), conserve les identifiants
+existants, évite de régénérer l'inchangé (cache) et retombe sur `say` en cas
+d'échec. Détails et limites : `scripts/README-voices.md`.
+
 ## Mascotte Basile
 
 Déposez le portrait détouré ici :

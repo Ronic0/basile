@@ -6175,6 +6175,133 @@ body {
   .cabane__swatch { width: 5vmin; height: 5vmin; }
 }
 
+/* ---------- Carte mot (découverte de vocabulaire) ---------- */
+.word-card {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3vmin;
+  background: radial-gradient(circle at 50% 40%, rgba(10, 30, 50, 0.6), rgba(6, 18, 32, 0.85));
+  animation: word-card-fade 0.25s ease;
+}
+.word-card__panel {
+  position: relative;
+  width: min(72vmin, 92%);
+  max-height: 92%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6vmin;
+  padding: 5vmin 4vmin 4vmin;
+  border-radius: 4vmin;
+  background: linear-gradient(180deg, #ffffff, #f3f7ff);
+  color: #22303a;
+  box-shadow: 0 3vmin 8vmin rgba(0, 0, 0, 0.4), 0 0 0 0.8vmin #ffd34d;
+  animation: word-card-pop 0.45s cubic-bezier(0.2, 1.3, 0.5, 1);
+}
+.word-card__close {
+  position: absolute;
+  top: 1.6vmin;
+  right: 1.6vmin;
+  border: none;
+  width: 6vmin;
+  height: 6vmin;
+  border-radius: 50%;
+  background: rgba(34, 48, 58, 0.08);
+  font-size: 2.6vmin;
+  line-height: 1;
+  cursor: pointer;
+}
+.word-card__art {
+  width: 26vmin;
+  height: 26vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 1vmin 1.4vmin rgba(0, 0, 0, 0.18));
+}
+.word-card__art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.word-card__word {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-weight: 800;
+  letter-spacing: 0.4vmin;
+  font-size: 9vmin;
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  color: #1d2b36;
+  padding: 0.5vmin 1vmin;
+  border-radius: 2vmin;
+}
+.word-card__word:active {
+  transform: scale(0.97);
+}
+.word-card__letter {
+  position: relative;
+  color: #e8543f;
+}
+.word-card__letter::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.6vmin;
+  height: 0.9vmin;
+  border-radius: 1vmin;
+  background: #ffd34d;
+}
+.word-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 2.4vmin;
+  margin-top: 1vmin;
+}
+.word-card__speaker {
+  border: none;
+  width: 9vmin;
+  height: 9vmin;
+  border-radius: 50%;
+  background: #2f9bd6;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0.8vmin 0 #1f6f9c;
+}
+.word-card__speaker svg {
+  width: 5vmin;
+  height: 5vmin;
+}
+.word-card__speaker:active {
+  transform: translateY(0.3vmin);
+  box-shadow: 0 0.5vmin 0 #1f6f9c;
+}
+.word-card__continue {
+  font-size: 3.4vmin;
+  padding: 1.6vmin 4vmin;
+}
+
+@keyframes word-card-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes word-card-pop {
+  0% { transform: scale(0.7) translateY(3vmin); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;

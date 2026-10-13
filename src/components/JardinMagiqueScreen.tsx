@@ -11,9 +11,11 @@ import {
   type GardenState,
   type PlantType,
 } from "../lib/garden";
+import { PLANT_WORDS, type WordId } from "../data/words";
 import { GardenBackdrop } from "./jardin/GardenBackdrop";
 import { Plant } from "./jardin/GardenPlants";
 import { BasketIcon, SeedPreview, WateringCanIcon } from "./jardin/GardenIcons";
+import { WordRevealCard } from "./WordRevealCard";
 import { BasileMascot } from "./BasileMascot";
 
 interface Props {
@@ -34,6 +36,7 @@ export function JardinMagiqueScreen({ onExit }: Props) {
   const [hint, setHint] = useState<string | null>(null);
   const [ladybug, setLadybug] = useState(false);
   const [resting, setResting] = useState<number | null>(null);
+  const [wordReveal, setWordReveal] = useState<WordId | null>(null);
 
   const timers = useRef<number[]>([]);
   const fxId = useRef(0);
@@ -62,6 +65,14 @@ export function JardinMagiqueScreen({ onExit }: Props) {
     playVoice("jardin-bienvenue");
     later(() => setHint(null), 6000);
   }, [later]);
+
+  /** Affiche au plus une carte mot à la fois (la première gagne). */
+  const showWord = useCallback(
+    (id: WordId, delay: number) => {
+      later(() => setWordReveal((cur) => cur ?? id), delay);
+    },
+    [later],
+  );
 
   const runFx = useCallback(
     (kind: Fx["kind"], plot: number, plant: PlantType | null, ms: number) => {
@@ -119,11 +130,14 @@ export function JardinMagiqueScreen({ onExit }: Props) {
       playSfx("recolte", 0.55);
       runFx("harvest", i, type, 950);
       harvestCount.current += 1;
-      if (harvestCount.current === 1 || harvestCount.current % 4 === 0) {
+      const spokeBravo = harvestCount.current === 1 || harvestCount.current % 4 === 0;
+      if (spokeBravo) {
         later(() => playVoice("jardin-bravo"), 450);
       }
+      // Une seule carte mot, après la récolte (et l'éventuel bravo).
+      showWord(PLANT_WORDS[type], spokeBravo ? 2600 : 1000);
     },
-    [garden.plots, runFx, later],
+    [garden.plots, runFx, later, showWord],
   );
 
   const tapPlot = useCallback(
@@ -345,6 +359,10 @@ export function JardinMagiqueScreen({ onExit }: Props) {
           <span className="jardin__tool-label">Arrosoir</span>
         </button>
       </footer>
+
+      {wordReveal && (
+        <WordRevealCard word={wordReveal} onClose={() => setWordReveal(null)} />
+      )}
     </div>
   );
 }
