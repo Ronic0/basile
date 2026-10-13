@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { playVoice, stopVoice } from "../lib/audio";
 import { firstLetter, getWord, restOfWord, type WordId } from "../data/words";
+import { isPlayableWord } from "../lib/wordGame";
+import { WordPlayground } from "./WordPlayground";
 import { WordArt } from "./words/WordArt";
 
 interface Props {
@@ -20,9 +22,12 @@ interface Props {
  */
 export function WordRevealCard({ word, onClose, autoCloseMs = 9000 }: Props) {
   const entry = getWord(word);
+  const playable = isPlayableWord(word);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
   const timer = useRef<number | null>(null);
+  const playingRef = useRef(false);
+  const [playing, setPlaying] = useState(false);
 
   const clearTimer = useCallback(() => {
     if (timer.current !== null) {
@@ -31,14 +36,19 @@ export function WordRevealCard({ word, onClose, autoCloseMs = 9000 }: Props) {
     }
   }, []);
 
+  /** (Re)programme la fermeture automatique (jamais pendant le mini-jeu). */
+  const scheduleClose = useCallback(() => {
+    clearTimer();
+    if (autoCloseMs > 0 && !playingRef.current) {
+      timer.current = window.setTimeout(() => closeRef.current(), autoCloseMs);
+    }
+  }, [autoCloseMs, clearTimer]);
+
   /** Prononce le mot complet et (re)programme la fermeture automatique. */
   const sayWord = useCallback(() => {
     playVoice(entry.voice);
-    clearTimer();
-    if (autoCloseMs > 0) {
-      timer.current = window.setTimeout(() => closeRef.current(), autoCloseMs);
-    }
-  }, [entry.voice, autoCloseMs, clearTimer]);
+    scheduleClose();
+  }, [entry.voice, scheduleClose]);
 
   useEffect(() => {
     sayWord();
@@ -53,6 +63,21 @@ export function WordRevealCard({ word, onClose, autoCloseMs = 9000 }: Props) {
     stopVoice();
     closeRef.current();
   }, [clearTimer]);
+
+  /** Ouvre le mini-jeu : la carte reste derrière, la fermeture auto est suspendue. */
+  const startPlay = useCallback(() => {
+    playingRef.current = true;
+    clearTimer();
+    stopVoice();
+    setPlaying(true);
+  }, [clearTimer]);
+
+  /** Quitte le mini-jeu et revient à la carte. */
+  const exitPlay = useCallback(() => {
+    playingRef.current = false;
+    setPlaying(false);
+    scheduleClose();
+  }, [scheduleClose]);
 
   const letter = firstLetter(entry.label);
   const rest = restOfWord(entry.label);
@@ -98,11 +123,18 @@ export function WordRevealCard({ word, onClose, autoCloseMs = 9000 }: Props) {
           >
             <SpeakerIcon />
           </button>
+          {playable && (
+            <button type="button" className="btn word-card__play" onClick={startPlay}>
+              🧩 Jouer avec le mot
+            </button>
+          )}
           <button type="button" className="btn btn--play word-card__continue" onClick={handleClose}>
             Continuer
           </button>
         </div>
       </div>
+
+      {playing && <WordPlayground word={word} onClose={exitPlay} />}
     </div>
   );
 }
