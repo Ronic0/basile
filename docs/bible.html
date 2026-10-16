@@ -1,0 +1,1585 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Le Monde de Basile — Bible du projet</title>
+    <meta
+      name="description"
+      content="Documentation complète et autonome du projet Les aventures des Alphas de Basile (React + TypeScript + Vite)."
+    />
+    <style>
+      :root {
+        --ink: #1d2b36;
+        --muted: #5b6b78;
+        --bg: #f4f7fb;
+        --panel: #ffffff;
+        --border: #dfe7ef;
+        --accent: #2f9bd6;
+        --brand: #7d4bd1;
+        --green: #3aa34a;
+        --amber: #f0b429;
+        --red: #e8543f;
+        --code-bg: #0f2233;
+        --code-ink: #e6f0f8;
+        --radius: 14px;
+        --shadow: 0 10px 30px rgba(20, 40, 60, 0.08);
+        --mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--sans);
+        line-height: 1.6;
+        font-size: 16px;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .wrap {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        max-width: 1500px;
+        margin: 0 auto;
+        gap: 28px;
+        padding: 0 24px;
+      }
+
+      /* ---------- Sidebar ---------- */
+      .sidebar {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 24px 0 40px;
+      }
+      .brand {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-bottom: 18px;
+      }
+      .brand strong {
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+      .brand span {
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      .search {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: inherit;
+        background: var(--panel);
+        margin-bottom: 14px;
+      }
+      .search:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+      }
+      nav.toc {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        border-left: 2px solid var(--border);
+      }
+      nav.toc a {
+        color: var(--muted);
+        font-size: 13.5px;
+        padding: 5px 12px;
+        border-left: 2px solid transparent;
+        margin-left: -2px;
+        border-radius: 0 8px 8px 0;
+      }
+      nav.toc a:hover {
+        background: #eaf2fa;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      nav.toc a.active {
+        color: var(--brand);
+        border-left-color: var(--brand);
+        font-weight: 600;
+        background: #f3edfd;
+      }
+      nav.toc a.sub {
+        padding-left: 26px;
+        font-size: 12.5px;
+      }
+      .search-info {
+        font-size: 12px;
+        color: var(--muted);
+        margin: -6px 0 12px;
+        min-height: 16px;
+      }
+
+      /* ---------- Main ---------- */
+      main {
+        padding: 40px 0 120px;
+        min-width: 0;
+      }
+      header.hero {
+        background: linear-gradient(150deg, #0e5f86 0%, #123c56 55%, #4a2472 100%);
+        color: #fff;
+        border-radius: 20px;
+        padding: 34px 36px;
+        box-shadow: var(--shadow);
+        margin-bottom: 34px;
+      }
+      header.hero h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+        letter-spacing: -0.02em;
+      }
+      header.hero p {
+        margin: 0 0 16px;
+        opacity: 0.92;
+        max-width: 70ch;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .pill {
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        padding: 4px 12px;
+        font-size: 12.5px;
+      }
+      section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 26px 30px;
+        margin-bottom: 22px;
+        box-shadow: var(--shadow);
+        scroll-margin-top: 20px;
+      }
+      section > h2 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        letter-spacing: -0.01em;
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      section > h2 .num {
+        font-size: 13px;
+        color: var(--accent);
+        font-family: var(--mono);
+        font-weight: 600;
+      }
+      section > .lead {
+        color: var(--muted);
+        margin: 0 0 18px;
+        max-width: 80ch;
+      }
+      h3 {
+        margin: 26px 0 8px;
+        font-size: 17px;
+      }
+      h4 {
+        margin: 18px 0 6px;
+        font-size: 14.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      p {
+        margin: 8px 0;
+      }
+      ul,
+      ol {
+        margin: 8px 0;
+        padding-left: 22px;
+      }
+      li {
+        margin: 4px 0;
+      }
+      code {
+        background: #eef3f8;
+        border: 1px solid #e0e9f1;
+        border-radius: 5px;
+        padding: 1px 6px;
+        font-family: var(--mono);
+        font-size: 0.86em;
+        color: #134057;
+        white-space: nowrap;
+      }
+      pre {
+        background: var(--code-bg);
+        color: var(--code-ink);
+        border-radius: 12px;
+        padding: 16px 18px;
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      pre code {
+        background: none;
+        border: none;
+        color: inherit;
+        padding: 0;
+        white-space: pre;
+        font-size: inherit;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      th {
+        background: #eff4f9;
+        font-size: 12.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--muted);
+      }
+      tbody tr:hover {
+        background: #f8fbfe;
+      }
+      td code,
+      th code {
+        white-space: nowrap;
+      }
+      .callout {
+        border-radius: 12px;
+        padding: 14px 16px 14px 16px;
+        margin: 14px 0;
+        border-left: 4px solid var(--accent);
+        background: #eef7fd;
+        font-size: 14.5px;
+      }
+      .callout.rule {
+        border-left-color: var(--brand);
+        background: #f5f0fe;
+      }
+      .callout.warn {
+        border-left-color: var(--amber);
+        background: #fdf6e6;
+      }
+      .callout.ok {
+        border-left-color: var(--green);
+        background: #eefaf0;
+      }
+      .callout strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 14px;
+        margin: 14px 0;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: #fbfdff;
+      }
+      .card h4 {
+        margin: 0 0 6px;
+        color: var(--ink);
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 15px;
+      }
+      .card p {
+        margin: 0;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .tree {
+        background: var(--code-bg);
+        color: var(--code-ink);
+        border-radius: 12px;
+        padding: 16px 18px;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        line-height: 1.6;
+        overflow-x: auto;
+      }
+      .tree .dir {
+        color: #7fd1ff;
+      }
+      .tree .cmt {
+        color: #8ba3b5;
+      }
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 1px 9px;
+        font-size: 11.5px;
+        font-weight: 600;
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+      .tag.ready {
+        background: #eefaf0;
+        color: #246e30;
+        border-color: #bfe8c8;
+      }
+      .tag.v1 {
+        background: #eef7fd;
+        color: #1c6a95;
+        border-color: #bfe0f2;
+      }
+      .tag.new {
+        background: #f5f0fe;
+        color: #542e93;
+        border-color: #ddcbf7;
+      }
+      .tag.soon {
+        background: #f2f4f6;
+        color: #6b7883;
+        border-color: #dbe1e7;
+      }
+      .kbd {
+        font-family: var(--mono);
+        font-size: 12px;
+        background: #fff;
+        border: 1px solid #cdd8e2;
+        border-bottom-width: 2px;
+        border-radius: 6px;
+        padding: 1px 7px;
+      }
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 22px 0;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .totop {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        background: var(--brand);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+      }
+      footer {
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+        padding: 20px 0;
+      }
+
+      @media (max-width: 980px) {
+        .wrap {
+          grid-template-columns: 1fr;
+          padding: 0 16px;
+        }
+        .sidebar {
+          position: static;
+          height: auto;
+          padding-top: 20px;
+        }
+        nav.toc {
+          max-height: 260px;
+          overflow-y: auto;
+        }
+        main {
+          padding-top: 10px;
+        }
+        section {
+          padding: 20px 18px;
+        }
+      }
+      @media print {
+        .sidebar,
+        .totop,
+        .search,
+        .search-info {
+          display: none !important;
+        }
+        .wrap {
+          grid-template-columns: 1fr;
+        }
+        body {
+          background: #fff;
+        }
+        section {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <aside class="sidebar">
+        <div class="brand">
+          <strong>Le Monde de Basile</strong>
+          <span>Bible du projet · v0.1.0</span>
+        </div>
+        <input
+          id="search"
+          class="search"
+          type="search"
+          placeholder="Rechercher dans la bible…"
+          aria-label="Rechercher dans la bible"
+        />
+        <div class="search-info" id="searchInfo"></div>
+        <nav class="toc" id="toc">
+          <a href="#vision">1. Vision &amp; principes</a>
+          <a href="#demarrage">2. Démarrage rapide</a>
+          <a href="#architecture">3. Architecture applicative</a>
+          <a href="#arborescence">4. Arborescence du projet</a>
+          <a href="#portail">5. Le Monde de Basile (portail)</a>
+          <a href="#activites">6. Les six activités</a>
+          <a href="#alphas">7. Catalogue des Alphas</a>
+          <a href="#moteur">8. Moteur pédagogique &amp; boss</a>
+          <a href="#mots">9. Les mots vivants (M1)</a>
+          <a href="#lettres">10. Les lettres vivantes (M2)</a>
+          <a href="#minijeu">11. Jouer avec le mot (M3)</a>
+          <a href="#audio">12. Audio &amp; voix</a>
+          <a href="#sauvegardes">13. Sauvegardes locales</a>
+          <a href="#assets">14. Ressources graphiques</a>
+          <a href="#scripts">15. Scripts npm</a>
+          <a href="#tests">16. Tests &amp; vérifications</a>
+          <a href="#conventions">17. Conventions de code</a>
+          <a href="#extension">18. Guides d'extension</a>
+          <a href="#journal">19. Journal des missions &amp; suite</a>
+          <a href="#depannage">20. Dépannage / FAQ</a>
+        </nav>
+      </aside>
+
+      <main>
+        <header class="hero">
+          <h1>Le Monde de Basile — Bible du projet</h1>
+          <p>
+            Documentation unique et autonome du jeu local
+            <em>Les aventures des Alphas de Basile</em> : application React + TypeScript + Vite
+            conçue pour un enfant de maternelle, jouée sur iPad Pro en paysage, sans réseau.
+          </p>
+          <div class="meta">
+            <span class="pill">React 18 · TypeScript · Vite 5</span>
+            <span class="pill">100 % hors-ligne</span>
+            <span class="pill">Aucun backend</span>
+            <span class="pill">82 fichiers dans src/</span>
+          </div>
+        </header>
+
+        <!-- ============================================================ -->
+        <section id="vision">
+          <h2><span class="num">01</span> Vision &amp; principes</h2>
+          <p class="lead">
+            Un espace de jeu calme et bienveillant pour apprendre à reconnaître les lettres et
+            les mots, sans pression. La bible fixe d'abord les règles non négociables : tout le
+            reste du document en découle.
+          </p>
+
+          <h3>Objectif</h3>
+          <p>
+            Faire découvrir les Alphas (personnages qui portent le son des lettres), le prénom
+            <strong>BASILE</strong>, puis des mots simples et courants du quotidien, à travers de
+            grandes activités libres. Le jeu est destiné à un jeune enfant, souvent seul devant la
+            tablette, parfois accompagné d'un adulte.
+          </p>
+
+          <h3>Principes non négociables</h3>
+          <div class="callout rule">
+            <strong>Règles du produit — à respecter par toute évolution</strong>
+            <ul style="margin: 6px 0 0">
+              <li>Aucun backend, aucune API distante, aucune donnée envoyée. Le jeu est 100 % hors-ligne.</li>
+              <li>Aucune pénalité, aucun chronomètre, aucun score anxiogène. Une mauvaise réponse est toujours douce.</li>
+              <li>Sauvegardes additives et non destructives : on n'écrase jamais une donnée existante.</li>
+              <li>Une seule piste audio à la fois (voix) : jamais de superposition.</li>
+              <li>Respect de <code>prefers-reduced-motion</code> pour toutes les animations.</li>
+              <li>Cible tactile : iPad Pro en paysage. Zones de dépôt généreuses, pas de précision fine.</li>
+              <li>Pas d'emoji utilisé pour <em>remplacer</em> une illustration existante.</li>
+            </ul>
+          </div>
+
+          <h3>Ce que la bible couvre</h3>
+          <ul>
+            <li>Le code : architecture, dossiers, composants, données, utilitaires.</li>
+            <li>Le contenu : Alphas, mots, lettres, activités, sons.</li>
+            <li>Les sauvegardes locales et leurs règles de migration.</li>
+            <li>Les procédures : lancer, tester, vérifier, étendre.</li>
+          </ul>
+          <div class="callout">
+            Les README de dossiers (<code>public/audio/…</code>, <code>scripts/README-voices.md</code>)
+            restent des annexes de détail. Cette bible les rassemble et fait autorité.
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="demarrage">
+          <h2><span class="num">02</span> Démarrage rapide</h2>
+          <p class="lead">Installer, lancer, et jouer sur l'iPad.</p>
+
+          <h3>Prérequis</h3>
+          <ul>
+            <li><strong>Node.js</strong> 18+ et npm.</li>
+            <li>Python 3 uniquement pour les scripts d'assets et de bruitages (optionnel).</li>
+            <li>Un Mac pour la génération de voix via <code>say</code> (optionnel).</li>
+          </ul>
+
+          <h3>Lancer en local</h3>
+          <pre><code>npm install
+npm run dev         # http://localhost:5173</code></pre>
+
+          <h3>Jouer sur l'iPad Pro (Wi-Fi local)</h3>
+          <pre><code>npm run dev -- --host
+# le terminal affiche http://192.168.1.x:5173
+# ouvrir cette adresse dans Safari sur l'iPad (même réseau)</code></pre>
+          <p>Pour un rendu plus stable sur tablette, utiliser le build de production :</p>
+          <pre><code>npm run build
+npm run preview     # déjà exposé sur le réseau (--host)</code></pre>
+          <div class="callout warn">
+            <strong>Autoplay iOS</strong>
+            Safari mobile bloque la lecture audio avant une interaction. Le premier tap déverrouille
+            l'audio via <code>primeAudio()</code> (voir <code>src/lib/audio.ts</code>).
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="architecture">
+          <h2><span class="num">03</span> Architecture applicative</h2>
+          <p class="lead">
+            Une application React mono-page dont la navigation est un simple état local. Aucun routeur.
+          </p>
+
+          <h3>Navigation</h3>
+          <p>
+            L'ensemble des écrans est piloté par un unique état <code>screen</code> dans
+            <code>src/App.tsx</code> (type <code>Screen</code>), complété par quelques états annexes
+            (<code>universeId</code>, <code>stats</code>, <code>lastResult</code>,
+            <code>discoveryTarget</code>). Chaque écran reçoit ses props et des callbacks de
+            navigation.
+          </p>
+          <pre><code>type Screen =
+  | "home" | "discovery" | "universes" | "game" | "reward"
+  | "parent" | "boss" | "nurserie" | "jardin-magique"
+  | "atelier" | "pirates" | "cabane" | "album"</code></pre>
+
+          <h3>Flux d'écrans (simplifié)</h3>
+          <pre><code>Accueil (home)
+ ├─ Le Jardin des Alphas ──► discovery ──► universes ──► game ──► reward
+ │                                              └────► album
+ │                                              └────► boss (boss du prénom)
+ ├─ Nurserie des dragons ──► nurserie
+ ├─ Jardin magique ───────► jardin-magique
+ ├─ Atelier ──────────────► atelier
+ ├─ Port des Pirates ─────► pirates
+ └─ Ma Cabane ────────────► cabane
+
+Espace Parent ────────────► parent   (accessible depuis l'accueil)</code></pre>
+
+          <h3>Moteur pédagogique commun</h3>
+          <p>
+            Les huit univers partagent le même moteur : une manche pose une consigne, affiche 2 ou 3
+            propositions, valide la bonne réponse et enchaîne. Chaque univers n'apporte qu'un
+            <strong>décor</strong> (<code>src/components/scenes/</code>) et un
+            <strong>plateau</strong> (<code>src/components/boards/</code>, contrat
+            <code>BoardProps</code>). Le registre <code>src/components/universes/registry.tsx</code>
+            fait le lien entre un <code>UniverseId</code> et son couple décor/plateau.
+          </p>
+          <pre><code>// Déclarer un univers
+src/data/universes.ts        -> UNIVERSES, correctSfx / accentSfx
+src/components/scenes/…      -> décor
+src/components/boards/…      -> plateau (props BoardProps)
+src/components/universes/registry.tsx -> association id -> (Scene, Board)</code></pre>
+
+          <h3>Rendu et style</h3>
+          <ul>
+            <li>Point d'entrée : <code>index.html</code> → <code>src/main.tsx</code> → <code>App.tsx</code>.</li>
+            <li>Un unique feuillet <code>src/styles.css</code> (~6400 lignes), organisé par commentaires de section.</li>
+            <li>Animations <strong>CSS uniquement</strong> (<code>transform</code> / <code>opacity</code>).</li>
+            <li>Mascotte <code>BasileMascot</code> avec variantes <code>hero</code>, <code>guide</code>, <code>sidekick</code>, <code>reward</code> et humeurs <code>idle</code>/<code>happy</code>/<code>celebrate</code>.</li>
+          </ul>
+
+          <h3>Configuration</h3>
+          <table>
+            <tbody>
+              <tr><td><code>vite.config.ts</code></td><td>Plugin React + middleware MIME <code>audio/aiff</code> (compat Safari) ; serveurs en <code>--host</code>.</td></tr>
+              <tr><td><code>tsconfig.json</code></td><td><code>strict</code>, <code>noUnusedLocals</code>, <code>noUnusedParameters</code>, <code>noFallthroughCasesInSwitch</code>.</td></tr>
+              <tr><td><code>index.html</code></td><td>Métadonnées <em>web-app capable</em>, favicon éclair en SVG inline, zoom désactivé.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="arborescence">
+          <h2><span class="num">04</span> Arborescence du projet</h2>
+          <p class="lead">Où trouver quoi, en un coup d'œil.</p>
+
+          <div class="tree"><span class="cmt"># Racine</span>
+index.html               <span class="cmt">page hôte Vite</span>
+vite.config.ts           <span class="cmt">plugins + serveurs</span>
+tsconfig.json            <span class="cmt">TS strict</span>
+package.json             <span class="cmt">scripts npm</span>
+README.md                <span class="cmt">démarrage rapide (pointe ici)</span>
+
+<span class="dir">src/</span>
+├── App.tsx              <span class="cmt">navigation par état, orchestration</span>
+├── main.tsx             <span class="cmt">bootstrap React</span>
+├── styles.css           <span class="cmt">tout le style, par sections</span>
+├── <span class="dir">data/</span>                <span class="cmt">contenu déclaratif (source de vérité)</span>
+│   ├── alphas.ts        <span class="cmt">30 Alphas + groupes</span>
+│   ├── universes.ts     <span class="cmt">8 univers pédagogiques</span>
+│   ├── activities.ts    <span class="cmt">6 activités du portail</span>
+│   ├── words.ts         <span class="cmt">catalogue des 21 mots</span>
+│   ├── letters.ts       <span class="cmt">26 lettres-jouets</span>
+│   ├── buildables.ts    <span class="cmt">objets de l'Atelier</span>
+│   ├── pirates.ts       <span class="cmt">îles, trésors, cachettes</span>
+│   ├── cabane.ts        <span class="cmt">décorations de la Cabane</span>
+│   └── audioManifest.ts <span class="cmt">manifeste voix + bruitages</span>
+├── <span class="dir">lib/</span>                 <span class="cmt">logique et persistance</span>
+│   ├── audio.ts         <span class="cmt">lecture, volumes, déverrouillage</span>
+│   ├── storage.ts       <span class="cmt">stats pédagogiques + migration</span>
+│   ├── collection.ts    <span class="cmt">collections additives (creatures, builds…)</span>
+│   ├── catalogue.ts     <span class="cmt">sélecteurs/mutations des Alphas</span>
+│   ├── difficulty.ts    <span class="cmt">difficulté adaptative</span>
+│   ├── game.ts          <span class="cmt">moteur de manche</span>
+│   ├── pirates.ts       <span class="cmt">sauvegarde Port des Pirates</span>
+│   ├── nursery.ts       <span class="cmt">sauvegarde Nurserie</span>
+│   ├── workshop.ts      <span class="cmt">sauvegarde Atelier</span>
+│   ├── garden.ts        <span class="cmt">sauvegarde Jardin magique</span>
+│   ├── cabane.ts        <span class="cmt">sauvegarde Cabane</span>
+│   ├── letters.ts       <span class="cmt">progression des lettres jouables</span>
+│   └── wordGame.ts      <span class="cmt">mots jouables du mini-jeu</span>
+└── <span class="dir">components/</span>
+    ├── HomeScreen.tsx … ParentScreen.tsx    <span class="cmt">écrans</span>
+    ├── <span class="dir">scenes/</span>          <span class="cmt">décors des univers</span>
+    ├── <span class="dir">boards/</span>          <span class="cmt">plateaux (BoardProps)</span>
+    ├── <span class="dir">universes/</span>       <span class="cmt">registry.tsx</span>
+    ├── <span class="dir">home/</span>            <span class="cmt">décor du portail (SVG)</span>
+    ├── <span class="dir">pirates/</span> <span class="dir">jardin/</span> <span class="dir">nurserie/</span> <span class="dir">atelier/</span> <span class="cmt">scènes par activité</span>
+    ├── <span class="dir">words/</span>           <span class="cmt">WordArt.tsx (illustrations de mots)</span>
+    └── WordRevealCard.tsx · WordPlayground.tsx · InteractiveLetter.tsx
+
+<span class="dir">public/</span>
+├── <span class="dir">assets/alphas/</span>       <span class="cmt">PNG des Alphas (+ optimized/)</span>
+├── <span class="dir">assets/basile/</span>       <span class="cmt">basile.png (mascotte)</span>
+├── <span class="dir">audio/fr/</span>            <span class="cmt">143 voix WAV</span>
+└── <span class="dir">audio/sfx/</span>           <span class="cmt">35 bruitages WAV</span>
+
+<span class="dir">scripts/</span>
+├── generate-voices.sh   <span class="cmt">voix via macOS say</span>
+├── voice-generator.py   <span class="cmt">voix neuronales Kokoro/MLX</span>
+├── voice-lines.json     <span class="cmt">textes prononcés (source de vérité)</span>
+├── generate-sfx.py      <span class="cmt">bruitages (stdlib Python)</span>
+├── prepare-alphas.py    <span class="cmt">recadrage des images</span>
+├── words.test.mjs · letters.test.mjs · wordgame.test.mjs  <span class="cmt">tests</span>
+└── README-voices.md     <span class="cmt">annexe : pipeline voix neuronale</span></div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="portail">
+          <h2><span class="num">05</span> Le Monde de Basile (portail)</h2>
+          <p class="lead">
+            L'accueil est un portail illustré vers six grandes activités. Le « Jardin des Alphas »
+            ouvre le jeu pédagogique historique ; les cinq autres sont des espaces de jeu libres.
+          </p>
+          <ul>
+            <li>Décor original en SVG/CSS : jardin, soleil, nuages, cabane, chemin, fleurs, papillons, petit dragon endormi.</li>
+            <li>Données des cartes : <code>src/data/activities.ts</code> (<code>ActivityId</code>, <code>ACTIVITIES</code>).</li>
+            <li>Illustrations du portail : <code>src/components/home/</code>.</li>
+            <li>Navigation : <code>selectActivity</code> dans <code>App.tsx</code>, sans dépendance ajoutée.</li>
+          </ul>
+          <h3>Annonce orale des activités</h3>
+          <ul>
+            <li>Survol souris de 350 ms → annonce (sans boucle, annulée si la souris repart).</li>
+            <li>Sur iPad : <strong>deux touchers</strong> (le premier sélectionne et prononce, le second ouvre).</li>
+            <li>Bouton haut-parleur sur la carte pour réécouter.</li>
+            <li>Focus clavier : annonce au focus, ouverture par <span class="kbd">Entrée</span> / <span class="kbd">Espace</span>.</li>
+            <li>Les activités « bientôt » sont annonçables mais jamais ouvrables.</li>
+          </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="activites">
+          <h2><span class="num">06</span> Les six activités</h2>
+          <p class="lead">
+            Chaque activité possède sa sauvegarde dédiée, ses bruitages et ses consignes. Aucune
+            n'utilise de questionnaire sur les Alphas, sauf le Jardin des Alphas.
+          </p>
+
+          <div class="grid">
+            <div class="card">
+              <h4>Le Jardin des Alphas <span class="tag ready">Jouable</span></h4>
+              <p>Porte d'entrée du moteur pédagogique : 8 univers + boss du prénom. Voir section 07 et 08.</p>
+            </div>
+            <div class="card">
+              <h4>Ma Cabane <span class="tag v1">V1</span></h4>
+              <p>Pièce 2D interactive. Lit en direct les collections des autres activités (étagère, coffre, cadres, vase). Décorations : murs, tapis, rideaux.</p>
+            </div>
+            <div class="card">
+              <h4>Le Port des Pirates <span class="tag v1">V1</span></h4>
+              <p>Carte maritime, 3 îles, 4 cachettes par île, trésors déterministes collectés dans « Mes trésors ».</p>
+            </div>
+            <div class="card">
+              <h4>L'Atelier de Basile <span class="tag v1">V1</span></h4>
+              <p>Construction par glisser-déposer (voiture, robot, fusée), choix de couleur, étagère de collection.</p>
+            </div>
+            <div class="card">
+              <h4>Le Jardin magique <span class="tag v1">V1</span></h4>
+              <p>Planter 3 graines dans 4 parcelles, arroser par étapes, récolter. Papillons, coccinelles.</p>
+            </div>
+            <div class="card">
+              <h4>La Nurserie des dragons <span class="tag v1">V1</span></h4>
+              <p>Nourrir, faire boire, caresser, jouer, endormir un bébé dragon. Trois jauges douces, aucune horloge.</p>
+            </div>
+          </div>
+
+          <h3>Détails marquants</h3>
+          <table>
+            <thead>
+              <tr><th>Activité</th><th>Mécanique clé</th><th>Bruitages / voix</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ma Cabane</td>
+                <td>Lampe, fenêtre, coffre, chat, objets de l'étagère qui rejouent leur animation. Personnalisation murs/tapis/rideaux.</td>
+                <td><code>cabane-*</code>, <code>lumiere</code>, <code>rideau</code></td>
+              </tr>
+              <tr>
+                <td>Port des Pirates</td>
+                <td>Navigation animée vers 3 îles ; 4 cachettes ; une nouvelle expédition rend les cachettes à nouveau explorables sans perdre les trésors.</td>
+                <td><code>depart|vagues|mouette|tresor|coffre-ouvre|surprise</code>, <code>pirates-*</code>, <code>tresor-*</code></td>
+              </tr>
+              <tr>
+                <td>Atelier</td>
+                <td>Glisser-déposer OU toucher la pièce puis l'emplacement. Aucune pénalité en cas de mauvais emplacement.</td>
+                <td><code>emboite|construit|robot|fusee</code>, <code>atelier-*</code></td>
+              </tr>
+              <tr>
+                <td>Jardin magique</td>
+                <td>Chaque arrosage = une étape (graine → pousse → plante → mature). Croissance sans horloge.</td>
+                <td><code>plantation|eau|croissance|recolte|papillon</code>, <code>jardin-*</code></td>
+              </tr>
+              <tr>
+                <td>Nurserie</td>
+                <td>Jauges Faim / Bonheur / Énergie jamais dégradées par le temps ; envie exprimée quand une jauge est basse ; surprises aléatoires.</td>
+                <td><code>dragon-content|ronflement|mastication|gorgee|ailes|flamme|balle</code>, <code>nurserie-*</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="alphas">
+          <h2><span class="num">07</span> Catalogue des Alphas</h2>
+          <p class="lead">
+            30 personnages dans <code>src/data/alphas.ts</code>, répartis en 7 groupes. Les six
+            personnages de BASILE gardent leurs identifiants historiques.
+          </p>
+
+          <h3>Les six Alphas de BASILE (fixes)</h3>
+          <table>
+            <thead>
+              <tr><th>Lettre</th><th>id</th><th>Nom</th><th>Voix (consigne / découverte)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>B</td><td><code>botte</code></td><td>La botte</td><td><code>trouve-la-botte</code> / <code>alpha-botte</code></td></tr>
+              <tr><td>A</td><td><code>monsieur-a</code></td><td>Monsieur a</td><td><code>trouve-monsieur-a</code> / <code>alpha-monsieur-a</code></td></tr>
+              <tr><td>S</td><td><code>serpent</code></td><td>Le serpent</td><td><code>trouve-le-serpent</code> / <code>alpha-serpent</code></td></tr>
+              <tr><td>I</td><td><code>madame-i</code></td><td>Madame i</td><td><code>trouve-madame-i</code> / <code>alpha-madame-i</code></td></tr>
+              <tr><td>L</td><td><code>limace</code></td><td>La limace</td><td><code>trouve-la-limace</code> / <code>alpha-limace</code></td></tr>
+              <tr><td>E</td><td><code>madame-e</code></td><td>Madame e</td><td><code>trouve-madame-e</code> / <code>alpha-madame-e</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Groupes (<code>ALPHA_GROUPS</code>)</h3>
+          <table>
+            <thead>
+              <tr><th>Groupe</th><th>Lettres</th><th>Personnages</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>basile</code></td><td>B A S I L E</td><td>botte, monsieur-a, serpent, madame-i, limace, madame-e</td></tr>
+              <tr><td><code>o-m-r-u</code></td><td>O M R U</td><td>monsieur-o, monstre, robinet, mademoiselle-u</td></tr>
+              <tr><td><code>f-v-n-t</code></td><td>F V N T</td><td>fuse-aigue, vent, nez, toupie</td></tr>
+              <tr><td><code>p-c-d-j</code></td><td>P C D J</td><td>perroquet, cornichon, dame, jet-deau</td></tr>
+              <tr><td><code>g-h-k-q</code></td><td>G H K Q</td><td>gulu, hutte, kangourou, quille</td></tr>
+              <tr><td><code>w-x-y-z</code></td><td>W X Y Z</td><td>wagon, xiou, monsieur-y, zibulus</td></tr>
+              <tr><td><code>special</code></td><td>ch, é, è, ê</td><td>chat (digramme), madame-e-aigu/grave/circonflexe (variantes)</td></tr>
+            </tbody>
+          </table>
+          <div class="callout warn">
+            <strong>Ambiguïtés pédagogiques assumées</strong>
+            Les variantes <code>é/è/ê</code> ne sont pas des lettres distinctes, et <code>ch</code>
+            est un digramme : ils appartiennent au groupe <code>special</code> et ne sont
+            <strong>jamais proposés par défaut</strong>. Le boss BASILE reste figé sur les six
+            personnages du prénom.
+          </div>
+
+          <h3>Par défaut &amp; espace Parent</h3>
+          <ul>
+            <li>Au départ, seuls les six Alphas de BASILE sont <strong>actifs</strong> ; deux sont <strong>découverts</strong> (début de partie).</li>
+            <li>Aucune nouveauté n'est débloquée automatiquement.</li>
+            <li>L'espace Parent permet d'activer/désactiver, débloquer, ordonner la découverte, consulter les confusions fréquentes et réinitialiser les progrès (avec confirmation).</li>
+            <li>L'<strong>Album des Alphas</strong> (depuis « Choisis ton univers ») montre les Alphas découverts interactifs et les autres en silhouette.</li>
+          </ul>
+
+          <h3>Moteur commun</h3>
+          <p>
+            Les huit univers puisent dans les Alphas <em>découverts ∩ actifs</em>. Sélecteurs dans
+            <code>src/lib/catalogue.ts</code> : <code>playableAlphas</code>,
+            <code>nextToDiscover</code>, <code>markDiscovered</code>, <code>setActive</code>,
+            <code>unlockAlpha</code>, <code>moveInOrder</code>, <code>resetPedagogy</code>.
+          </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="moteur">
+          <h2><span class="num">08</span> Moteur pédagogique &amp; boss du prénom</h2>
+          <p class="lead">
+            Huit univers jouables qui partagent une logique de manche identique, et un boss final
+            autour du prénom BASILE.
+          </p>
+
+          <h3>Les huit univers</h3>
+          <table>
+            <thead>
+              <tr><th>id</th><th>Titre</th><th>Idée de manche</th><th>Bruitages</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>pirates</code></td><td>Les Pirates</td><td>Ouvrir le bon coffre au trésor</td><td><code>coffre</code> + <code>piece</code></td></tr>
+              <tr><td><code>dragons</code></td><td>Les Dragons</td><td>Aider le dragon à attraper l'Alpha</td><td><code>dragon</code> + <code>etoile</code></td></tr>
+              <tr><td><code>jurassic</code></td><td>Jurassic Basile</td><td>Ouvrir le bon œuf de dinosaure</td><td><code>eclosion</code> + <code>etoile</code></td></tr>
+              <tr><td><code>racing</code></td><td>Turbo Basile</td><td>Foncer vers le bon Alpha</td><td><code>moteur</code> + <code>etoile</code></td></tr>
+              <tr><td><code>creatures</code></td><td>Les Créatures</td><td>Découvrir les créatures cachées</td><td><code>capture</code> + <code>etoile</code></td></tr>
+              <tr><td><code>workshop</code></td><td>Bricolo Basile</td><td>Construire avec les Alphas</td><td><code>construction</code> + <code>piece</code></td></tr>
+              <tr><td><code>rescue</code></td><td>Mission Sauvetage</td><td>Sauver l'animal avec le bon Alpha</td><td><code>sirene</code> + <code>etoile</code></td></tr>
+              <tr><td><code>hero</code></td><td>Super Basile</td><td>Soulever le bon rocher</td><td><code>pouvoir</code> + <code>etoile</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Difficulté adaptative (<code>src/lib/difficulty.ts</code>)</h3>
+          <ul>
+            <li>Deux choix par défaut ; passage à trois lorsque trois Alphas sont réellement connus <em>et</em> après trois réussites autonomes.</li>
+            <li>Retour à deux après deux difficultés consécutives.</li>
+            <li>Réglage parent : « Toujours 2 / Adaptatif / Toujours 3 » (<code>DifficulteMode</code>).</li>
+          </ul>
+          <table>
+            <tbody>
+              <tr><td><code>MAITRISE_SEUIL</code></td><td>2 réussites autonomes pour « connaître » un Alpha</td></tr>
+              <tr><td><code>ALPHAS_CONNUS_REQUIS</code></td><td>3 Alphas connus avant de passer à trois choix</td></tr>
+              <tr><td><code>AUTONOMIE_REQUISE</code></td><td>3 réussites autonomes indépendantes</td></tr>
+              <tr><td><code>DIFFICULTES_RETOUR</code></td><td>2 difficultés avant retour à deux choix</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Boss du prénom — « Le Mystère du prénom BASILE »</h3>
+          <ol>
+            <li><strong>Étape A</strong> — retrouver chaque Alpha et allumer sa pierre magique.</li>
+            <li><strong>Étape B</strong> — reconstituer B-A-S-I-L-E par tap tactile (jamais de clavier), avec trois niveaux d'aide : <code>debutant</code> / <code>intermediaire</code> / <code>avance</code>.</li>
+            <li><strong>Étape C</strong> — château qui s'ouvre, dragon qui s'envole, confettis, médaille enregistrée.</li>
+          </ol>
+          <p>
+            Rejouable à volonté. La vérification de l'image de Madame i est réelle (aucune
+            substitution). Récompense persistée dans <code>alphas-de-basile/boss/v1</code>.
+          </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="mots">
+          <h2><span class="num">09</span> Les mots vivants (mission 1)</h2>
+          <p class="lead">
+            À certains succès, une carte de découverte affiche un mot illustré, prononcé en entier.
+          </p>
+
+          <h3>Principe</h3>
+          <p>
+            <code>src/components/WordRevealCard.tsx</code> affiche une illustration
+            (<code>WordArt</code>), le mot en grandes lettres (première lettre mise en évidence),
+            un bouton haut-parleur, et se ferme automatiquement après 9 secondes (fermeture
+            manuelle toujours possible). Toucher le mot le réécoute.
+          </p>
+          <div class="callout rule">
+            <strong>Règle audio</strong> La carte prononce <strong>uniquement le mot complet</strong>
+            (jamais les lettres une à une).
+          </div>
+
+          <h3>Trois événements déclencheurs</h3>
+          <table>
+            <thead>
+              <tr><th>Activité</th><th>Événement</th><th>Mapping</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Port des Pirates</td><td>Trésor extrait d'une cachette</td><td><code>TREASURE_WORDS</code></td></tr>
+              <tr><td>Jardin magique</td><td>Récolte d'une plante</td><td><code>PLANT_WORDS</code> (fraisier → FRAISE)</td></tr>
+              <tr><td>Atelier</td><td>Objet terminé</td><td><code>BUILDABLE_WORDS</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>Les 21 mots du catalogue (<code>src/data/words.ts</code>)</h3>
+          <table>
+            <thead>
+              <tr><th>id</th><th>Mot</th><th>Voix</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>piece</code></td><td>PIÈCE</td><td><code>mot-piece</code></td></tr>
+              <tr><td><code>coquillage</code></td><td>COQUILLAGE</td><td><code>tresor-coquillage</code> (réutilisée)</td></tr>
+              <tr><td><code>rubis</code></td><td>RUBIS</td><td><code>tresor-rubis</code> (réutilisée)</td></tr>
+              <tr><td><code>emeraude</code></td><td>ÉMERAUDE</td><td><code>tresor-emeraude</code> (réutilisée)</td></tr>
+              <tr><td><code>perle</code></td><td>PERLE</td><td><code>tresor-perle</code> (réutilisée)</td></tr>
+              <tr><td><code>carte</code></td><td>CARTE</td><td><code>mot-carte</code></td></tr>
+              <tr><td><code>tournesol</code></td><td>TOURNESOL</td><td><code>mot-tournesol</code></td></tr>
+              <tr><td><code>fraise</code></td><td>FRAISE</td><td><code>mot-fraise</code></td></tr>
+              <tr><td><code>carotte</code></td><td>CAROTTE</td><td><code>mot-carotte</code></td></tr>
+              <tr><td><code>voiture</code></td><td>VOITURE</td><td><code>mot-voiture</code></td></tr>
+              <tr><td><code>robot</code></td><td>ROBOT</td><td><code>mot-robot</code></td></tr>
+              <tr><td><code>fusee</code></td><td>FUSÉE</td><td><code>alpha-fuse-aigue</code> (réutilisée)</td></tr>
+              <tr><td><code>dragon</code></td><td>DRAGON</td><td><code>mot-dragon</code></td></tr>
+              <tr><td><code>pomme</code></td><td>POMME</td><td><code>mot-pomme</code></td></tr>
+              <tr><td><code>poisson</code></td><td>POISSON</td><td><code>mot-poisson</code></td></tr>
+              <tr><td><code>eau</code></td><td>EAU</td><td><code>mot-eau</code></td></tr>
+              <tr><td><code>balle</code></td><td>BALLE</td><td><code>mot-balle</code></td></tr>
+              <tr><td><code>lampe</code></td><td>LAMPE</td><td><code>mot-lampe</code></td></tr>
+              <tr><td><code>coffre</code></td><td>COFFRE</td><td><code>mot-coffre</code></td></tr>
+              <tr><td><code>tapis</code></td><td>TAPIS</td><td><code>mot-tapis</code></td></tr>
+              <tr><td><code>fenetre</code></td><td>FENÊTRE</td><td><code>mot-fenetre</code></td></tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            <strong>Réutilisation audio</strong> On RÉUTILISE une prise existante si elle prononce
+            exactement le mot ; sinon on génère un son <code>mot-*</code>. Les accents français sont
+            conservés dans <code>label</code>.
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="lettres">
+          <h2><span class="num">10</span> Les lettres vivantes (mission 2)</h2>
+          <p class="lead">
+            Des lettres-jouets que l'enfant peut toucher, déplacer et relâcher, qui réagissent et
+            prononcent le <em>nom</em> de la lettre.
+          </p>
+
+          <h3>Notions volontairement séparées (<code>src/data/letters.ts</code>)</h3>
+          <table>
+            <thead>
+              <tr><th>Notion</th><th>Rôle</th><th>Audio</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>name</code></td><td>Nom français de la lettre (ex. « bé »)</td><td><code>lettre-*</code> — joué</td></tr>
+              <tr><td><code>phoneme</code></td><td>Information pédagogique (ex. <code>/b/</code>)</td><td>jamais joué</td></tr>
+              <tr><td><code>alphaId</code> / <code>alphaName</code></td><td>Alpha associé (correspondance validée)</td><td><code>alpha-*</code> conservé</td></tr>
+            </tbody>
+          </table>
+          <div class="callout rule">
+            <strong>Règle audio</strong> On ne réutilise JAMAIS l'audio d'un mot complet
+            (<code>mot-*</code>, <code>tresor-*</code>) pour une lettre isolée. Un seul audio par
+            caractère : <code>lettre-a</code> … <code>lettre-z</code>.
+          </div>
+
+          <h3>Progression</h3>
+          <p>
+            L'ordre commence par les lettres du prénom <code>BASILE_LETTERS = ["b","a","s","i","l","e"]</code>,
+            puis s'étend aux lettres du <strong>catalogue découvert</strong> (Alphas « letter »
+            simples, digrammes et variantes exclus). Sélecteurs dans <code>src/lib/letters.ts</code> :
+            <code>availableLetters</code>, <code>firstLetterToy</code>, <code>pickAvailableLetter</code>.
+          </p>
+
+          <h3>Interaction (<code>src/components/InteractiveLetter.tsx</code>)</h3>
+          <ul>
+            <li>Pointer Events unifiés (souris + tactile), position clammée aux bornes de l'écran.</li>
+            <li>Réactions : saut, dandinement (wobble), rotation (spin), atterrissage, puis retour au repos.</li>
+            <li>Toucher lit le <strong>nom</strong> de la lettre.</li>
+            <li>Intégrée notamment dans <code>NurserieScreen.tsx</code> (<code>reactToLetter</code>) et <code>JardinMagiqueScreen.tsx</code> (<code>showGardenLetter</code>).</li>
+          </ul>
+          <div class="callout warn">
+            <strong>Piège connu</strong> Ne jamais lire l'état de glissement depuis un état React
+            dans un <code>pointerup</code> rapide : utiliser une <strong>ref synchrone</strong> (voir
+            <code>InteractiveLetter</code>).
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="minijeu">
+          <h2><span class="num">11</span> Jouer avec le mot (mission 3)</h2>
+          <p class="lead">
+            Mini-jeu facultatif, ouvert depuis la carte de découverte, où l'enfant reconstitue le
+            mot en déplaçant des lettres. Jamais automatique, jamais obligatoire.
+          </p>
+
+          <h3>Accès</h3>
+          <p>
+            Un bouton « Jouer avec le mot » apparaît dans <code>WordRevealCard</code> uniquement
+            pour un mot jouable (<code>isPlayableWord</code>). Le mini-jeu s'ouvre
+            <strong>sur action</strong> : la fermeture automatique de la carte est suspendue
+            pendant la partie, et l'enfant peut sortir à tout moment (retour à la carte).
+          </p>
+
+          <h3>Mots activés (<code>src/lib/wordGame.ts</code>)</h3>
+          <p>
+            <code>PLAYABLE_WORD_IDS = WORDS.map(w =&gt; w.id)</code> : tout le catalogue M1 est
+            jouable (mots courts et longs, accents inclus). Deux mots proposés sont
+            <strong>volontairement exclus</strong> car ils n'ont pas d'objet : <code>ILE</code> et
+            <code>OR</code>.
+          </p>
+
+          <h3>Deux modes (<code>src/components/WordPlayground.tsx</code>)</h3>
+          <table>
+            <thead>
+              <tr><th>Mode</th><th>Modèle</th><th>Lettres</th><th>Aide</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Découverte</strong> (défaut)</td>
+                <td>visible</td>
+                <td>dans l'ordre, emplacements guidés (lettre fantôme)</td>
+                <td>bouton « Aide » (place la prochaine lettre)</td>
+              </tr>
+              <tr>
+                <td><strong>Défi doux</strong></td>
+                <td>masqué (« Voir le mot »)</td>
+                <td>mélangées, emplacements neutres</td>
+                <td>bouton « Recommencer » libre</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Interaction</h3>
+          <ul>
+            <li>Toucher une lettre puis un emplacement, ou glisser-déposer (Pointer Events + <code>elementFromPoint</code> / <code>[data-slot]</code>).</li>
+            <li>Grandes zones de dépôt (tuile CSS <code>--wg-tile</code>), dimensionnées selon la longueur du mot.</li>
+            <li>Lettres répétées : identifiants uniques par occurrence (<code>`${word}-${index}`</code>).</li>
+            <li>Accents : caractère affiché conservé (<code>É</code>, <code>Ê</code>), lettre de base normalisée (NFD) pour l'audio.</li>
+          </ul>
+
+          <h3>Audio</h3>
+          <ul>
+            <li>Mot complet prononcé à l'ouverture et après réussite.</li>
+            <li>Toucher une lettre lit son <strong>nom</strong> (<code>lettre-&lt;base&gt;</code>).</li>
+            <li>Le mot n'est <strong>jamais épelé</strong> lettre à lettre.</li>
+          </ul>
+
+          <div class="callout rule">
+            <strong>Garde-fous</strong> Aucune pénalité, aucun chronomètre, aucun score. Le jeu ne
+            peut pas interrompre la collecte d'un trésor, une récolte ou une construction : il vit
+            à l'intérieur de la carte, après l'enregistrement de la récompense.
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="audio">
+          <h2><span class="num">12</span> Audio &amp; voix</h2>
+          <p class="lead">
+            Tout l'audio est local et généré automatiquement. Aucun service, aucune API, aucun
+            modèle embarqué dans l'application.
+          </p>
+
+          <h3>Manifeste central</h3>
+          <p>
+            <code>src/data/audioManifest.ts</code> est la source de vérité : chaque entrée a un
+            <code>id</code>, un <code>kind</code> (<code>voice</code> ou <code>sfx</code>) et un
+            <code>label</code>. Remplacer un son = écraser le WAV du même nom.
+          </p>
+          <table>
+            <tbody>
+              <tr><td>Voix</td><td><strong>143</strong> fichiers · <code>public/audio/fr/&lt;id&gt;.wav</code></td></tr>
+              <tr><td>Bruitages</td><td><strong>35</strong> fichiers · <code>public/audio/sfx/&lt;id&gt;.wav</code></td></tr>
+              <tr><td>Voix du catalogue étendu</td><td>dérivées automatiquement de <code>alphas.ts</code> (24 Alphas × 2)</td></tr>
+              <tr><td>Extensions</td><td><code>VOICE_EXT</code> / <code>SFX_EXT</code> dans le manifeste</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Familles de voix</h3>
+          <table>
+            <thead>
+              <tr><th>Préfixe</th><th>Usage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>trouve-*</code></td><td>Consignes de manche</td></tr>
+              <tr><td><code>alpha-*</code></td><td>Découverte / album des Alphas</td></tr>
+              <tr><td><code>mot-*</code></td><td>Mots du catalogue (mission 1)</td></tr>
+              <tr><td><code>lettre-*</code></td><td>Nom des lettres (mission 2)</td></tr>
+              <tr><td><code>activite-*</code></td><td>Annonce des activités du portail</td></tr>
+              <tr><td><code>pirates-*</code>, <code>tresor-*</code></td><td>Port des Pirates</td></tr>
+              <tr><td><code>cabane-*</code>, <code>jardin-*</code>, <code>nurserie-*</code>, <code>atelier-*</code></td><td>Activités libres</td></tr>
+              <tr><td><code>boss-*</code></td><td>Boss du prénom</td></tr>
+              <tr><td><code>bravo</code>, <code>bien-joue</code>, <code>reessaie</code></td><td>Encouragements</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Moteur de lecture (<code>src/lib/audio.ts</code>)</h3>
+          <ul>
+            <li><strong>Anti-superposition</strong> : une seule consigne vocale jouée à la fois ; <code>isVoicePlaying</code> évite les relances inutiles.</li>
+            <li><strong>Volumes distincts</strong> : <code>DEFAULT_VOICE_VOLUME</code> (1) et <code>DEFAULT_SFX_VOLUME</code> (0.5), réglables via <code>setVoiceVolume</code> / <code>setSfxVolume</code>.</li>
+            <li><strong>Autoplay iOS</strong> : <code>primeAudio()</code> au premier tap / touche.</li>
+            <li>API : <code>playVoice</code>, <code>stopVoice</code>, <code>playSfx</code>, <code>playVoiceAwait</code>, <code>probeAudio</code>, <code>diagnoseAudio</code>.</li>
+          </ul>
+
+          <h3>Chaîne de génération</h3>
+          <table>
+            <thead>
+              <tr><th>Commande</th><th>Rôle</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>npm run voices</code></td><td>Voix FR via macOS <code>say</code> puis <code>afconvert</code> → WAV PCM 16 bits mono.</td></tr>
+              <tr><td><code>npm run sfx</code></td><td>Bruitages via Python (stdlib uniquement).</td></tr>
+              <tr><td><code>npm run audio</code></td><td>Les deux.</td></tr>
+              <tr><td><code>npm run voices:setup</code></td><td>Venv isolé <code>scripts/.venv-kokoro</code> (outil de dev, hors jeu).</td></tr>
+              <tr><td><code>npm run voices:check</code></td><td>Cohérence manifeste ↔ textes (doit rester complet).</td></tr>
+              <tr><td><code>npm run voices:neural</code></td><td>Génère tout le catalogue (Kokoro/MLX + repli <code>say</code>).</td></tr>
+              <tr><td><code>npm run voices:samples</code> / <code>voices:report</code></td><td>Échantillons de comparaison / rapport de prononciation.</td></tr>
+            </tbody>
+          </table>
+          <table>
+            <tbody>
+              <tr><td><code>scripts/voice-lines.json</code></td><td>Source de vérité des textes et de leur rôle (narratrice / victoire / personnage).</td></tr>
+              <tr><td><code>scripts/voice-generator.py</code></td><td>Générateur Kokoro (MLX) + repli <code>say</code>, cache et découpage.</td></tr>
+              <tr><td><code>scripts/generate-voices.sh</code></td><td>Solution historique macOS <code>say</code>, conservée comme repli.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            Détails et limites du pipeline neuronal : <code>scripts/README-voices.md</code>. Une
+            seule voix FR native (<code>ff_siwis</code>) ; les rôles sont différenciés par la
+            vitesse.
+          </div>
+
+          <h3>Test audio (écran Parent)</h3>
+          <p>
+            Bouton « Tout tester » et statut présent/absent de chaque fichier, via
+            <code>probeAudio</code> / <code>diagnoseAudio</code>.
+          </p>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="sauvegardes">
+          <h2><span class="num">13</span> Sauvegardes locales (localStorage)</h2>
+          <p class="lead">
+            Chaque domaine possède sa clé dédiée, versionnée. Les lectures passent par un
+            <em>sanitize</em> qui ne conserve que des valeurs valides.
+          </p>
+
+          <table>
+            <thead>
+              <tr><th>Clé</th><th>Fichier</th><th>Contenu</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>alphas-de-basile/stats/v1</code></td>
+                <td><code>src/lib/storage.ts</code></td>
+                <td>Stats pédagogiques : <code>parties</code>, <code>bonnes</code>, <code>erreurs</code>, <code>dernierUnivers</code>, <code>decouverte</code>, <code>difficulte</code>, <code>aideBoss</code>, <code>bonnesSansAide</code>, <code>bonnesAvecAide</code>, <code>maitrise</code>, <code>decouverts</code>, <code>actifs</code>, <code>ordre</code>, <code>confusions</code>.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/creatures/v1</code></td>
+                <td><code>src/lib/collection.ts</code></td>
+                <td><code>string[]</code> — ids des créatures capturées.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/builds/v1</code></td>
+                <td><code>src/lib/collection.ts</code></td>
+                <td><code>string[]</code> — constructions mémorisées.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/explored/v1</code></td>
+                <td><code>src/lib/collection.ts</code></td>
+                <td><code>UniverseId[]</code> — univers déjà visités.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/boss/v1</code></td>
+                <td><code>src/lib/collection.ts</code></td>
+                <td><code>BossReward</code> : <code>medaille</code>, <code>parties</code>, <code>derniereVictoire</code>.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/derniere-activite/v1</code></td>
+                <td><code>src/lib/collection.ts</code></td>
+                <td><code>string</code> — dernière grande activité visitée.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/pirates-port/v1</code></td>
+                <td><code>src/lib/pirates.ts</code></td>
+                <td><code>PiratesState</code> : <code>treasures</code>, <code>expeditions</code>, <code>lastIsland</code>, <code>searched</code>.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/nurserie/v1</code></td>
+                <td><code>src/lib/nursery.ts</code></td>
+                <td><code>NurseryState</code> : <code>name</code>, <code>faim</code>, <code>bonheur</code>, <code>energie</code>, <code>interactions</code>, <code>derniereAction</code>.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/atelier/v1</code></td>
+                <td><code>src/lib/workshop.ts</code></td>
+                <td><code>AtelierState</code> : <code>built</code> (id → couleur), <code>builds</code>.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/jardin/v1</code></td>
+                <td><code>src/lib/garden.ts</code></td>
+                <td><code>GardenState</code> : <code>plots</code> (4 parcelles), <code>harvests</code>, <code>tool</code>.</td>
+              </tr>
+              <tr>
+                <td><code>alphas-de-basile/cabane/v1</code></td>
+                <td><code>src/lib/cabane.ts</code></td>
+                <td><code>CabaneState</code> : <code>wall</code>, <code>rug</code>, <code>curtain</code>, <code>lampOn</code>. Décorations uniquement.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Règles de persistance</h3>
+          <div class="callout rule">
+            <strong>Additivité</strong> Une nouvelle fonctionnalité écrit dans sa propre clé ; elle
+            ne réécrit jamais les clés existantes. La Cabane, par exemple, ne stocke que ses
+            décorations et <em>lit</em> les collections des autres.
+          </div>
+          <ul>
+            <li>Chaque <code>load*</code> désérialise puis <em>sanitize</em> : types vérifiés, valeurs bornées (ex. jauges 0..100, index de décoration clammés).</li>
+            <li>Les erreurs de lecture/écriture sont journalisées en <code>console.debug</code> et ne bloquent jamais le jeu.</li>
+            <li><strong>Migration rétro-compatible</strong> : dans <code>stats</code>, l'ancien champ numérique <code>decouverte</code> est converti en liste <code>decouverts</code> ; <code>ordre</code> est complété/filtré selon le catalogue connu.</li>
+            <li>Chaque domaine expose aussi un <code>reset*</code> (souvent via l'espace Parent, avec confirmation).</li>
+          </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="assets">
+          <h2><span class="num">14</span> Ressources graphiques</h2>
+          <p class="lead">
+            Les images sont optionnelles : le jeu démarre et reste jouable même si un fichier manque
+            (carte de remplacement « image à venir », aucun crash).
+          </p>
+
+          <h3>Alphas</h3>
+          <p>
+            Dossier <code>public/assets/alphas/</code> (voir son README). Les PNG sources ont de
+            grandes marges transparentes ; on génère des versions recadrées :
+          </p>
+          <pre><code>npm run alphas    # python3 scripts/prepare-alphas.py (requiert Pillow)</code></pre>
+          <ul>
+            <li>Détourage des marges, recadrage centré sur carré avec marge de 7 %, sans modifier couleurs ni traits.</li>
+            <li>Sortie : <code>public/assets/alphas/optimized/</code> (les originaux sont conservés).</li>
+            <li>Le jeu utilise <code>optimized/&lt;nom&gt;.png</code> et bascule sur l'original si absent (<code>imageFallback</code>).</li>
+            <li>Correspondance nom ↔ graphème issue de <code>public/assets/alphas/alphas.json</code>.</li>
+          </ul>
+
+          <h3>Mascotte</h3>
+          <p>
+            Déposer le portrait détouré sous <code>public/assets/basile/basile.png</code>. S'il est
+            absent, <code>BasileMascot</code> ne s'affiche pas (warning console discret).
+            <code>pointer-events: none</code> : la mascotte n'empiète jamais sur les zones tactiles.
+          </p>
+          <table>
+            <thead><tr><th>Variante</th><th>Écran</th><th>Rendu</th></tr></thead>
+            <tbody>
+              <tr><td><code>hero</code></td><td>Accueil</td><td>Grand, flottement doux + halo</td></tr>
+              <tr><td><code>guide</code></td><td>Choix d'univers, Découverte, Parent</td><td>Petit, flotte</td></tr>
+              <tr><td><code>sidekick</code></td><td>Mini-jeux</td><td>Compagnon discret, saute à la réussite</td></tr>
+              <tr><td><code>reward</code></td><td>Récompense</td><td>Mis en avant, bounce + étoiles</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Illustrations du jeu</h3>
+          <ul>
+            <li>Décors des univers : <code>src/components/scenes/</code> (SVG/CSS).</li>
+            <li>Plateaux : <code>src/components/boards/</code>.</li>
+            <li>Portail : <code>src/components/home/</code>.</li>
+            <li>Mots : <code>src/components/words/WordArt.tsx</code>.</li>
+            <li>Activités libres : sous-dossiers <code>pirates/</code>, <code>jardin/</code>, <code>nurserie/</code>, <code>atelier/</code>.</li>
+          </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="scripts">
+          <h2><span class="num">15</span> Scripts npm</h2>
+          <p class="lead">Référence des commandes disponibles.</p>
+          <table>
+            <thead>
+              <tr><th>Commande</th><th>Effet</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>npm run dev</code></td><td>Serveur de développement Vite (port 5173, <code>--host</code>).</td></tr>
+              <tr><td><code>npm run build</code></td><td><code>tsc -b</code> puis build Vite de production.</td></tr>
+              <tr><td><code>npm run preview</code></td><td>Prévisualise le build, exposé sur le réseau (port 4173).</td></tr>
+              <tr><td><code>npm run lint</code></td><td><code>tsc -b --noEmit</code> — vérification TypeScript.</td></tr>
+              <tr><td><code>npm test</code></td><td>Tests Node natifs : <code>words</code>, <code>letters</code>, <code>wordgame</code>.</td></tr>
+              <tr><td><code>npm run voices</code></td><td>Génère les voix FR via <code>say</code> (repli historique).</td></tr>
+              <tr><td><code>npm run voices:setup</code></td><td>Crée le venv Kokoro isolé (outil de dev).</td></tr>
+              <tr><td><code>npm run voices:check</code></td><td>Vérifie la couverture manifeste ↔ textes.</td></tr>
+              <tr><td><code>npm run voices:neural</code></td><td>Génère les voix neuronales (Kokoro/MLX).</td></tr>
+              <tr><td><code>npm run voices:samples</code></td><td>Échantillons de comparaison → <code>tmp/voice-comparison/</code>.</td></tr>
+              <tr><td><code>npm run voices:report</code></td><td>Rapport des prononciations à vérifier.</td></tr>
+              <tr><td><code>npm run sfx</code></td><td>Génère les bruitages (Python stdlib).</td></tr>
+              <tr><td><code>npm run alphas</code></td><td>Recadre les images des Alphas (Python + Pillow).</td></tr>
+              <tr><td><code>npm run audio</code></td><td><code>voices</code> puis <code>sfx</code>.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="tests">
+          <h2><span class="num">16</span> Tests &amp; vérifications</h2>
+          <p class="lead">
+            Pas de framework de test : les tests sont des fichiers <code>.mjs</code> exécutés par
+            <code>node --test</code>. Ils lisent le code source et les manifestes pour vérifier des
+            invariants de contenu et de règles.
+          </p>
+
+          <table>
+            <thead>
+              <tr><th>Fichier</th><th>Vérifie</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>scripts/words.test.mjs</code></td><td>Catalogue M1 : couverture exacte des mots, accents, audio présent, voix <code>mot-*</code> déclarées, événements branchés.</td></tr>
+              <tr><td><code>scripts/letters.test.mjs</code></td><td>Lettres M2 : audio <code>lettre-*</code>, séparation nom/phonème/alpha, progression BASILE.</td></tr>
+              <tr><td><code>scripts/wordgame.test.mjs</code></td><td>M3 : mots jouables/refusés, ids uniques pour lettres répétées, accents, mot non épelé, modes sans pénalité, ouverture non automatique.</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Séquence de validation avant commit</h3>
+          <pre><code>npm run lint        # TypeScript strict
+npm test            # 17 tests Node natifs
+npm run build       # build de production
+npm run voices:check  # couverture audio (doit rester complète)</code></pre>
+          <div class="callout ok">
+            <strong>État courant</strong> Lint, tests (17), build et <code>voices:check</code>
+            (143 / 143) sont verts.
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="conventions">
+          <h2><span class="num">17</span> Conventions de code</h2>
+          <p class="lead">Quelques règles simples pour toute contribution future.</p>
+          <ul>
+            <li><strong>TypeScript strict</strong> : <code>strict</code>, <code>noUnusedLocals</code>, <code>noUnusedParameters</code>. Pas de <code>any</code> implicite.</li>
+            <li><strong>Pas de commentaires ajoutés</strong> dans le code sauf nécessité (le style existant en contient peu, uniquement pour expliquer une décision).</li>
+            <li><strong>Contenu déclaratif</strong> : les listes (Alphas, mots, lettres, activités, univers, trésors) vivent dans <code>src/data/</code> ; la logique dans <code>src/lib/</code>.</li>
+            <li><strong>Persistance additive</strong> : nouvelle clé dédiée, jamais de réécriture destructive ; <em>sanitize</em> à la lecture.</li>
+            <li><strong>Pointer Events</strong> et <strong>refs synchrones</strong> pour le glisser-déposer (ne pas lire l'état React dans un <code>pointerup</code> rapide).</li>
+            <li><strong>Animations CSS</strong> uniquement, respectant <code>prefers-reduced-motion</code>.</li>
+            <li><strong>Local d'abord</strong> : aucun appel réseau, aucune dépendance ajoutée sans raison forte.</li>
+            <li><strong>Nommage</strong> : fichiers de composants en PascalCase, identifiants de contenu en français (cohérent avec l'existant).</li>
+          </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="extension">
+          <h2><span class="num">18</span> Guides d'extension</h2>
+          <p class="lead">Recettes pour les évolutions les plus courantes.</p>
+
+          <h3>Ajouter un univers pédagogique</h3>
+          <ol>
+            <li>Créer un décor dans <code>src/components/scenes/</code>.</li>
+            <li>Créer un plateau dans <code>src/components/boards/</code> (props <code>BoardProps</code>).</li>
+            <li>Déclarer le monde dans <code>src/data/universes.ts</code> (<code>UniverseId</code>, <code>UNIVERSES</code>, <code>correctSfx</code>/<code>accentSfx</code>).</li>
+            <li>Ajouter l'entrée dans <code>src/components/universes/registry.tsx</code>.</li>
+          </ol>
+          <p>Le moteur (manches, score, consignes, progression) est réutilisé automatiquement.</p>
+
+          <h3>Ajouter une activité du portail</h3>
+          <ol>
+            <li>Ajouter son <code>ActivityId</code> et son entrée dans <code>src/data/activities.ts</code>.</li>
+            <li>Créer l'écran <code>src/components/&lt;Nom&gt;Screen.tsx</code> et l'ajouter au type <code>Screen</code> + au rendu dans <code>App.tsx</code>.</li>
+            <li>Créer une sauvegarde dédiée dans <code>src/lib/</code> (clé <code>alphas-de-basile/&lt;nom&gt;/v1</code>, <em>sanitize</em> à la lecture).</li>
+            <li>Ajouter les voix (<code>activite-*</code>) et bruitages au manifeste + à <code>voice-lines.json</code>.</li>
+            <li>Créer la carte du portail dans <code>src/components/home/</code>.</li>
+          </ol>
+
+          <h3>Ajouter un mot (mission 1)</h3>
+          <ol>
+            <li>Ajouter l'entrée dans <code>WORDS</code> (<code>src/data/words.ts</code>) : <code>id</code>, <code>label</code> accentué, <code>voice</code>.</li>
+            <li>Ajouter l'illustration dans <code>WordArt.tsx</code>.</li>
+            <li>Réutiliser un audio existant ou ajouter une entrée <code>mot-*</code> (manifeste + <code>voice-lines.json</code>), puis générer.</li>
+            <li>Brancher éventuellement un mapping objet → mot.</li>
+          </ol>
+
+          <h3>Ajouter une lettre jouable</h3>
+          <p>
+            Couvert automatiquement pour <code>a</code>–<code>z</code> dès qu'une entrée
+            <code>LETTER_NAMES</code> et un audio <code>lettre-&lt;x&gt;</code> existent. Pour un
+            nouveau graphème (digramme, variante), l'étendre explicitement.
+          </p>
+
+          <h3>Ajouter un son (voix ou bruitage)</h3>
+          <ol>
+            <li>Déclarer l'entrée dans <code>src/data/audioManifest.ts</code> (<code>kind</code> = <code>voice</code> ou <code>sfx</code>).</li>
+            <li>Pour une voix : ajouter le texte + le rôle dans <code>scripts/voice-lines.json</code>.</li>
+            <li>Générer : <code>npm run voices</code> ou <code>npm run voices:neural</code> / <code>npm run sfx</code>.</li>
+            <li>Vérifier : <code>npm run voices:check</code>.</li>
+          </ol>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="journal">
+          <h2><span class="num">19</span> Journal des missions &amp; suite</h2>
+          <p class="lead">Historique récent et pistes d'évolution.</p>
+
+          <h3>Missions récentes</h3>
+          <table>
+            <thead>
+              <tr><th>Commit</th><th>Mission</th><th>Apport principal</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>56a35d4</code></td>
+                <td>Les mots vivants (M1)</td>
+                <td>Catalogue de 21 mots, <code>WordRevealCard</code>, <code>WordArt</code>, intégrations pirates/jardin/atelier, voix <code>mot-*</code>.</td>
+              </tr>
+              <tr>
+                <td><code>8496d27</code></td>
+                <td>Les lettres vivantes (M2)</td>
+                <td><code>letters.ts</code>, <code>InteractiveLetter</code>, progression BASILE → lettres découvertes, voix <code>lettre-*</code>.</td>
+              </tr>
+              <tr>
+                <td><code>8d1554b</code></td>
+                <td>Jouer avec le mot (M3)</td>
+                <td><code>wordGame.ts</code>, <code>WordPlayground</code> (2 modes, glisser-déposer), action depuis <code>WordRevealCard</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Fonctionnalités déjà livrées (rappel)</h3>
+          <ul>
+            <li>8 univers jouables + boss du prénom, difficulté adaptative.</li>
+            <li>Six activités du portail entièrement jouables, chacune avec sauvegarde dédiée.</li>
+            <li>Album des Alphas, espace Parent (stats + test audio + catalogue).</li>
+            <li>Audio entièrement local (143 voix + 35 bruitages).</li>
+          </ul>
+
+          <h3>Pistes possibles (non engagées)</h3>
+          <ul>
+            <li>Étendre les mots à de nouveaux objets (et créer les mots correspondants côté catalogue).</li>
+            <li>Activer <code>ILE</code> et <code>OR</code> si un objet associé est ajouté.</li>
+            <li>Nouveaux univers ou nouvelles activités libres sur le portail.</li>
+            <li>Enrichir les réactions des lettres et la personnalisation de la Cabane.</li>
+          </ul>
+        </section>
+
+        <!-- ============================================================ -->
+        <section id="depannage">
+          <h2><span class="num">20</span> Dépannage / FAQ</h2>
+
+          <h3>Le son ne démarre pas sur iPad</h3>
+          <p>
+            Safari bloque l'autoplay avant interaction. Toucher l'écran une fois (le jeu appelle
+            <code>primeAudio()</code>).
+          </p>
+
+          <h3>Un fichier audio manque</h3>
+          <p>
+            Le jeu reste jouable ; l'écran Parent affiche le statut présent/absent. Regénérer via
+            <code>npm run voices</code> / <code>npm run sfx</code>, puis <code>npm run voices:check</code>.
+          </p>
+
+          <h3>Une image d'Alpha ne s'affiche pas</h3>
+          <p>
+            Vérifier <code>public/assets/alphas/</code> et lancer <code>npm run alphas</code>. En
+            l'absence d'image optimisée, le jeu utilise l'original ; en l'absence totale, une carte
+            « image à venir » s'affiche.
+          </p>
+
+          <h3>La mascotte Basile n'apparaît pas</h3>
+          <p>
+            Le fichier <code>public/assets/basile/basile.png</code> est probablement absent. Un
+            message discret est écrit dans la console ; le jeu continue normalement.
+          </p>
+
+          <h3>Repartir de zéro (progrès d'un enfant)</h3>
+          <p>
+            Utiliser les réinitialisations de l'espace Parent (avec confirmation). Pour tout
+            effacer : supprimer les clés <code>alphas-de-basile/*</code> dans le stockage local du
+            navigateur.
+          </p>
+
+          <h3>Où modifier les textes prononcés ?</h3>
+          <p>
+            Dans <code>scripts/voice-lines.json</code> (texte + rôle), en cohérence avec les ids de
+            <code>src/data/audioManifest.ts</code>.
+          </p>
+
+          <h3>Une animation saccade ou est trop forte</h3>
+          <p>
+            Le jeu respecte <code>prefers-reduced-motion</code>. Activer « Réduire les animations »
+            dans les réglages d'accessibilité de l'appareil réduit les mouvements.
+          </p>
+        </section>
+
+        <footer>
+          Bible du projet — <em>Les aventures des Alphas de Basile</em> · v0.1.0 · document généré
+          depuis l'état du dépôt.
+        </footer>
+      </main>
+    </div>
+
+    <button class="totop" id="totop" type="button">Haut de page</button>
+
+    <script>
+      (function () {
+        var search = document.getElementById("search");
+        var info = document.getElementById("searchInfo");
+        var sections = Array.prototype.slice.call(document.querySelectorAll("main section"));
+        var tocLinks = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+
+        // Recherche : filtre les sections et met en valeur les liens du sommaire.
+        function runSearch() {
+          var q = search.value.trim().toLowerCase();
+          var shown = 0;
+          sections.forEach(function (sec) {
+            var match = q === "" || sec.textContent.toLowerCase().indexOf(q) !== -1;
+            sec.classList.toggle("hidden", !match);
+            if (match) shown++;
+          });
+          tocLinks.forEach(function (a) {
+            var id = a.getAttribute("href").slice(1);
+            var sec = document.getElementById(id);
+            a.style.display = sec && sec.classList.contains("hidden") ? "none" : "";
+          });
+          info.textContent = q === ""
+            ? ""
+            : shown + " section" + (shown > 1 ? "s" : "") + " correspond" + (shown > 1 ? "ent" : "") + " à « " + search.value.trim() + " »";
+        }
+        search.addEventListener("input", runSearch);
+
+        // Scrollspy : surligne la section visible.
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              var id = entry.target.id;
+              tocLinks.forEach(function (a) {
+                a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+              });
+            });
+          },
+          { rootMargin: "-10% 0px -80% 0px", threshold: 0 }
+        );
+        sections.forEach(function (sec) {
+          if (sec.id) observer.observe(sec);
+        });
+
+        document.getElementById("totop").addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      })();
+    </script>
+  </body>
+</html>

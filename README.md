@@ -1,5 +1,9 @@
 # Les aventures des Alphas de Basile — V1
 
+> **Bible du projet** : la documentation complète et autonome (architecture,
+> contenu, audio, sauvegardes, procédures) est dans
+> [`docs/bible.html`](docs/bible.html) — à ouvrir directement dans un navigateur.
+
 Mini-jeu local React + TypeScript + Vite pour apprendre à reconnaître les
 Alphas du prénom **BASILE** (botte, monsieur a, serpent, madame i, limace,
 madame e).
